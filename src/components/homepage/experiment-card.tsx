@@ -1,29 +1,18 @@
 import type { ExperimentItem } from "@/types/experiment.types"
 import { MoveUpRight } from "lucide-react"
 
-export default function HomepageGrid({ items }: { items: ExperimentItem[] }) {
-  return (
-    <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {items.map(({ id, title, description, Component }) => (
-        <ExperimentCard
-          key={id}
-          id={id}
-          title={title}
-          description={description}
-          Component={Component}
-        />
-      ))}
-    </section>
-  )
-}
-
-function ExperimentCard({ id, title, description, Component }: ExperimentItem) {
+export default function ExperimentCard({
+  id,
+  title,
+  description,
+  Component,
+}: ExperimentItem) {
   return (
     <article
       key={id}
       className="group relative aspect-square overflow-hidden rounded-3xl border border-border bg-card"
     >
-      <section className="pointer-events-none absolute bottom-0 h-14 max-h-16 w-full">
+      <section className="pointer-events-none absolute bottom-0 z-50 h-14 max-h-16 w-full">
         <div className="flex h-full w-full items-center justify-between px-3">
           <div
             id="component-details"

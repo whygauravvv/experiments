@@ -7,7 +7,7 @@ export default function MotionButtonDemo() {
   const [isActive, setIsActive] = useState(false)
 
   return (
-    <div className="flex h-full min-h-44 items-center justify-center">
+    <div className="flex h-full items-center justify-center">
       <motion.div
         whileHover={{ y: -4, scale: 1.03 }}
         whileTap={{ scale: 0.96, y: 0 }}

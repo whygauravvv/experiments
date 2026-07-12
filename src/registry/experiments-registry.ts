@@ -1,3 +1,4 @@
+import IphoneMockupDemo from "@/experiments/iphone-mockup-demo"
 import MotionButtonDemo from "@/experiments/motion-button"
 import type { ExperimentItem } from "@/types/experiment.types"
 
@@ -9,9 +10,9 @@ export const experiments: ExperimentItem[] = [
     Component: MotionButtonDemo,
   },
   {
-    id: "motion-button-demo",
-    title: "Motion Button",
-    description: "Simple Framer Motion hover and tap interaction.",
-    Component: MotionButtonDemo,
+    id: "iphone-mockup-demo",
+    title: "iPhone Mockup",
+    description: "CSS-based mobile shell for phone-first experiments.",
+    Component: IphoneMockupDemo,
   },
 ]
