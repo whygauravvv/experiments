@@ -5,7 +5,7 @@ import { experiments } from "@/experiments"
 export default function ExperimentsGallery() {
   return (
     <main className="min-h-screen bg-background p-10 text-foreground">
-      <div className="mx-auto flex w-full flex-col items-center gap-32">
+      <div className="mx-auto flex w-full flex-col items-center gap-20">
         <GalleryHeader />
 
         <section className="h-full w-full">

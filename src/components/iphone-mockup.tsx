@@ -102,7 +102,7 @@ export default function IphoneMockup({
           src={MOCKUP_ASSETS[variant]}
           alt=""
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-20 h-full w-full select-none"
+          className="pointer-events-none absolute inset-0 z-40 h-full w-full select-none"
           draggable={false}
         />
       </div>
