@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router-dom"
-import Homepage from "./experiments"
+import ExperimentsGallery from "./pages/experiments-gallery"
 
 export function App() {
   return (
     <Routes>
-      <Route path="/" element={<Homepage />} />
+      <Route path="/" element={<ExperimentsGallery />} />
     </Routes>
   )
 }

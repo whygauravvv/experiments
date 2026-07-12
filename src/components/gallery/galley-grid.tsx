@@ -1,11 +1,11 @@
-import type { ExperimentItem } from "@/types/experiment.types"
-import ExperimentCard from "./experiment-card"
+import type { ExperimentItem } from "@/experiments"
+import GalleryCard from "./gallery-card"
 
-export default function HomepageGrid({ items }: { items: ExperimentItem[] }) {
+export default function GalleryGrid({ items }: { items: ExperimentItem[] }) {
   return (
     <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
       {items.map(({ id, title, description, Component }) => (
-        <ExperimentCard
+        <GalleryCard
           key={id}
           id={id}
           title={title}

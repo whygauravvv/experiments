@@ -1,4 +1,4 @@
-export default function HomepageHeader() {
+export default function GalleryHeader() {
   return (
     <header className="font-rounded">
       <h1 className="text-center text-6xl font-bold tracking-tight">

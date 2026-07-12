@@ -1,6 +1,13 @@
 import IphoneMockupDemo from "@/experiments/iphone-mockup-demo"
 import MotionButtonDemo from "@/experiments/motion-button"
-import type { ExperimentItem } from "@/types/experiment.types"
+import type { ComponentType } from "react"
+
+export type ExperimentItem = {
+  id: string
+  title: string
+  description: string
+  Component: ComponentType
+}
 
 export const experiments: ExperimentItem[] = [
   {

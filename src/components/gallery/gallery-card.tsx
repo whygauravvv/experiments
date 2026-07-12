@@ -1,7 +1,7 @@
-import type { ExperimentItem } from "@/types/experiment.types"
+import type { ExperimentItem } from "@/experiments"
 import { MoveUpRight } from "lucide-react"
 
-export default function ExperimentCard({
+export default function GalleryCard({
   id,
   title,
   description,
