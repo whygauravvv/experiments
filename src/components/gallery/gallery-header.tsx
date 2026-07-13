@@ -1,4 +1,4 @@
-export default function GalleryHeader({ count }: { count: number }) {
+export default function GalleryHeader() {
   return (
     <header className="relative z-10 flex flex-col p-6 sm:p-8 lg:h-full lg:min-h-0 lg:p-10">
       <div>

@@ -1,5 +1,6 @@
 import MotionButtonDemo from "@/experiments/motion-button"
 import type { ComponentType } from "react"
+import CodexAtmosphere from "./codex-atmosphere"
 import MotionButton from "./iphone"
 
 export type ExperimentItem = {
@@ -22,5 +23,11 @@ export const experiments: ExperimentItem[] = [
     title: "Motion Button",
     description: "Simple Framer Motion hover and tap interaction.",
     Component: MotionButton,
+  },
+  {
+    id: "codex-atmosphere",
+    title: "Codex Atmosphere",
+    description: "Warm video texture with a cursor-reactive ASCII field.",
+    Component: CodexAtmosphere,
   },
 ]

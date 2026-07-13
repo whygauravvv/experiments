@@ -8,7 +8,7 @@ export default function ExperimentsGallery() {
     <main className="min-h-screen w-full bg-background text-foreground lg:grid lg:grid-cols-[clamp(17rem,24vw,23rem)_minmax(0,1fr)]">
       <aside className="relative isolate overflow-hidden border-b border-border/40 lg:sticky lg:top-0 lg:h-screen lg:border-r lg:border-b-0">
         <DotGridBackground />
-        <GalleryHeader count={experiments.length} />
+        <GalleryHeader />
       </aside>
 
       <section className="relative min-w-0 px-4 py-5 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
