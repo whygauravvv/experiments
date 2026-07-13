@@ -11,7 +11,7 @@ export default function ExperimentsGallery() {
         <GalleryHeader />
       </aside>
 
-      <section className="relative min-w-0 px-4 py-5 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
+      <section className="relative min-w-0 bg-neutral-50/50 px-4 py-5 sm:px-6 sm:py-7 lg:px-7 lg:py-7 2xl:px-8 2xl:py-8">
         <GalleryGrid items={experiments} />
       </section>
     </main>

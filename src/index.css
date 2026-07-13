@@ -161,3 +161,14 @@
     @apply font-sans;
   }
 }
+
+/*
+ * A 13-inch laptop has desktop proportions without desktop-scale breathing
+ * room. Keep the desktop layout, but use a slightly denser rem scale until
+ * the viewport is wide enough to support the full-size presentation.
+ */
+@media (min-width: 64rem) and (max-width: 89.999rem) {
+  html {
+    font-size: 14px;
+  }
+}

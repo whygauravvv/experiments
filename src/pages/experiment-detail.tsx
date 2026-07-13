@@ -26,7 +26,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
   const { Component, description, source, tags, title, year } = experiment
 
   return (
-    <main className="flex h-dvh max-h-dvh flex-col overflow-hidden bg-background px-4 py-5 text-foreground sm:px-6 lg:px-10 lg:py-8">
+    <main className="flex h-dvh max-h-dvh flex-col overflow-hidden bg-background px-4 py-5 text-foreground sm:px-6 lg:px-8 lg:py-7 2xl:px-10 2xl:py-8">
       <header className="mb-5 flex shrink-0 items-center justify-between gap-6 lg:mb-6">
         {isOverlay ? (
           <button
@@ -49,7 +49,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
         <p className="text-xs text-muted-foreground">{year}</p>
       </header>
 
-      <div className="grid min-h-0 flex-1 grid-rows-[minmax(12rem,42%)_minmax(0,1fr)] gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(20rem,0.8fr)] lg:grid-rows-1 lg:gap-8">
+      <div className="grid min-h-0 flex-1 grid-rows-[minmax(12rem,42%)_minmax(0,1fr)] gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,1fr)] lg:grid-rows-1 lg:gap-7 2xl:grid-cols-[minmax(0,1.2fr)_minmax(20rem,0.8fr)] 2xl:gap-8">
         <motion.section
           layoutId={`experiment-${experiment.id}`}
           transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.75 }}
@@ -60,7 +60,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
 
         <aside className="min-h-0 min-w-0 overflow-y-auto overscroll-contain pr-1 lg:pl-2 lg:pr-3">
           <p className="mb-3 text-xs text-muted-foreground">Experiment</p>
-          <h1 className="text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
+          <h1 className="text-[clamp(2.25rem,3.75vw,3rem)] font-semibold tracking-[-0.045em]">
             {title}
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">

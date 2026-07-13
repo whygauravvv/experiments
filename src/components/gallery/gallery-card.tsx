@@ -22,10 +22,12 @@ export default function GalleryCard({
         <div className="flex h-full w-full items-center justify-between px-3">
           <div
             id="component-details"
-            className="translate-y-14 scale-95 opacity-0 blur-sm duration-150 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-hover:blur-none"
+            className="translate-y-0 scale-100 opacity-100 duration-150 md:translate-y-14 md:scale-95 md:opacity-0 md:blur-sm md:group-hover:translate-y-0 md:group-hover:scale-100 md:group-hover:opacity-100 md:group-hover:blur-none"
           >
-            <p className="text-sm font-medium text-primary">{title}</p>
-            <p className="line-clamp-1 text-xs text-muted-foreground/60">
+            <p className="text-xs font-medium text-primary lg:text-sm">
+              {title}
+            </p>
+            <p className="line-clamp-1 text-[10px] text-muted-foreground/60 lg:text-xs">
               {description}
             </p>
           </div>
@@ -35,9 +37,9 @@ export default function GalleryCard({
             to={`/experiments/${id}`}
             state={{ backgroundLocation: location }}
             aria-label={`View ${title}`}
-            className="pointer-events-auto translate-y-14 scale-95 rounded-full bg-muted/40 p-2 opacity-0 blur-sm delay-50 duration-150 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-hover:blur-none hover:rotate-45 hover:bg-primary/10 hover:text-primary focus-visible:translate-y-0 focus-visible:opacity-100 focus-visible:blur-none focus-visible:outline-none"
+            className="pointer-events-auto translate-y-0 scale-100 rounded-full bg-muted/60 p-2 opacity-100 delay-50 duration-150 hover:rotate-45 hover:bg-primary/10 hover:text-primary focus-visible:translate-y-0 focus-visible:opacity-100 focus-visible:blur-none focus-visible:outline-none md:translate-y-14 md:scale-95 md:bg-muted/40 md:opacity-0 md:blur-sm md:group-hover:translate-y-0 md:group-hover:scale-100 md:group-hover:opacity-100 md:group-hover:blur-none"
           >
-            <MoveUpRight className="text-muted-foreground/60" />
+            <MoveUpRight size={18} className="text-muted-foreground/60" />
           </Link>
         </div>
       </section>
