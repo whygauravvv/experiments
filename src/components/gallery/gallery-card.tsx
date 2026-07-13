@@ -1,5 +1,7 @@
 import type { ExperimentItem } from "@/experiments"
 import { MoveUpRight } from "lucide-react"
+import { motion } from "motion/react"
+import { Link } from "react-router-dom"
 
 export default function GalleryCard({
   id,
@@ -8,8 +10,10 @@ export default function GalleryCard({
   Component,
 }: ExperimentItem) {
   return (
-    <article
+    <motion.article
       key={id}
+      layoutId={`experiment-${id}`}
+      transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.75 }}
       className="group relative aspect-square overflow-hidden rounded-xl border border-border/60 bg-card"
     >
       <section className="pointer-events-none absolute bottom-0 z-50 h-14 max-h-16 w-full">
@@ -24,17 +28,19 @@ export default function GalleryCard({
             </p>
           </div>
 
-          <button
+          <Link
             id="redirect-button"
-            className="pointer-events-auto translate-y-14 scale-95 rounded-full bg-muted/40 p-2 opacity-0 blur-sm delay-50 duration-150 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-hover:blur-none hover:rotate-45 hover:bg-primary/10 hover:text-primary"
+            to={`/experiments/${id}`}
+            aria-label={`View ${title}`}
+            className="pointer-events-auto translate-y-14 scale-95 rounded-full bg-muted/40 p-2 opacity-0 blur-sm delay-50 duration-150 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-hover:blur-none hover:rotate-45 hover:bg-primary/10 hover:text-primary focus-visible:translate-y-0 focus-visible:opacity-100 focus-visible:blur-none focus-visible:outline-none"
           >
             <MoveUpRight className="text-muted-foreground/60" />
-          </button>
+          </Link>
         </div>
       </section>
       <section className="h-full w-full">
         <Component />
       </section>
-    </article>
+    </motion.article>
   )
 }
