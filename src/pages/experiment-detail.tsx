@@ -1,3 +1,4 @@
+import CodeViewer from "@/components/code/code-viewer"
 import { experiments } from "@/experiments"
 import { ArrowLeft } from "lucide-react"
 import { motion } from "motion/react"
@@ -78,13 +79,8 @@ export default function ExperimentDetail({ isOverlay = false }) {
           </ul>
 
           <section className="mt-10">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-sm font-medium">Source</h2>
-              <span className="text-[11px] text-muted-foreground">TSX</span>
-            </div>
-            <pre className="max-h-[34rem] overflow-auto rounded-xl border border-border/70 bg-muted/35 p-4 text-xs leading-relaxed">
-              <code>{source}</code>
-            </pre>
+            <h2 className="mb-3 text-sm font-medium">Source</h2>
+            <CodeViewer code={source} filename={`${experiment.id}.tsx`} />
           </section>
         </aside>
       </div>
