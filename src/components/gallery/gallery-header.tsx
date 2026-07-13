@@ -1,13 +1,86 @@
+import type { ReactNode } from "react"
+
+const socialLinks: { icon: ReactNode; label: string }[] = [
+  {
+    label: "Insta",
+    icon: (
+      <svg fill="#000000" viewBox="0 0 256 256">
+        <path d="M160,128a32,32,0,1,1-32-32A32.03667,32.03667,0,0,1,160,128Zm68-44v88a56.06353,56.06353,0,0,1-56,56H84a56.06353,56.06353,0,0,1-56-56V84A56.06353,56.06353,0,0,1,84,28h88A56.06353,56.06353,0,0,1,228,84Zm-52,44a48,48,0,1,0-48,48A48.05436,48.05436,0,0,0,176,128Zm16-52a12,12,0,1,0-12,12A12,12,0,0,0,192,76Z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Twitter",
+    icon: (
+      <svg viewBox="0 0 256 209" preserveAspectRatio="xMidYMid">
+        <path
+          d="M256 25.45c-9.42 4.177-19.542 7-30.166 8.27 10.845-6.5 19.172-16.793 23.093-29.057a105.183 105.183 0 0 1-33.351 12.745C205.995 7.201 192.346.822 177.239.822c-29.006 0-52.523 23.516-52.523 52.52 0 4.117.465 8.125 1.36 11.97-43.65-2.191-82.35-23.1-108.255-54.876-4.52 7.757-7.11 16.78-7.11 26.404 0 18.222 9.273 34.297 23.365 43.716a52.312 52.312 0 0 1-23.79-6.57c-.003.22-.003.44-.003.661 0 25.447 18.104 46.675 42.13 51.5a52.592 52.592 0 0 1-23.718.9c6.683 20.866 26.08 36.05 49.062 36.475-17.975 14.086-40.622 22.483-65.228 22.483-4.24 0-8.42-.249-12.529-.734 23.243 14.902 50.85 23.597 80.51 23.597 96.607 0 149.434-80.031 149.434-149.435 0-2.278-.05-4.543-.152-6.795A106.748 106.748 0 0 0 256 25.45"
+          fill="#000000"
+        />
+      </svg>
+    ),
+  },
+  {
+    label: "Github",
+    icon: (
+      <svg viewBox="0 0 1024 1024" fill="none">
+        <path
+          fill="#000000"
+          fill-rule="evenodd"
+          d="M512 0C229.12 0 0 229.12 0 512c0 226.56 146.56 417.92 350.08 485.76 25.6 4.48 35.2-10.88 35.2-24.32 0-12.16-.64-52.48-.64-95.36-128.64 23.68-161.92-31.36-172.16-60.16-5.76-14.72-30.72-60.16-52.48-72.32-17.92-9.6-43.52-33.28-.64-33.92 40.32-.64 69.12 37.12 78.72 52.48 46.08 77.44 119.68 55.68 149.12 42.24 4.48-33.28 17.92-55.68 32.64-68.48-113.92-12.8-232.96-56.96-232.96-252.8 0-55.68 19.84-101.76 52.48-137.6-5.12-12.8-23.04-65.28 5.12-135.68 0 0 42.88-13.44 140.8 52.48 40.96-11.52 84.48-17.28 128-17.28s87.04 5.76 128 17.28c97.92-66.56 140.8-52.48 140.8-52.48 28.16 70.4 10.24 122.88 5.12 135.68 32.64 35.84 52.48 81.28 52.48 137.6 0 196.48-119.68 240-233.6 252.8 18.56 16 34.56 46.72 34.56 94.72 0 68.48-.64 123.52-.64 140.8 0 13.44 9.6 29.44 35.2 24.32C877.44 929.92 1024 737.92 1024 512 1024 229.12 794.88 0 512 0"
+          clip-rule="evenodd"
+        />
+      </svg>
+    ),
+  },
+]
+
+function SocialButton({ icon, label }: { icon: ReactNode; label: string }) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      className="group flex h-8 items-center overflow-hidden rounded-full border border-border/50 p-2 text-muted-foreground shadow-xs duration-150 hover:bg-primary hover:text-white"
+    >
+      <span className="grid w-4 shrink-0 place-items-center duration-150 group-hover:invert">
+        {icon}
+      </span>
+      <span className="max-w-0 scale-95 overflow-hidden text-xs whitespace-nowrap opacity-0 duration-200 group-hover:ml-1 group-hover:max-w-16 group-hover:scale-100 group-hover:opacity-100">
+        {label}
+      </span>
+    </button>
+  )
+}
+
+function GalleryFooter() {
+  return (
+    <footer className="flex h-14 min-w-0 items-center gap-2 bg-background p-1">
+      <div className="flex h-full min-w-0 flex-1 items-center overflow-hidden">
+        {socialLinks.map((social) => (
+          <SocialButton key={social.label} {...social} />
+        ))}
+      </div>
+      <div className="shrink-0">
+        <p className="text-xs text-muted-foreground">© 2026 Yash Gaurav</p>
+      </div>
+    </footer>
+  )
+}
+
 export default function GalleryHeader() {
   return (
-    <header className="relative z-10 flex flex-col p-6 sm:p-8 lg:h-full lg:min-h-0 lg:p-10">
-      <div>
-        <h1 className="text-[2.65rem] leading-[0.94] font-semibold tracking-[-0.04em]">
-          Experiments<span className="inline text-blue-600">.</span>
-        </h1>
-        <p className="pt-1 text-xs text-muted-foreground/50">By Yash Gaurav</p>
-
-        <div className="mt-10 max-w-64 space-y-5 text-sm leading-relaxed text-muted-foreground">
+    <header className="relative z-10 flex flex-col justify-between p-6 sm:p-8 lg:h-full lg:min-h-0 lg:p-10">
+      <div className="space-y-6 bg-background p-1">
+        <div>
+          <h1 className="text-[2.65rem] leading-[0.94] font-semibold tracking-[-0.04em]">
+            Experiments
+            <div className="ml-1 inline-block size-2 rounded-full bg-linear-to-t from-blue-300 to-blue-700" />
+          </h1>
+          <p className="pt-1 text-xs text-muted-foreground/50">
+            By Yash Gaurav
+          </p>
+        </div>
+        <div className="space-y-5 text-sm leading-relaxed text-muted-foreground">
           <p>
             My attempt to share my interaction studies, interface details, and
             working prototypes.
@@ -15,14 +88,7 @@ export default function GalleryHeader() {
         </div>
       </div>
 
-      <div className="mt-auto flex items-end justify-between gap-4 pt-16 text-[11px] text-muted-foreground">
-        <p>
-          Made with React,
-          <br />
-          Motion &amp; curiosity
-        </p>
-        <p className="text-right">© 2026 Yash Gaurav</p>
-      </div>
+      <GalleryFooter />
     </header>
   )
 }

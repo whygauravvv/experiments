@@ -18,7 +18,7 @@ export default function GalleryCard({
             id="component-details"
             className="translate-y-14 scale-95 opacity-0 blur-sm duration-150 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-hover:blur-none"
           >
-            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            <p className="text-sm font-medium text-primary">{title}</p>
             <p className="line-clamp-1 text-xs text-muted-foreground/60">
               {description}
             </p>
