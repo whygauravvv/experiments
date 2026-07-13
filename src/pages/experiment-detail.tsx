@@ -23,19 +23,19 @@ export default function ExperimentDetail({ isOverlay = false }) {
 
   if (!experiment) return <Navigate to="/" replace />
 
-  const { Component, description, source, tags, title, year } = experiment
+  const { Component, description, source, title, year } = experiment
 
   return (
-    <main className="flex h-dvh max-h-dvh flex-col overflow-hidden bg-background px-4 py-5 text-foreground sm:px-6 lg:px-8 lg:py-7 2xl:px-10 2xl:py-8">
-      <header className="mb-5 flex shrink-0 items-center justify-between gap-6 lg:mb-6">
+    <main className="flex min-h-dvh flex-col gap-6 bg-neutral-50 px-4 pb-6 text-foreground sm:px-6 md:h-dvh md:max-h-dvh md:overflow-hidden">
+      <header className="-mx-4 flex items-center justify-between border-b bg-background px-4 py-4 sm:-mx-6 sm:px-6">
         {isOverlay ? (
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="group inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="group inline-flex cursor-pointer items-center gap-2 rounded-full px-3 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
-            All experiments
+            Back
           </button>
         ) : (
           <Link
@@ -49,37 +49,24 @@ export default function ExperimentDetail({ isOverlay = false }) {
         <p className="text-xs text-muted-foreground">{year}</p>
       </header>
 
-      <div className="grid min-h-0 flex-1 grid-rows-[minmax(12rem,42%)_minmax(0,1fr)] gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,1fr)] lg:grid-rows-1 lg:gap-7 2xl:grid-cols-[minmax(0,1.2fr)_minmax(20rem,0.8fr)] 2xl:gap-8">
+      <div className="grid grid-cols-1 gap-6 md:min-h-0 md:flex-1 md:grid-cols-2 md:gap-4">
         <motion.section
           layoutId={`experiment-${experiment.id}`}
-          transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.75 }}
-          className="aspect-square h-full max-h-full w-auto max-w-full justify-self-center overflow-hidden rounded-xl border border-border/60 bg-card"
+          className="z-50 aspect-square w-full overflow-hidden rounded-lg border border-border/60 bg-card md:h-full md:max-h-full md:w-auto md:max-w-full md:justify-self-center"
         >
           <Component />
         </motion.section>
 
-        <aside className="min-h-0 min-w-0 overflow-y-auto overscroll-contain pr-1 lg:pl-2 lg:pr-3">
-          <p className="mb-3 text-xs text-muted-foreground">Experiment</p>
-          <h1 className="text-[clamp(2.25rem,3.75vw,3rem)] font-semibold tracking-[-0.045em]">
-            {title}
-          </h1>
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
-            {description}
-          </p>
-
-          <ul className="mt-6 flex flex-wrap gap-2" aria-label="Technologies">
-            {tags.map((tag) => (
-              <li
-                key={tag}
-                className="rounded-full border border-border/70 px-2.5 py-1 text-xs text-muted-foreground"
-              >
-                {tag}
-              </li>
-            ))}
-          </ul>
+        <aside className="min-w-0 md:min-h-0 md:overflow-y-auto md:overscroll-contain">
+          <div>
+            <h1 className="text-[clamp(2.25rem,3.75vw,3rem)] font-semibold tracking-[-0.045em]">
+              {title}
+            </h1>
+            <p className="text-xs text-muted-foreground">{description}</p>
+          </div>
 
           <section className="mt-10">
-            <h2 className="mb-3 text-sm font-medium">Source</h2>
+            <h2 className="mb-1 text-sm font-medium">Source</h2>
             <CodeViewer code={source} filename={`${experiment.id}.tsx`} />
           </section>
         </aside>

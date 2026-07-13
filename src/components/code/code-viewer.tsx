@@ -1,6 +1,6 @@
+import "@/styles/code-viewer.css"
 import { Check, Copy } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
-import "@/styles/code-viewer.css"
 
 type CodeViewerProps = {
   code: string
@@ -61,10 +61,14 @@ export default function CodeViewer({
           <button
             type="button"
             onClick={copyCode}
-            className="inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 text-[10px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+            className="inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 text-[10px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:outline-none"
             aria-label={copied ? "Code copied" : "Copy code"}
           >
-            {copied ? <Check className="size-3" /> : <Copy className="size-3" />}
+            {copied ? (
+              <Check className="size-3" />
+            ) : (
+              <Copy className="size-3" />
+            )}
             <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
           </button>
         </div>
