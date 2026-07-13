@@ -10,7 +10,7 @@ export default function GalleryCard({
   return (
     <article
       key={id}
-      className="group relative aspect-square overflow-hidden rounded-xl border border-border bg-card"
+      className="group relative aspect-square overflow-hidden rounded-xl border border-border/60 bg-card"
     >
       <section className="pointer-events-none absolute bottom-0 z-50 h-14 max-h-16 w-full">
         <div className="flex h-full w-full items-center justify-between px-3">

@@ -1,0 +1,162 @@
+.dot-grid {
+  --grid-spacing: 6px; /* Distance between each dot. */
+  --grid-offset: 5px; /* Shifts the whole grid horizontally and vertically. */
+  --grid-transition-duration: 300ms; /* Speed of the hover fade in and out. */
+
+  --base-dot-color: 30%; /* Darkness of the resting dots. */
+  --base-dot-size: 0.65px; /* Visible radius of each resting dot. */
+  --base-dot-edge: 0.85px; /* Soft outer edge of each resting dot. */
+  --base-opacity: 0.13; /* Overall visibility of the resting grid. */
+  --base-fade-width: 82%; /* Horizontal reach of the resting radial fade. */
+  --base-fade-height: 72%; /* Vertical reach of the resting radial fade. */
+  --base-fade-x: 50%; /* Horizontal center of the resting radial fade. */
+  --base-fade-y: 34%; /* Vertical center of the resting radial fade. */
+  --base-fade-middle: 48%; /* Point where the resting grid starts fading more. */
+  --base-fade-middle-opacity: 0.72; /* Strength at the middle fade point. */
+
+  --outer-dot-color: 25%; /* Darkness of the widest hover layer. */
+  --outer-dot-size: 0.9px; /* Dot radius in the widest hover layer. */
+  --outer-dot-edge: 1.1px; /* Soft edge of the widest hover dots. */
+  --outer-radius: 260px; /* Overall reach of the cursor effect. */
+  --outer-opacity: 0.22; /* Visibility of the widest hover layer. */
+
+  --middle-dot-color: 24%; /* Darkness of the middle hover layer. */
+  --middle-dot-size: 1.2px; /* Dot radius in the middle hover layer. */
+  --middle-dot-edge: 1.4px; /* Soft edge of the middle hover dots. */
+  --middle-radius: 190px; /* Reach of the middle hover layer. */
+  --middle-opacity: 0.26; /* Visibility of the middle hover layer. */
+
+  --inner-dot-color: 23%; /* Darkness of the inner hover layer. */
+  --inner-dot-size: 1.5px; /* Dot radius close to the cursor. */
+  --inner-dot-edge: 1.72px; /* Soft edge of the inner hover dots. */
+  --inner-radius: 125px; /* Reach of the inner hover layer. */
+  --inner-opacity: 0.3; /* Visibility of the inner hover layer. */
+
+  --core-dot-color: 22%; /* Darkness of the dots directly under the cursor. */
+  --core-dot-size: 1.9px; /* Largest dot radius at the cursor center. */
+  --core-dot-edge: 2.12px; /* Soft edge of the largest cursor dots. */
+  --core-radius: 70px; /* Size of the central cursor area. */
+  --core-opacity: 0.35; /* Visibility of the central cursor layer. */
+
+  --growth-solid-stop: 6%; /* Solid portion at the center of hover layers. */
+  --growth-fade-stop: 76%; /* Point where hover layers become transparent. */
+
+  /* These two values are updated automatically as the pointer moves. */
+  --pointer-x: 50vw;
+  --pointer-y: 35vh;
+
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.dot-grid__base,
+.dot-grid__growth {
+  position: absolute;
+  inset: 0;
+  background-position: var(--grid-offset) var(--grid-offset);
+  background-size: var(--grid-spacing) var(--grid-spacing);
+}
+
+.dot-grid__base {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--foreground) var(--base-dot-color), transparent)
+      var(--base-dot-size),
+    transparent var(--base-dot-edge)
+  );
+  opacity: var(--base-opacity);
+  mask-image: radial-gradient(
+    ellipse var(--base-fade-width) var(--base-fade-height) at var(--base-fade-x)
+      var(--base-fade-y),
+    black 0%,
+    rgb(0 0 0 / var(--base-fade-middle-opacity)) var(--base-fade-middle),
+    transparent 100%
+  );
+}
+
+.dot-grid__growth {
+  opacity: 0;
+  transition: opacity var(--grid-transition-duration) ease;
+  will-change: mask-image, opacity;
+}
+
+.dot-grid__growth--outer {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--foreground) var(--outer-dot-color), transparent)
+      var(--outer-dot-size),
+    transparent var(--outer-dot-edge)
+  );
+  mask-image: radial-gradient(
+    var(--outer-radius) circle at var(--pointer-x) var(--pointer-y),
+    black var(--growth-solid-stop),
+    transparent var(--growth-fade-stop)
+  );
+}
+
+.dot-grid__growth--middle {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--foreground) var(--middle-dot-color), transparent)
+      var(--middle-dot-size),
+    transparent var(--middle-dot-edge)
+  );
+  mask-image: radial-gradient(
+    var(--middle-radius) circle at var(--pointer-x) var(--pointer-y),
+    black var(--growth-solid-stop),
+    transparent var(--growth-fade-stop)
+  );
+}
+
+.dot-grid__growth--inner {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--foreground) var(--inner-dot-color), transparent)
+      var(--inner-dot-size),
+    transparent var(--inner-dot-edge)
+  );
+  mask-image: radial-gradient(
+    var(--inner-radius) circle at var(--pointer-x) var(--pointer-y),
+    black var(--growth-solid-stop),
+    transparent var(--growth-fade-stop)
+  );
+}
+
+.dot-grid__growth--core {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--foreground) var(--core-dot-color), transparent)
+      var(--core-dot-size),
+    transparent var(--core-dot-edge)
+  );
+  mask-image: radial-gradient(
+    var(--core-radius) circle at var(--pointer-x) var(--pointer-y),
+    black 0%,
+    transparent var(--growth-fade-stop)
+  );
+}
+
+.dot-grid[data-active="true"] .dot-grid__growth--outer {
+  opacity: var(--outer-opacity);
+}
+
+.dot-grid[data-active="true"] .dot-grid__growth--middle {
+  opacity: var(--middle-opacity);
+}
+
+.dot-grid[data-active="true"] .dot-grid__growth--inner {
+  opacity: var(--inner-opacity);
+}
+
+.dot-grid[data-active="true"] .dot-grid__growth--core {
+  opacity: var(--core-opacity);
+}
+
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .dot-grid__growth {
+    display: none;
+  }
+}

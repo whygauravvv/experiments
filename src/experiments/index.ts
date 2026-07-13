@@ -1,5 +1,6 @@
 import MotionButtonDemo from "@/experiments/motion-button"
 import type { ComponentType } from "react"
+import MotionButton from "./iphone"
 
 export type ExperimentItem = {
   id: string
@@ -15,5 +16,11 @@ export const experiments: ExperimentItem[] = [
     title: "Motion Button",
     description: "Simple Framer Motion hover and tap interaction.",
     Component: MotionButtonDemo,
+  },
+  {
+    id: "motion-button-demo",
+    title: "Motion Button",
+    description: "Simple Framer Motion hover and tap interaction.",
+    Component: MotionButton,
   },
 ]
