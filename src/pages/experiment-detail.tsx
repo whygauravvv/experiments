@@ -1,11 +1,24 @@
 import { experiments } from "@/experiments"
 import { ArrowLeft } from "lucide-react"
 import { motion } from "motion/react"
-import { Link, Navigate, useParams } from "react-router-dom"
+import { useEffect } from "react"
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
 
-export default function ExperimentDetail() {
+export default function ExperimentDetail({ isOverlay = false }) {
   const { id } = useParams()
+  const navigate = useNavigate()
   const experiment = experiments.find((item) => item.id === id)
+
+  useEffect(() => {
+    if (!isOverlay) return
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") navigate(-1)
+    }
+
+    window.addEventListener("keydown", closeOnEscape)
+    return () => window.removeEventListener("keydown", closeOnEscape)
+  }, [isOverlay, navigate])
 
   if (!experiment) return <Navigate to="/" replace />
 
@@ -14,13 +27,24 @@ export default function ExperimentDetail() {
   return (
     <main className="flex h-dvh max-h-dvh flex-col overflow-hidden bg-background px-4 py-5 text-foreground sm:px-6 lg:px-10 lg:py-8">
       <header className="mb-5 flex shrink-0 items-center justify-between gap-6 lg:mb-6">
-        <Link
-          to="/"
-          className="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
-          All experiments
-        </Link>
+        {isOverlay ? (
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="group inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
+            All experiments
+          </button>
+        ) : (
+          <Link
+            to="/"
+            className="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
+            All experiments
+          </Link>
+        )}
         <p className="text-xs text-muted-foreground">{year}</p>
       </header>
 
