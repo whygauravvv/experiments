@@ -2,7 +2,7 @@ import ExperimentSource from "@/components/code/experiment-source"
 import { experiments } from "@/experiments"
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import {
   Link,
   Navigate,
@@ -17,6 +17,8 @@ const experimentTransitionVariants = {
   exit: (direction: 1 | -1) => ({ opacity: 0, x: direction * -12 }),
 } satisfies Variants
 
+const CLOSE_TRANSITION_DURATION = 100
+
 export default function ExperimentDetail({ isOverlay = false }) {
   const { id } = useParams()
   const location = useLocation()
@@ -24,17 +26,36 @@ export default function ExperimentDetail({ isOverlay = false }) {
   const experiment = experiments.find((item) => item.id === id)
   const [isBrowsingExperiments, setIsBrowsingExperiments] = useState(false)
   const [navigationDirection, setNavigationDirection] = useState<1 | -1>(1)
+  const [isClosing, setIsClosing] = useState(false)
+  const closeTimer = useRef<number>(undefined)
+
+  const closeDetail = useCallback(() => {
+    if (!isOverlay) {
+      navigate("/")
+      return
+    }
+
+    setIsClosing(true)
+    window.clearTimeout(closeTimer.current)
+    closeTimer.current = window.setTimeout(
+      () => navigate("/"),
+      CLOSE_TRANSITION_DURATION
+    )
+  }, [isOverlay, navigate])
 
   useEffect(() => {
     if (!isOverlay) return
 
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") navigate(-1)
+      if (event.key === "Escape") closeDetail()
     }
 
     window.addEventListener("keydown", closeOnEscape)
-    return () => window.removeEventListener("keydown", closeOnEscape)
-  }, [isOverlay, navigate])
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape)
+      window.clearTimeout(closeTimer.current)
+    }
+  }, [closeDetail, isOverlay])
 
   if (!experiment) return <Navigate to="/" replace />
 
@@ -58,11 +79,16 @@ export default function ExperimentDetail({ isOverlay = false }) {
 
   return (
     <main className="flex min-h-dvh flex-col gap-6 bg-neutral-50 px-4 pb-6 text-foreground sm:px-6 md:h-dvh md:max-h-dvh md:overflow-hidden">
-      <header className="-mx-4 flex items-center justify-between border-b bg-background px-4 py-4 sm:-mx-6 sm:px-6">
+      <motion.header
+        animate={{ opacity: isClosing ? 0 : 1 }}
+        transition={{ duration: 0.1, ease: "easeOut" }}
+        className="-mx-4 flex items-center justify-between border-b bg-background px-4 py-4 sm:-mx-6 sm:px-6"
+      >
         {isOverlay ? (
           <button
             type="button"
-            onClick={() => navigate("/")}
+            onClick={closeDetail}
+            disabled={isClosing}
             className="group inline-flex cursor-pointer items-center gap-2 rounded-full px-3 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
@@ -84,6 +110,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
           <button
             type="button"
             onClick={() => navigateToExperiment(previousExperiment.id, -1)}
+            disabled={isClosing}
             aria-label={`Previous experiment: ${previousExperiment.title}`}
             className="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
           >
@@ -92,13 +119,14 @@ export default function ExperimentDetail({ isOverlay = false }) {
           <button
             type="button"
             onClick={() => navigateToExperiment(nextExperiment.id, 1)}
+            disabled={isClosing}
             aria-label={`Next experiment: ${nextExperiment.title}`}
             className="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
           >
             <ChevronRight className="size-4" />
           </button>
         </nav>
-      </header>
+      </motion.header>
 
       <AnimatePresence initial={false} mode="wait" custom={navigationDirection}>
         <motion.div
@@ -120,7 +148,11 @@ export default function ExperimentDetail({ isOverlay = false }) {
             <Component />
           </motion.section>
 
-          <aside className="flex min-w-0 flex-col md:min-h-0 md:overflow-hidden">
+          <motion.aside
+            animate={{ opacity: isClosing ? 0 : 1 }}
+            transition={{ duration: 0.1, ease: "easeOut" }}
+            className="flex min-w-0 flex-col md:min-h-0 md:overflow-hidden"
+          >
             <div className="shrink-0">
               <h1 className="text-[clamp(2.25rem,3.75vw,3rem)] font-semibold tracking-[-0.045em]">
                 {title}
@@ -132,7 +164,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
               <h2 className="mb-2 shrink-0 text-sm font-medium">Source</h2>
               <ExperimentSource files={files} />
             </section>
-          </aside>
+          </motion.aside>
         </motion.div>
       </AnimatePresence>
     </main>
