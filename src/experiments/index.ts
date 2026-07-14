@@ -5,6 +5,8 @@ import codexAtmosphereStyles from "@/styles/codex-atmosphere.css?raw"
 import type { ComponentType } from "react"
 import CodexAtmosphere from "./codex-atmosphere"
 import codexAtmosphereSource from "./codex-atmosphere.tsx?raw"
+import ImessageMenu from "./imessage-menu"
+import imessageMenuSource from "./imessage-menu.tsx?raw"
 import MotionButton from "./iphone"
 import iphoneSource from "./iphone.tsx?raw"
 
@@ -75,5 +77,20 @@ export const experiments: ExperimentItem[] = [
       },
     ],
     Component: CodexAtmosphere,
+  },
+  {
+    id: "imessage-menu",
+    title: "iMessage Menu",
+    description: "IOS 18 Imessage Menu Inspired Menu",
+    year: "2026",
+    tags: [],
+    files: [
+      {
+        filename: "imessage-menu.tsx",
+        language: "tsx",
+        code: imessageMenuSource,
+      },
+    ],
+    Component: ImessageMenu,
   },
 ]

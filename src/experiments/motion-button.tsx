@@ -1,13 +1,14 @@
 import { motion } from "motion/react"
 import { useState } from "react"
 
+import CardShell from "@/components/card-shell"
 import { Button } from "@/components/ui/button"
 
 export default function MotionButtonDemo() {
   const [isActive, setIsActive] = useState(false)
 
   return (
-    <div className="flex h-full items-center justify-center">
+    <CardShell>
       <motion.div
         whileHover={{ y: -4, scale: 1.03 }}
         whileTap={{ scale: 0.96, y: 0 }}
@@ -25,6 +26,6 @@ export default function MotionButtonDemo() {
           </motion.span>
         </Button>
       </motion.div>
-    </div>
+    </CardShell>
   )
 }

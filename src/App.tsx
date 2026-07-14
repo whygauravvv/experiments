@@ -3,6 +3,7 @@ import { LayoutGroup, motion } from "motion/react"
 import { Route, Routes, useLocation, type Location } from "react-router-dom"
 import ExperimentDetail from "./pages/experiment-detail"
 import ExperimentsGallery from "./pages/experiments-gallery"
+import NotFound from "./pages/not-found"
 
 export function App() {
   const location = useLocation()
@@ -29,6 +30,7 @@ export function App() {
       <Routes location={backgroundLocation ?? location}>
         <Route path="/" element={<ExperimentsGallery />} />
         <Route path="/experiments/:id" element={<ExperimentDetail />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       {isOverlay && (
