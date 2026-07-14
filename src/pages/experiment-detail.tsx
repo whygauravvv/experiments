@@ -1,4 +1,4 @@
-import CodeViewer from "@/components/code/code-viewer"
+import ExperimentSource from "@/components/code/experiment-source"
 import { experiments } from "@/experiments"
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
@@ -42,7 +42,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
   const previousExperiment =
     experiments[(experimentIndex - 1 + experiments.length) % experiments.length]
   const nextExperiment = experiments[(experimentIndex + 1) % experiments.length]
-  const { Component, description, source, title } = experiment
+  const { Component, description, files, title } = experiment
 
   const navigateToExperiment = (experimentId: string, direction: 1 | -1) => {
     setNavigationDirection(direction)
@@ -120,17 +120,17 @@ export default function ExperimentDetail({ isOverlay = false }) {
             <Component />
           </motion.section>
 
-          <aside className="min-w-0 md:min-h-0 md:overflow-y-auto md:overscroll-contain">
-            <div>
+          <aside className="flex min-w-0 flex-col md:min-h-0 md:overflow-hidden">
+            <div className="shrink-0">
               <h1 className="text-[clamp(2.25rem,3.75vw,3rem)] font-semibold tracking-[-0.045em]">
                 {title}
               </h1>
               <p className="text-xs text-muted-foreground">{description}</p>
             </div>
 
-            <section className="mt-10">
-              <h2 className="mb-1 text-sm font-medium">Source</h2>
-              <CodeViewer code={source} filename={`${experiment.id}.tsx`} />
+            <section className="mt-10 flex flex-col md:min-h-0 md:flex-1">
+              <h2 className="mb-2 shrink-0 text-sm font-medium">Source</h2>
+              <ExperimentSource files={files} />
             </section>
           </aside>
         </motion.div>
