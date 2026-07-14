@@ -12,9 +12,23 @@ import {
 } from "react-router-dom"
 
 const experimentTransitionVariants = {
+  enter: { opacity: 0, filter: "blur(2px)" },
+  center: { opacity: 1, filter: "blur(0px)" },
+  exit: { opacity: 0, filter: "blur(2px)" },
+} satisfies Variants
+
+const experimentDetailsTransitionVariants = {
   enter: (direction: 1 | -1) => ({ opacity: 0, x: direction * 12 }),
-  center: { opacity: 1, x: 0 },
-  exit: (direction: 1 | -1) => ({ opacity: 0, x: direction * -12 }),
+  center: {
+    opacity: 1,
+    x: 0,
+    transition: { delay: 0.12, duration: 0.16, ease: "easeOut" },
+  },
+  exit: (direction: 1 | -1) => ({
+    opacity: 0,
+    x: direction * -12,
+    transition: { duration: 0.16, ease: "easeOut" },
+  }),
 } satisfies Variants
 
 const CLOSE_TRANSITION_DURATION = 100
@@ -128,45 +142,62 @@ export default function ExperimentDetail({ isOverlay = false }) {
         </nav>
       </motion.header>
 
-      <AnimatePresence initial={false} mode="wait" custom={navigationDirection}>
-        <motion.div
-          key={experiment.id}
-          custom={navigationDirection}
-          variants={experimentTransitionVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{ duration: 0.16, ease: "easeOut" }}
-          className="grid grid-cols-1 gap-6 md:min-h-0 md:flex-1 md:grid-cols-2 md:gap-4"
+      <div className="grid grid-cols-1 gap-6 md:min-h-0 md:flex-1 md:grid-cols-2 md:gap-4">
+        <motion.section
+          layoutId={
+            isBrowsingExperiments ? undefined : `experiment-${experiment.id}`
+          }
+          className="z-50 aspect-square w-full overflow-hidden rounded-lg border border-border/60 bg-card md:h-full md:max-h-full md:w-auto md:max-w-full md:justify-self-center"
         >
-          <motion.section
-            layoutId={
-              isBrowsingExperiments ? undefined : `experiment-${experiment.id}`
-            }
-            className="z-50 aspect-square w-full overflow-hidden rounded-lg border border-border/60 bg-card md:h-full md:max-h-full md:w-auto md:max-w-full md:justify-self-center"
-          >
-            <Component />
-          </motion.section>
+          <AnimatePresence initial={false} mode="wait">
+            <motion.div
+              key={experiment.id}
+              variants={experimentTransitionVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.16, ease: "easeOut" }}
+              className="h-full w-full"
+            >
+              <Component />
+            </motion.div>
+          </AnimatePresence>
+        </motion.section>
 
-          <motion.aside
-            animate={{ opacity: isClosing ? 0 : 1 }}
-            transition={{ duration: 0.1, ease: "easeOut" }}
-            className="flex min-w-0 flex-col md:min-h-0 md:overflow-hidden"
+        <AnimatePresence
+          initial={false}
+          mode="wait"
+          custom={navigationDirection}
+        >
+          <motion.div
+            key={experiment.id}
+            custom={navigationDirection}
+            variants={experimentDetailsTransitionVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="min-w-0 md:min-h-0"
           >
-            <div className="shrink-0">
-              <h1 className="text-[clamp(2.25rem,3.75vw,3rem)] font-semibold tracking-[-0.045em]">
-                {title}
-              </h1>
-              <p className="text-xs text-muted-foreground">{description}</p>
-            </div>
+            <motion.aside
+              animate={{ opacity: isClosing ? 0 : 1 }}
+              transition={{ duration: 0.1, ease: "easeOut" }}
+              className="flex h-full min-w-0 flex-col md:min-h-0 md:overflow-hidden"
+            >
+              <div className="shrink-0">
+                <h1 className="text-[clamp(2.25rem,3.75vw,3rem)] font-semibold tracking-[-0.045em]">
+                  {title}
+                </h1>
+                <p className="text-xs text-muted-foreground">{description}</p>
+              </div>
 
-            <section className="mt-10 flex flex-col md:min-h-0 md:flex-1">
-              <h2 className="mb-2 shrink-0 text-sm font-medium">Source</h2>
-              <ExperimentSource files={files} />
-            </section>
-          </motion.aside>
-        </motion.div>
-      </AnimatePresence>
+              <section className="mt-10 flex flex-col md:min-h-0 md:flex-1">
+                <h2 className="mb-2 shrink-0 text-sm font-medium">Source</h2>
+                <ExperimentSource files={files} />
+              </section>
+            </motion.aside>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </main>
   )
 }
