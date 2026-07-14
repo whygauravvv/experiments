@@ -1,11 +1,6 @@
 import { useEffect } from "react"
 import { AnimatePresence, LayoutGroup, motion } from "motion/react"
-import {
-  Route,
-  Routes,
-  useLocation,
-  type Location,
-} from "react-router-dom"
+import { Route, Routes, useLocation, type Location } from "react-router-dom"
 import ExperimentDetail from "./pages/experiment-detail"
 import ExperimentsGallery from "./pages/experiments-gallery"
 
@@ -15,7 +10,7 @@ export function App() {
     location.state as { backgroundLocation?: Location } | null
   )?.backgroundLocation
   const isOverlay = Boolean(
-    backgroundLocation && location.pathname.startsWith("/experiments/"),
+    backgroundLocation && location.pathname.startsWith("/experiments/")
   )
 
   useEffect(() => {
@@ -39,7 +34,7 @@ export function App() {
       <AnimatePresence initial={false}>
         {isOverlay && (
           <motion.div
-            key={location.pathname}
+            key="experiment-detail-overlay"
             role="dialog"
             aria-modal="true"
             aria-label="Experiment details"
