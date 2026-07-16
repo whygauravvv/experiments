@@ -1,26 +1,41 @@
 import type { ExperimentItem } from "@/experiments"
 import { MoveUpRight } from "lucide-react"
-import { motion } from "motion/react"
-import { useState } from "react"
+import { motion, useReducedMotion } from "motion/react"
 import { Link, useLocation } from "react-router-dom"
+
+type GalleryCardProps = ExperimentItem & {
+  isActive?: boolean
+  isDetailOpen?: boolean
+}
 
 export default function GalleryCard({
   id,
   title,
   description,
   Component,
-}: ExperimentItem) {
+  isActive = false,
+  isDetailOpen = false,
+}: GalleryCardProps) {
   const location = useLocation()
-  const [isLayoutAnimating, setIsLayoutAnimating] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
+
+  const backgroundState = isActive
+    ? { opacity: 0, scale: 0.985, filter: "blur(0px)", y: 0 }
+    : { opacity: 0.28, scale: 0.99, filter: "blur(6px)", y: 6 }
 
   return (
     <motion.article
-      key={id}
-      layoutId={`experiment-${id}`}
-      onLayoutAnimationStart={() => setIsLayoutAnimating(true)}
-      onLayoutAnimationComplete={() => setIsLayoutAnimating(false)}
-      transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.75 }}
-      className={`group relative aspect-square overflow-hidden rounded-xl border border-border/60 bg-card ${isLayoutAnimating ? "z-50" : "z-0"}`}
+      animate={
+        isDetailOpen
+          ? backgroundState
+          : { opacity: 1, scale: 1, filter: "blur(0px)", y: 0 }
+      }
+      transition={
+        shouldReduceMotion
+          ? { duration: 0.01 }
+          : { duration: 0.34, ease: [0.16, 1, 0.3, 1] }
+      }
+      className="group relative aspect-square overflow-hidden rounded-xl border border-border/60 bg-card"
     >
       <section className="pointer-events-none absolute bottom-0 z-50 h-14 max-h-16 w-full">
         <div className="flex h-full w-full items-center justify-between px-3">

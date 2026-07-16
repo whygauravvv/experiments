@@ -1,5 +1,5 @@
+import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { useEffect } from "react"
-import { LayoutGroup, motion } from "motion/react"
 import { Route, Routes, useLocation, type Location } from "react-router-dom"
 import ExperimentDetail from "./pages/experiment-detail"
 import ExperimentsGallery from "./pages/experiments-gallery"
@@ -7,12 +7,16 @@ import NotFound from "./pages/not-found"
 
 export function App() {
   const location = useLocation()
+  const shouldReduceMotion = useReducedMotion()
   const backgroundLocation = (
     location.state as { backgroundLocation?: Location } | null
   )?.backgroundLocation
   const isOverlay = Boolean(
     backgroundLocation && location.pathname.startsWith("/experiments/")
   )
+  const activeExperimentId = isOverlay
+    ? location.pathname.split("/").filter(Boolean).at(-1)
+    : undefined
 
   useEffect(() => {
     if (!isOverlay) return
@@ -26,33 +30,56 @@ export function App() {
   }, [isOverlay])
 
   return (
-    <LayoutGroup>
+    <>
       <Routes location={backgroundLocation ?? location}>
-        <Route path="/" element={<ExperimentsGallery />} />
+        <Route
+          path="/"
+          element={
+            <ExperimentsGallery
+              activeExperimentId={activeExperimentId}
+              isDetailOpen={isOverlay}
+            />
+          }
+        />
         <Route path="/experiments/:id" element={<ExperimentDetail />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {isOverlay && (
-        <motion.div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Experiment details"
-          className="fixed inset-0 z-50 overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.12, ease: "linear" }}
-          style={{ willChange: "opacity" }}
-        >
-          <Routes location={location}>
-            <Route
-              path="/experiments/:id"
-              element={<ExperimentDetail isOverlay />}
-            />
-          </Routes>
-        </motion.div>
-      )}
-    </LayoutGroup>
+      <AnimatePresence>
+        {isOverlay && (
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Experiment details"
+            className="fixed inset-0 z-50 overflow-hidden"
+            initial={{ backgroundColor: "rgba(250, 250, 250, 0)" }}
+            animate={{
+              backgroundColor: "rgba(250, 250, 250, 1)",
+              transition: shouldReduceMotion
+                ? { duration: 0.01 }
+                : { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+            }}
+            exit={{
+              backgroundColor: "rgba(250, 250, 250, 0)",
+              transition: shouldReduceMotion
+                ? { duration: 0.01 }
+                : {
+                    delay: 0.1,
+                    duration: 0.22,
+                    ease: [0.16, 1, 0.3, 1],
+                  },
+            }}
+          >
+            <Routes location={location}>
+              <Route
+                path="/experiments/:id"
+                element={<ExperimentDetail isOverlay />}
+              />
+            </Routes>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
 
