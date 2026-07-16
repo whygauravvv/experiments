@@ -1,0 +1,270 @@
+.rainbow-dot-field {
+  --grid-spacing: 10px;
+  --grid-offset: 5px;
+  --grid-transition-duration: 340ms;
+
+  --base-dot-size: 1px;
+  --base-dot-edge: 1.3px;
+  --base-opacity: 0.42;
+  --base-fade-width: 88%;
+  --base-fade-height: 82%;
+
+  --outer-dot-size: 1.55px;
+  --outer-dot-edge: 1.9px;
+  --outer-radius: 260px;
+  --outer-opacity: 0.52;
+
+  --middle-dot-size: 2.25px;
+  --middle-dot-edge: 2.62px;
+  --middle-radius: 190px;
+  --middle-opacity: 0.68;
+
+  --inner-dot-size: 3.05px;
+  --inner-dot-edge: 3.45px;
+  --inner-radius: 125px;
+  --inner-opacity: 0.82;
+
+  --core-dot-size: 4px;
+  --core-dot-edge: 4.4px;
+  --core-radius: 70px;
+  --core-opacity: 1;
+
+  --growth-solid-stop: 6%;
+  --growth-fade-stop: 76%;
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background: #faf9f6;
+}
+
+.rainbow-dot-field::after {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 76% 72% at 50% 50%,
+    transparent 52%,
+    rgba(250, 249, 246, 0.28) 76%,
+    rgba(250, 249, 246, 0.9) 100%
+  );
+  content: "";
+}
+
+.rainbow-dot-field__layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 255, 255, 0.22),
+      transparent 48%,
+      rgba(20, 18, 28, 0.08) 100%
+    ),
+    conic-gradient(
+      from -35deg at 50% 50%,
+      #ff375f,
+      #ff8a00,
+      #ffd60a,
+      #30d158,
+      #00c7be,
+      #0a84ff,
+      #5e5ce6,
+      #bf5af2,
+      #ff375f
+    );
+}
+
+.rainbow-dot-field__base {
+  opacity: var(--base-opacity);
+  -webkit-mask-image:
+    radial-gradient(
+      circle,
+      #000 var(--base-dot-size),
+      transparent var(--base-dot-edge)
+    ),
+    radial-gradient(
+      ellipse var(--base-fade-width) var(--base-fade-height) at 50% 50%,
+      #000 0%,
+      rgba(0, 0, 0, 0.72) 48%,
+      transparent 100%
+    );
+  mask-image:
+    radial-gradient(
+      circle,
+      #000 var(--base-dot-size),
+      transparent var(--base-dot-edge)
+    ),
+    radial-gradient(
+      ellipse var(--base-fade-width) var(--base-fade-height) at 50% 50%,
+      #000 0%,
+      rgba(0, 0, 0, 0.72) 48%,
+      transparent 100%
+    );
+  -webkit-mask-position:
+    var(--grid-offset) var(--grid-offset),
+    0 0;
+  mask-position:
+    var(--grid-offset) var(--grid-offset),
+    0 0;
+  -webkit-mask-size:
+    var(--grid-spacing) var(--grid-spacing),
+    100% 100%;
+  mask-size:
+    var(--grid-spacing) var(--grid-spacing),
+    100% 100%;
+  -webkit-mask-repeat: repeat, no-repeat;
+  mask-repeat: repeat, no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.rainbow-dot-field__growth {
+  opacity: 0;
+  transition: opacity var(--grid-transition-duration) ease;
+  will-change: opacity, mask-image;
+  -webkit-mask-position:
+    var(--grid-offset) var(--grid-offset),
+    0 0;
+  mask-position:
+    var(--grid-offset) var(--grid-offset),
+    0 0;
+  -webkit-mask-size:
+    var(--grid-spacing) var(--grid-spacing),
+    100% 100%;
+  mask-size:
+    var(--grid-spacing) var(--grid-spacing),
+    100% 100%;
+  -webkit-mask-repeat: repeat, no-repeat;
+  mask-repeat: repeat, no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.rainbow-dot-field__growth--outer {
+  -webkit-mask-image:
+    radial-gradient(
+      circle,
+      #000 var(--outer-dot-size),
+      transparent var(--outer-dot-edge)
+    ),
+    radial-gradient(
+      var(--outer-radius) circle at var(--pointer-x) var(--pointer-y),
+      #000 var(--growth-solid-stop),
+      transparent var(--growth-fade-stop)
+    );
+  mask-image:
+    radial-gradient(
+      circle,
+      #000 var(--outer-dot-size),
+      transparent var(--outer-dot-edge)
+    ),
+    radial-gradient(
+      var(--outer-radius) circle at var(--pointer-x) var(--pointer-y),
+      #000 var(--growth-solid-stop),
+      transparent var(--growth-fade-stop)
+    );
+}
+
+.rainbow-dot-field__growth--middle {
+  -webkit-mask-image:
+    radial-gradient(
+      circle,
+      #000 var(--middle-dot-size),
+      transparent var(--middle-dot-edge)
+    ),
+    radial-gradient(
+      var(--middle-radius) circle at var(--pointer-x) var(--pointer-y),
+      #000 var(--growth-solid-stop),
+      transparent var(--growth-fade-stop)
+    );
+  mask-image:
+    radial-gradient(
+      circle,
+      #000 var(--middle-dot-size),
+      transparent var(--middle-dot-edge)
+    ),
+    radial-gradient(
+      var(--middle-radius) circle at var(--pointer-x) var(--pointer-y),
+      #000 var(--growth-solid-stop),
+      transparent var(--growth-fade-stop)
+    );
+}
+
+.rainbow-dot-field__growth--inner {
+  -webkit-mask-image:
+    radial-gradient(
+      circle,
+      #000 var(--inner-dot-size),
+      transparent var(--inner-dot-edge)
+    ),
+    radial-gradient(
+      var(--inner-radius) circle at var(--pointer-x) var(--pointer-y),
+      #000 var(--growth-solid-stop),
+      transparent var(--growth-fade-stop)
+    );
+  mask-image:
+    radial-gradient(
+      circle,
+      #000 var(--inner-dot-size),
+      transparent var(--inner-dot-edge)
+    ),
+    radial-gradient(
+      var(--inner-radius) circle at var(--pointer-x) var(--pointer-y),
+      #000 var(--growth-solid-stop),
+      transparent var(--growth-fade-stop)
+    );
+}
+
+.rainbow-dot-field__growth--core {
+  -webkit-mask-image:
+    radial-gradient(
+      circle,
+      #000 var(--core-dot-size),
+      transparent var(--core-dot-edge)
+    ),
+    radial-gradient(
+      var(--core-radius) circle at var(--pointer-x) var(--pointer-y),
+      #000 0%,
+      transparent var(--growth-fade-stop)
+    );
+  mask-image:
+    radial-gradient(
+      circle,
+      #000 var(--core-dot-size),
+      transparent var(--core-dot-edge)
+    ),
+    radial-gradient(
+      var(--core-radius) circle at var(--pointer-x) var(--pointer-y),
+      #000 0%,
+      transparent var(--growth-fade-stop)
+    );
+}
+
+.rainbow-dot-field[data-active="true"] .rainbow-dot-field__growth--outer {
+  opacity: var(--outer-opacity);
+}
+
+.rainbow-dot-field[data-active="true"] .rainbow-dot-field__growth--middle {
+  opacity: var(--middle-opacity);
+}
+
+.rainbow-dot-field[data-active="true"] .rainbow-dot-field__growth--inner {
+  opacity: var(--inner-opacity);
+}
+
+.rainbow-dot-field[data-active="true"] .rainbow-dot-field__growth--core {
+  opacity: var(--core-opacity);
+}
+
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .rainbow-dot-field__growth {
+    display: none;
+  }
+}

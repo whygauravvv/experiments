@@ -5,6 +5,7 @@ import codexAtmosphereStyles from "@/styles/codex-atmosphere.css?raw"
 import createModalStyles from "@/styles/create-modal.css?raw"
 import iconRevealStyles from "@/styles/icon-reveal.css?raw"
 import metricMatrixStyles from "@/styles/metric-matrix.css?raw"
+import rainbowDotFieldStyles from "@/styles/rainbow-dot-field.css?raw"
 import type { ComponentType } from "react"
 import CodexAtmosphere from "./codex-atmosphere"
 import codexAtmosphereSource from "./codex-atmosphere.tsx?raw"
@@ -18,6 +19,8 @@ import MotionButton from "./iphone"
 import iphoneSource from "./iphone.tsx?raw"
 import MetricMatrix from "./metric-matrix"
 import metricMatrixSource from "./metric-matrix.tsx?raw"
+import RainbowDotField from "./rainbow-dot-field"
+import rainbowDotFieldSource from "./rainbow-dot-field.tsx?raw"
 
 export type ExperimentItem = {
   id: string
@@ -37,6 +40,26 @@ export type ExperimentSourceFile = {
 }
 
 export const experiments: ExperimentItem[] = [
+  {
+    id: "rainbow-dot-field",
+    title: "Rainbow Dot Field",
+    description: "A masked spectrum of dots that grows around the cursor.",
+    year: "2026",
+    tags: ["CSS", "Pointer", "Masking"],
+    files: [
+      {
+        filename: "rainbow-dot-field.tsx",
+        language: "tsx",
+        code: rainbowDotFieldSource,
+      },
+      {
+        filename: "rainbow-dot-field.css",
+        language: "css",
+        code: rainbowDotFieldStyles,
+      },
+    ],
+    Component: RainbowDotField,
+  },
   {
     id: "metric-matrix",
     title: "Metric Matrix",
