@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build UI Experiment"
+  short_description: "Create polished, personalized UI experiments"
+  default_prompt: "Use $build-ui-experiment to turn this reference or interaction idea into a polished experiment."

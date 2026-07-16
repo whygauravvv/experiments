@@ -2,9 +2,15 @@ import MotionButtonDemo from "@/experiments/motion-button"
 import motionButtonSource from "@/experiments/motion-button.tsx?raw"
 import type { SupportedCodeLanguage } from "@/lib/highlight-code"
 import codexAtmosphereStyles from "@/styles/codex-atmosphere.css?raw"
+import createModalStyles from "@/styles/create-modal.css?raw"
+import iconRevealStyles from "@/styles/icon-reveal.css?raw"
 import type { ComponentType } from "react"
 import CodexAtmosphere from "./codex-atmosphere"
 import codexAtmosphereSource from "./codex-atmosphere.tsx?raw"
+import CreateModal from "./create-modal"
+import createModalSource from "./create-modal.tsx?raw"
+import IconReveal from "./icon-reveal"
+import iconRevealSource from "./icon-reveal.tsx?raw"
 import ImessageMenu from "./imessage-menu"
 import imessageMenuSource from "./imessage-menu.tsx?raw"
 import MotionButton from "./iphone"
@@ -28,6 +34,47 @@ export type ExperimentSourceFile = {
 }
 
 export const experiments: ExperimentItem[] = [
+  {
+    id: "create-modal",
+    title: "Create Modal",
+    description: "A compact create button that morphs into an action menu.",
+    year: "2026",
+    tags: ["Motion", "Menu", "Interaction"],
+    files: [
+      {
+        filename: "create-modal.tsx",
+        language: "tsx",
+        code: createModalSource,
+      },
+      {
+        filename: "create-modal.css",
+        language: "css",
+        code: createModalStyles,
+      },
+    ],
+    Component: CreateModal,
+  },
+  {
+    id: "icon-reveal",
+    title: "Icon Reveal",
+    description: "A color reveal made by stacking and clipping two icons.",
+    year: "2026",
+    tags: ["CSS", "Clip Path", "Interaction"],
+    files: [
+      {
+        filename: "icon-reveal.tsx",
+        language: "tsx",
+        code: iconRevealSource,
+      },
+      {
+        filename: "icon-reveal.css",
+        language: "css",
+        code: iconRevealStyles,
+      },
+    ],
+    url: "https://x.com/jh3yy/status/2019918728440283481",
+    Component: IconReveal,
+  },
   {
     id: "motion-button-demo",
     title: "Motion Button",
