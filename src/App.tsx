@@ -1,11 +1,35 @@
+import MobileExperiments from "@/components/mobile-experiments"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { AnimatePresence, motion } from "motion/react"
 import { useEffect } from "react"
-import { Route, Routes, useLocation, type Location } from "react-router-dom"
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  type Location,
+} from "react-router-dom"
 import ExperimentDetail from "./pages/experiment-detail"
 import ExperimentsGallery from "./pages/experiments-gallery"
 import NotFound from "./pages/not-found"
 
 export function App() {
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return (
+      <Routes>
+        <Route path="/" element={<MobileExperiments />} />
+        <Route path="/experiments/:id" element={<MobileExperiments />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    )
+  }
+
+  return <DesktopApp />
+}
+
+function DesktopApp() {
   const location = useLocation()
   const backgroundLocation = (
     location.state as { backgroundLocation?: Location } | null
