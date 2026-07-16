@@ -1,0 +1,127 @@
+.metric-matrix-demo {
+  container-type: inline-size;
+  display: grid;
+  height: 100%;
+  width: 100%;
+  place-items: center;
+  overflow: hidden;
+  background: #f1f1f1;
+}
+
+.metric-matrix {
+  display: grid;
+  width: clamp(14rem, 62cqw, 19rem);
+  aspect-ratio: 1;
+  cursor: pointer;
+  appearance: none;
+  grid-template-rows: minmax(0, 1fr) auto;
+  overflow: hidden;
+  border: 0;
+  border-radius: clamp(0.35rem, 1.2cqw, 0.6rem);
+  padding: clamp(0.9rem, 3.2cqw, 1.05rem);
+  text-align: left;
+  box-shadow:
+    0 1px 2px rgba(24, 20, 16, 0.06),
+    0 12px 32px rgba(24, 20, 16, 0.09);
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.metric-matrix:focus-visible {
+  outline: 3px solid #7d9aff;
+  outline-offset: 5px;
+}
+
+.metric-matrix__dots {
+  display: grid;
+  min-height: 0;
+  align-content: start;
+  justify-content: space-between;
+  grid-template-columns: repeat(12, clamp(0.62rem, 2.3cqw, 0.84rem));
+  row-gap: clamp(0.35rem, 1.55cqw, 0.62rem);
+}
+
+.metric-matrix__dot {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  will-change: transform, opacity, background-color;
+}
+
+.metric-matrix__footer {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 0.96fr 1.04fr;
+  align-items: end;
+  gap: clamp(0.5rem, 2.5cqw, 0.85rem);
+}
+
+.metric-matrix__value-viewport {
+  position: relative;
+  display: block;
+  width: clamp(5.8rem, 24cqw, 7.4rem);
+  height: clamp(2.15rem, 10cqw, 3.35rem);
+  overflow: hidden;
+}
+
+.metric-matrix__value {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: baseline;
+  font-size: clamp(2rem, 10cqw, 3.45rem);
+  font-weight: 500;
+  line-height: 0.86;
+  letter-spacing: -0.055em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  white-space: nowrap;
+}
+
+.metric-matrix__character {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+.metric-matrix__copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(0.2rem, 0.8cqw, 0.34rem);
+  padding-bottom: 0.05rem;
+  font-size: clamp(0.48rem, 1.55cqw, 0.66rem);
+  font-weight: 450;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.metric-matrix__copy-viewport {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 2.5em;
+}
+
+.metric-matrix__copy-text {
+  position: absolute;
+  inset: 0;
+  display: block;
+  will-change: transform, opacity, filter;
+}
+
+.metric-matrix__link {
+  font-size: 0.88em;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.14em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metric-matrix,
+  .metric-matrix__dot,
+  .metric-matrix__character {
+    transition-duration: 0.01ms;
+  }
+}

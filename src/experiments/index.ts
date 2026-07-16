@@ -4,6 +4,7 @@ import type { SupportedCodeLanguage } from "@/lib/highlight-code"
 import codexAtmosphereStyles from "@/styles/codex-atmosphere.css?raw"
 import createModalStyles from "@/styles/create-modal.css?raw"
 import iconRevealStyles from "@/styles/icon-reveal.css?raw"
+import metricMatrixStyles from "@/styles/metric-matrix.css?raw"
 import type { ComponentType } from "react"
 import CodexAtmosphere from "./codex-atmosphere"
 import codexAtmosphereSource from "./codex-atmosphere.tsx?raw"
@@ -15,6 +16,8 @@ import ImessageMenu from "./imessage-menu"
 import imessageMenuSource from "./imessage-menu.tsx?raw"
 import MotionButton from "./iphone"
 import iphoneSource from "./iphone.tsx?raw"
+import MetricMatrix from "./metric-matrix"
+import metricMatrixSource from "./metric-matrix.tsx?raw"
 
 export type ExperimentItem = {
   id: string
@@ -34,6 +37,26 @@ export type ExperimentSourceFile = {
 }
 
 export const experiments: ExperimentItem[] = [
+  {
+    id: "metric-matrix",
+    title: "Metric Matrix",
+    description: "A click-driven metric card with progressive dot transitions.",
+    year: "2026",
+    tags: ["Data", "Motion", "Interaction"],
+    files: [
+      {
+        filename: "metric-matrix.tsx",
+        language: "tsx",
+        code: metricMatrixSource,
+      },
+      {
+        filename: "metric-matrix.css",
+        language: "css",
+        code: metricMatrixStyles,
+      },
+    ],
+    Component: MetricMatrix,
+  },
   {
     id: "create-modal",
     title: "Create Modal",
