@@ -263,7 +263,7 @@
   opacity: var(--core-opacity);
 }
 
-@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+@media (pointer: coarse) {
   .rainbow-dot-field__growth {
     display: none;
   }

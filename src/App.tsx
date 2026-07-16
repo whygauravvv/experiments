@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
+import { AnimatePresence, motion } from "motion/react"
 import { useEffect } from "react"
 import { Route, Routes, useLocation, type Location } from "react-router-dom"
 import ExperimentDetail from "./pages/experiment-detail"
@@ -7,7 +7,6 @@ import NotFound from "./pages/not-found"
 
 export function App() {
   const location = useLocation()
-  const shouldReduceMotion = useReducedMotion()
   const backgroundLocation = (
     location.state as { backgroundLocation?: Location } | null
   )?.backgroundLocation
@@ -55,19 +54,15 @@ export function App() {
             initial={{ backgroundColor: "rgba(250, 250, 250, 0)" }}
             animate={{
               backgroundColor: "rgba(250, 250, 250, 1)",
-              transition: shouldReduceMotion
-                ? { duration: 0.01 }
-                : { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+              transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
             }}
             exit={{
               backgroundColor: "rgba(250, 250, 250, 0)",
-              transition: shouldReduceMotion
-                ? { duration: 0.01 }
-                : {
-                    delay: 0.1,
-                    duration: 0.22,
-                    ease: [0.16, 1, 0.3, 1],
-                  },
+              transition: {
+                delay: 0.1,
+                duration: 0.22,
+                ease: [0.16, 1, 0.3, 1],
+              },
             }}
           >
             <Routes location={location}>

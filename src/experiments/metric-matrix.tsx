@@ -1,11 +1,6 @@
 import "../styles/metric-matrix.css"
 
-import {
-  AnimatePresence,
-  motion,
-  useReducedMotion,
-  type Variants,
-} from "motion/react"
+import { AnimatePresence, motion, type Variants } from "motion/react"
 import { useState } from "react"
 
 type Direction = 1 | -1
@@ -25,7 +20,6 @@ type CharacterMotion = {
   index: number
   total: number
   direction: Direction
-  reduceMotion: boolean
 }
 
 const DOT_COUNT = 96
@@ -65,31 +59,28 @@ const METRIC_STATES: MetricState[] = [
 ]
 
 const CHARACTER_VARIANTS = {
-  hidden: ({ direction, reduceMotion }: CharacterMotion) =>
-    reduceMotion
-      ? { opacity: 0 }
-      : {
-          opacity: 0,
-          y: direction === 1 ? 18 : -18,
-          filter: "blur(5px)",
-        },
-  visible: ({ index, reduceMotion }: CharacterMotion) => ({
+  hidden: ({ direction }: CharacterMotion) => ({
+    opacity: 0,
+    y: direction === 1 ? 18 : -18,
+    filter: "blur(5px)",
+  }),
+  visible: ({ index }: CharacterMotion) => ({
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
     transition: {
-      delay: reduceMotion ? 0 : index * 0.038,
-      duration: reduceMotion ? 0.01 : 0.28,
+      delay: index * 0.038,
+      duration: 0.28,
       ease: [0.16, 1, 0.3, 1],
     },
   }),
-  exit: ({ index, total, direction, reduceMotion }: CharacterMotion) => ({
+  exit: ({ index, total, direction }: CharacterMotion) => ({
     opacity: 0,
-    y: reduceMotion ? 0 : direction === 1 ? -16 : 16,
-    filter: reduceMotion ? "blur(0px)" : "blur(4px)",
+    y: direction === 1 ? -16 : 16,
+    filter: "blur(4px)",
     transition: {
-      delay: reduceMotion ? 0 : (total - index - 1) * 0.02,
-      duration: reduceMotion ? 0.01 : 0.16,
+      delay: (total - index - 1) * 0.02,
+      duration: 0.16,
       ease: "easeIn",
     },
   }),
@@ -98,7 +89,6 @@ const CHARACTER_VARIANTS = {
 export default function MetricMatrix() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [direction, setDirection] = useState<Direction>(1)
-  const shouldReduceMotion = Boolean(useReducedMotion())
   const state = METRIC_STATES[activeIndex]
   const nextIndex = (activeIndex + 1) % METRIC_STATES.length
   const nextState = METRIC_STATES[nextIndex]
@@ -124,13 +114,13 @@ export default function MetricMatrix() {
           backgroundColor: state.background,
           color: state.foreground,
         }}
-        whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
+        whileTap={{ scale: 0.985 }}
         transition={{
           backgroundColor: {
-            duration: shouldReduceMotion ? 0.01 : 0.42,
+            duration: 0.42,
             ease: [0.16, 1, 0.3, 1],
           },
-          color: { duration: shouldReduceMotion ? 0.01 : 0.3 },
+          color: { duration: 0.3 },
           scale: { type: "spring", stiffness: 500, damping: 34 },
         }}
       >
@@ -151,8 +141,8 @@ export default function MetricMatrix() {
                   scale: 1,
                 }}
                 transition={{
-                  delay: shouldReduceMotion || !isActive ? 0 : index * 0.0025,
-                  duration: shouldReduceMotion ? 0.01 : 0.26,
+                  delay: isActive ? index * 0.0025 : 0,
+                  duration: 0.26,
                   ease: [0.16, 1, 0.3, 1],
                 }}
               />
@@ -162,10 +152,7 @@ export default function MetricMatrix() {
 
         <span className="metric-matrix__footer">
           <span className="metric-matrix__value-viewport" aria-hidden="true">
-            <AnimatePresence
-              initial={false}
-              custom={{ direction, shouldReduceMotion }}
-            >
+            <AnimatePresence initial={false}>
               <motion.span
                 key={state.value}
                 className="metric-matrix__value"
@@ -183,7 +170,6 @@ export default function MetricMatrix() {
                         index,
                         total: characters.length,
                         direction,
-                        reduceMotion: shouldReduceMotion,
                       }}
                       variants={CHARACTER_VARIANTS}
                     >
@@ -200,19 +186,11 @@ export default function MetricMatrix() {
                 <motion.span
                   key={state.value}
                   className="metric-matrix__copy-text"
-                  initial={
-                    shouldReduceMotion
-                      ? { opacity: 0 }
-                      : { opacity: 0, y: 5, filter: "blur(3px)" }
-                  }
+                  initial={{ opacity: 0, y: 5, filter: "blur(3px)" }}
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={
-                    shouldReduceMotion
-                      ? { opacity: 0 }
-                      : { opacity: 0, y: -5, filter: "blur(3px)" }
-                  }
+                  exit={{ opacity: 0, y: -5, filter: "blur(3px)" }}
                   transition={{
-                    duration: shouldReduceMotion ? 0.01 : 0.2,
+                    duration: 0.2,
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   style={{ color: state.muted }}
@@ -224,7 +202,7 @@ export default function MetricMatrix() {
             <motion.span
               className="metric-matrix__link"
               animate={{ color: state.accent }}
-              transition={{ duration: shouldReduceMotion ? 0.01 : 0.3 }}
+              transition={{ duration: 0.3 }}
             >
               learn more n3xt.com
             </motion.span>

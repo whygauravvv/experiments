@@ -1,6 +1,6 @@
 import type { ExperimentItem } from "@/experiments"
 import { MoveUpRight } from "lucide-react"
-import { motion, useReducedMotion } from "motion/react"
+import { motion } from "motion/react"
 import { Link, useLocation } from "react-router-dom"
 
 type GalleryCardProps = ExperimentItem & {
@@ -17,8 +17,6 @@ export default function GalleryCard({
   isDetailOpen = false,
 }: GalleryCardProps) {
   const location = useLocation()
-  const shouldReduceMotion = useReducedMotion()
-
   const backgroundState = isActive
     ? { opacity: 0, scale: 0.985, filter: "blur(0px)", y: 0 }
     : { opacity: 0.28, scale: 0.99, filter: "blur(6px)", y: 6 }
@@ -30,11 +28,7 @@ export default function GalleryCard({
           ? backgroundState
           : { opacity: 1, scale: 1, filter: "blur(0px)", y: 0 }
       }
-      transition={
-        shouldReduceMotion
-          ? { duration: 0.01 }
-          : { duration: 0.34, ease: [0.16, 1, 0.3, 1] }
-      }
+      transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
       className="group relative aspect-square overflow-hidden rounded-xl border border-border/60 bg-card"
     >
       <section className="pointer-events-none absolute bottom-0 z-50 h-14 max-h-16 w-full">

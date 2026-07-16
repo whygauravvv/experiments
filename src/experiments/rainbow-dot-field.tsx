@@ -8,11 +8,7 @@ export default function RainbowDotField() {
   useEffect(() => {
     const field = fieldRef.current
 
-    if (
-      !field ||
-      window.matchMedia("(pointer: coarse)").matches ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
+    if (!field || window.matchMedia("(pointer: coarse)").matches) {
       return
     }
 

@@ -133,10 +133,3 @@
   outline: 2px solid rgba(37, 36, 34, 0.35);
   outline-offset: 3px;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .icon-reveal__icon,
-  .icon-reveal__icon img:last-child {
-    transition-duration: 0.01ms;
-  }
-}

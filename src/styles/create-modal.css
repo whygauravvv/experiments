@@ -123,11 +123,3 @@
     max-width: calc(100% - 24px);
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .create-modal,
-  .create-modal__action,
-  .create-modal__action svg {
-    transition-duration: 0.01ms;
-  }
-}

@@ -1,13 +1,8 @@
 import ExperimentSource from "@/components/code/experiment-source"
 import { experiments } from "@/experiments"
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react"
-import {
-  AnimatePresence,
-  motion,
-  useReducedMotion,
-  type Variants,
-} from "motion/react"
-import { useCallback, useEffect, useState } from "react"
+import { AnimatePresence, motion, type Variants } from "motion/react"
+import { useCallback, useEffect } from "react"
 import {
   Link,
   Navigate,
@@ -17,23 +12,35 @@ import {
 } from "react-router-dom"
 
 const experimentTransitionVariants = {
-  enter: { opacity: 0, filter: "blur(2px)" },
-  center: { opacity: 1, filter: "blur(0px)" },
-  exit: { opacity: 0, filter: "blur(2px)" },
-} satisfies Variants
-
-const experimentDetailsTransitionVariants = {
-  enter: (direction: 1 | -1) => ({ opacity: 0, x: direction * 12 }),
+  enter: { opacity: 0, x: -28, filter: "blur(5px)" },
   center: {
     opacity: 1,
     x: 0,
-    transition: { delay: 0.12, duration: 0.16, ease: "easeOut" },
+    filter: "blur(0px)",
+    transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
   },
-  exit: (direction: 1 | -1) => ({
+  exit: {
     opacity: 0,
-    x: direction * -12,
-    transition: { duration: 0.16, ease: "easeOut" },
-  }),
+    x: -28,
+    filter: "blur(5px)",
+    transition: { duration: 0.13, ease: [0.16, 1, 0.3, 1] },
+  },
+} satisfies Variants
+
+const experimentDetailsTransitionVariants = {
+  enter: { opacity: 0, x: 28, filter: "blur(5px)" },
+  center: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
+  },
+  exit: {
+    opacity: 0,
+    x: 28,
+    filter: "blur(5px)",
+    transition: { duration: 0.13, ease: [0.16, 1, 0.3, 1] },
+  },
 } satisfies Variants
 
 export default function ExperimentDetail({ isOverlay = false }) {
@@ -41,9 +48,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
   const location = useLocation()
   const navigate = useNavigate()
   const experiment = experiments.find((item) => item.id === id)
-  const [navigationDirection, setNavigationDirection] = useState<1 | -1>(1)
-  const shouldReduceMotion = useReducedMotion()
-  const shouldAnimateOverlay = isOverlay && !shouldReduceMotion
+  const shouldAnimateOverlay = isOverlay
 
   const closeDetail = useCallback(() => {
     navigate("/")
@@ -70,9 +75,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
   const nextExperiment = experiments[(experimentIndex + 1) % experiments.length]
   const { Component, description, files, title } = experiment
 
-  const navigateToExperiment = (experimentId: string, direction: 1 | -1) => {
-    setNavigationDirection(direction)
-
+  const navigateToExperiment = (experimentId: string) => {
     requestAnimationFrame(() => {
       navigate(`/experiments/${experimentId}`, {
         replace: true,
@@ -134,7 +137,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
         >
           <button
             type="button"
-            onClick={() => navigateToExperiment(previousExperiment.id, -1)}
+            onClick={() => navigateToExperiment(previousExperiment.id)}
             aria-label={`Previous experiment: ${previousExperiment.title}`}
             className="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
           >
@@ -142,7 +145,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
           </button>
           <button
             type="button"
-            onClick={() => navigateToExperiment(nextExperiment.id, 1)}
+            onClick={() => navigateToExperiment(nextExperiment.id)}
             aria-label={`Next experiment: ${nextExperiment.title}`}
             className="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
           >
@@ -152,7 +155,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
       </motion.header>
 
       <div className="grid grid-cols-1 gap-6 md:min-h-0 md:flex-1 md:grid-cols-2 md:gap-4">
-        <motion.section
+        <motion.div
           initial={
             shouldAnimateOverlay
               ? { opacity: 0, x: -48, filter: "blur(8px)" }
@@ -177,22 +180,21 @@ export default function ExperimentDetail({ isOverlay = false }) {
             duration: shouldAnimateOverlay ? 0.44 : 0.01,
             ease: [0.16, 1, 0.3, 1],
           }}
-          className="z-50 aspect-square w-full overflow-hidden rounded-lg border border-border/60 bg-card md:h-full md:max-h-full md:w-auto md:max-w-full md:justify-self-center"
+          className="z-50 aspect-square w-full md:h-full md:max-h-full md:w-auto md:max-w-full md:justify-self-center"
         >
           <AnimatePresence initial={false} mode="wait">
-            <motion.div
+            <motion.section
               key={experiment.id}
               variants={experimentTransitionVariants}
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.16, ease: "easeOut" }}
-              className="h-full w-full"
+              className="h-full w-full overflow-hidden rounded-lg border border-border/60 bg-card"
             >
               <Component />
-            </motion.div>
+            </motion.section>
           </AnimatePresence>
-        </motion.section>
+        </motion.div>
 
         <motion.div
           initial={
@@ -221,14 +223,9 @@ export default function ExperimentDetail({ isOverlay = false }) {
           }}
           className="min-w-0 md:min-h-0"
         >
-          <AnimatePresence
-            initial={false}
-            mode="wait"
-            custom={navigationDirection}
-          >
+          <AnimatePresence initial={false} mode="wait">
             <motion.div
               key={experiment.id}
-              custom={navigationDirection}
               variants={experimentDetailsTransitionVariants}
               initial="enter"
               animate="center"

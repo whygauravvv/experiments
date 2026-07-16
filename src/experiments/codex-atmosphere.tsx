@@ -17,9 +17,6 @@ export default function CodexAtmosphere() {
 
     if (!container || !canvas || !context) return
 
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches
     const glyphs = [" ", ".", ":", "+", "*", "o", "O", "#"]
     const pointer = { x: 0, y: 0, targetX: 0, targetY: 0 }
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
@@ -63,7 +60,7 @@ export default function CodexAtmosphere() {
       const columns = Math.ceil(width / spacing)
       const rows = Math.ceil(height / spacing)
       const radius = Math.min(width, height) * 0.3
-      const tick = reducedMotion ? 0 : time * 0.0012
+      const tick = time * 0.0012
 
       for (let row = 0; row < rows; row += 1) {
         for (let column = 0; column < columns; column += 1) {
@@ -79,21 +76,15 @@ export default function CodexAtmosphere() {
           const intensity = (wave + 2) / 4 + influence * 0.9
           const glyphIndex = Math.min(
             glyphs.length - 1,
-            Math.max(0, Math.floor(intensity * (glyphs.length - 1))),
+            Math.max(0, Math.floor(intensity * (glyphs.length - 1)))
           )
 
           if (glyphIndex === 0 && influence < 0.06) continue
 
-          const driftX = reducedMotion
-            ? 0
-            : Math.sin(tick + row * 0.37 + column * 0.13) * 1.3
-          const driftY = reducedMotion
-            ? 0
-            : Math.cos(tick * 1.1 - row * 0.18 + column * 0.17) * 1.1
-          const pullX =
-            distance > 0 ? (dx / distance) * influence * 7 : 0
-          const pullY =
-            distance > 0 ? (dy / distance) * influence * 7 : 0
+          const driftX = Math.sin(tick + row * 0.37 + column * 0.13) * 1.3
+          const driftY = Math.cos(tick * 1.1 - row * 0.18 + column * 0.17) * 1.1
+          const pullX = distance > 0 ? (dx / distance) * influence * 7 : 0
+          const pullY = distance > 0 ? (dy / distance) * influence * 7 : 0
 
           context.fillStyle =
             influence > 0.18
@@ -101,18 +92,18 @@ export default function CodexAtmosphere() {
               : "rgba(84, 90, 150, 0.18)"
           context.globalAlpha = Math.min(
             0.62,
-            0.08 + influence * 0.46 + glyphIndex * 0.04,
+            0.08 + influence * 0.46 + glyphIndex * 0.04
           )
           context.fillText(
             glyphs[glyphIndex],
             baseX + driftX + pullX,
-            baseY + driftY + pullY,
+            baseY + driftY + pullY
           )
         }
       }
 
       context.globalAlpha = 1
-      if (!reducedMotion) frame = requestAnimationFrame(render)
+      frame = requestAnimationFrame(render)
     }
 
     const observer = new ResizeObserver(resize)

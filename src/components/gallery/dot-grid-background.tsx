@@ -7,11 +7,7 @@ export default function DotGridBackground() {
   useEffect(() => {
     const grid = gridRef.current
 
-    if (
-      !grid ||
-      window.matchMedia("(pointer: coarse)").matches ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
+    if (!grid || window.matchMedia("(pointer: coarse)").matches) {
       return
     }
 

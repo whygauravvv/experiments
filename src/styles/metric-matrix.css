@@ -117,11 +117,3 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 0.14em;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .metric-matrix,
-  .metric-matrix__dot,
-  .metric-matrix__character {
-    transition-duration: 0.01ms;
-  }
-}

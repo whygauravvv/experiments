@@ -11,7 +11,7 @@ import {
   Sticker,
   type LucideIcon,
 } from "lucide-react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
+import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useState } from "react"
 
 type MenuItem = {
@@ -113,15 +113,13 @@ function MessageCanvas() {
 }
 
 function MessageMenuOverlay({ onDismiss }: { onDismiss: () => void }) {
-  const shouldReduceMotion = useReducedMotion()
-
   return (
     <motion.div
       className="absolute inset-0 z-20 overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: shouldReduceMotion ? 0.01 : 0.24 }}
+      transition={{ duration: 0.24 }}
     >
       <motion.button
         type="button"
@@ -131,7 +129,7 @@ function MessageMenuOverlay({ onDismiss }: { onDismiss: () => void }) {
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
-        transition={{ duration: shouldReduceMotion ? 0.01 : 0.28 }}
+        transition={{ duration: 0.28 }}
       />
 
       <div className="pointer-events-none relative flex h-full w-full items-end pr-[5%] pb-[22%] pl-[3%]">
@@ -140,30 +138,28 @@ function MessageMenuOverlay({ onDismiss }: { onDismiss: () => void }) {
           role="menu"
           aria-label="iMessage apps"
           className="pointer-events-auto w-full overflow-hidden rounded-[8%] bg-white/36 py-[2%] shadow-[0_1px_0_rgba(255,255,255,0.75)_inset]"
-          initial={
-            shouldReduceMotion
-              ? { opacity: 0 }
-              : { opacity: 0, y: "4%", scale: 0.96, filter: "blur(8px)" }
-          }
+          initial={{
+            opacity: 0,
+            y: "4%",
+            scale: 0.96,
+            filter: "blur(8px)",
+          }}
           animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-          exit={
-            shouldReduceMotion
-              ? { opacity: 0 }
-              : { opacity: 0, y: "3%", scale: 0.975, filter: "blur(5px)" }
-          }
-          transition={
-            shouldReduceMotion
-              ? { duration: 0.01 }
-              : { type: "spring", stiffness: 410, damping: 34, mass: 0.82 }
-          }
+          exit={{
+            opacity: 0,
+            y: "3%",
+            scale: 0.975,
+            filter: "blur(5px)",
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 410,
+            damping: 34,
+            mass: 0.82,
+          }}
         >
           {MENU_ITEMS.map((item, index) => (
-            <MessageMenuItem
-              key={item.label}
-              item={item}
-              index={index}
-              shouldReduceMotion={shouldReduceMotion}
-            />
+            <MessageMenuItem key={item.label} item={item} index={index} />
           ))}
         </motion.div>
       </div>
@@ -171,15 +167,7 @@ function MessageMenuOverlay({ onDismiss }: { onDismiss: () => void }) {
   )
 }
 
-function MessageMenuItem({
-  item,
-  index,
-  shouldReduceMotion,
-}: {
-  item: MenuItem
-  index: number
-  shouldReduceMotion: boolean | null
-}) {
+function MessageMenuItem({ item, index }: { item: MenuItem; index: number }) {
   const Icon = item.icon
 
   return (
@@ -187,20 +175,14 @@ function MessageMenuItem({
       type="button"
       role="menuitem"
       className="flex w-full items-center gap-[4%] px-[3%] py-[2.6%]"
-      initial={
-        shouldReduceMotion
-          ? { opacity: 0 }
-          : { opacity: 0, y: 12, scale: 0.97, filter: "blur(5px)" }
-      }
+      initial={{ opacity: 0, y: 12, scale: 0.97, filter: "blur(5px)" }}
       animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
       transition={{
-        delay: shouldReduceMotion
-          ? 0
-          : 0.035 + (MENU_ITEMS.length - 1 - index) * 0.045,
-        duration: shouldReduceMotion ? 0.01 : 0.2,
+        delay: 0.035 + (MENU_ITEMS.length - 1 - index) * 0.045,
+        duration: 0.2,
         ease: [0.16, 1, 0.3, 1],
       }}
-      whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+      whileTap={{ scale: 0.98 }}
     >
       <span
         className={`flex aspect-square w-[15cqw] shrink-0 items-center justify-center rounded-full ${item.iconBackground}`}
@@ -225,8 +207,6 @@ function MenuToggle({
   isOpen: boolean
   onClick: () => void
 }) {
-  const shouldReduceMotion = useReducedMotion()
-
   return (
     <motion.button
       type="button"
@@ -235,13 +215,9 @@ function MenuToggle({
       aria-controls="imessage-app-menu"
       onClick={onClick}
       className="flex aspect-square w-[15cqw] items-center justify-center rounded-full bg-zinc-950 text-white"
-      whileTap={shouldReduceMotion ? undefined : { scale: 0.9 }}
+      whileTap={{ scale: 0.9 }}
       animate={{ rotate: isOpen ? 45 : 0 }}
-      transition={
-        shouldReduceMotion
-          ? { duration: 0.01 }
-          : { type: "spring", stiffness: 360, damping: 24 }
-      }
+      transition={{ type: "spring", stiffness: 360, damping: 24 }}
     >
       <Plus aria-hidden="true" className="h-auto w-[46%]" strokeWidth={2.25} />
     </motion.button>
