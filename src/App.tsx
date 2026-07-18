@@ -1,7 +1,7 @@
 import MobileExperiments from "@/components/mobile-experiments"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { AnimatePresence, motion, usePresence } from "motion/react"
-import { useCallback, useEffect, useLayoutEffect, useState } from "react"
+import { AnimatePresence, motion } from "motion/react"
+import { useCallback, useEffect, useState } from "react"
 import { Navigate, Route, Routes, useLocation } from "react-router-dom"
 import ExperimentDetail from "./pages/experiment-detail"
 import ExperimentsGallery from "./pages/experiments-gallery"
@@ -26,8 +26,6 @@ export function App() {
 function DesktopApp() {
   const location = useLocation()
   const transitionState = location.state as {
-    activeExperimentId?: string
-    transitionFromDetail?: boolean
     transitionFromGallery?: boolean
   } | null
   const isGalleryRoute = location.pathname === "/"
@@ -35,32 +33,18 @@ function DesktopApp() {
   const isOverlayTransition = Boolean(
     isDetailRoute && transitionState?.transitionFromGallery
   )
-  const [galleryScrollPosition, setGalleryScrollPosition] = useState(0)
-  const [activeExperimentId, setActiveExperimentId] = useState<string>()
-  const [wasOverlayDetail, setWasOverlayDetail] = useState(false)
-  const isReturningFromDetail = Boolean(
-    isGalleryRoute &&
-    (wasOverlayDetail || transitionState?.transitionFromDetail)
-  )
+  const [galleryPreviewsEnabled, setGalleryPreviewsEnabled] =
+    useState(isGalleryRoute)
 
-  const openExperiment = useCallback((experimentId: string) => {
-    setGalleryScrollPosition(window.scrollY)
-    setActiveExperimentId(experimentId)
-    setWasOverlayDetail(true)
-  }, [])
-  const finishGalleryReturn = useCallback(() => {
-    setWasOverlayDetail(false)
+  const pauseCoveredGalleryPreviews = useCallback(() => {
+    setGalleryPreviewsEnabled(false)
   }, [])
 
-  useEffect(() => {
-    if (!isDetailRoute) return
-
-    const timer = window.setTimeout(
-      () => setWasOverlayDetail(isOverlayTransition),
-      0
-    )
-    return () => window.clearTimeout(timer)
-  }, [isDetailRoute, isOverlayTransition])
+  const handleExitComplete = useCallback(() => {
+    if (isGalleryRoute) {
+      setGalleryPreviewsEnabled(true)
+    }
+  }, [isGalleryRoute])
 
   useEffect(() => {
     if (!isOverlayTransition) return
@@ -74,107 +58,62 @@ function DesktopApp() {
   }, [isOverlayTransition])
 
   return (
-    <AnimatePresence initial={false} mode="sync">
-      {isGalleryRoute ? (
-        <DesktopGalleryRoute
-          key="gallery"
-          activeExperimentId={
-            activeExperimentId ?? transitionState?.activeExperimentId
-          }
-          isReturningFromDetail={isReturningFromDetail}
-          scrollPosition={galleryScrollPosition}
-          onOpenExperiment={openExperiment}
-          onReturnComplete={finishGalleryReturn}
+    <>
+      {isGalleryRoute || isOverlayTransition ? (
+        <ExperimentsGallery
+          isDetailOpen={isOverlayTransition}
+          previewsEnabled={isGalleryRoute || galleryPreviewsEnabled}
         />
-      ) : isDetailRoute ? (
-        <motion.div
-          key="detail"
-          role={isOverlayTransition ? "dialog" : undefined}
-          aria-modal={isOverlayTransition ? "true" : undefined}
-          aria-label={isOverlayTransition ? "Experiment details" : undefined}
-          className="fixed inset-0 z-50 overflow-hidden"
-          initial={
-            isOverlayTransition
-              ? { backgroundColor: "rgba(250, 250, 250, 0)" }
-              : false
-          }
-          animate={{
-            backgroundColor: "rgba(250, 250, 250, 1)",
-            transition: {
-              duration: isOverlayTransition ? 0.4 : 0.01,
-              ease: [0.16, 1, 0.3, 1],
-            },
-          }}
-          exit={{
-            backgroundColor: "rgba(250, 250, 250, 0)",
-            transition: {
-              delay: isOverlayTransition ? 0.1 : 0,
-              duration: isOverlayTransition ? 0.22 : 0.01,
-              ease: [0.16, 1, 0.3, 1],
-            },
-          }}
-        >
-          <Routes location={location}>
-            <Route
-              path="/experiments/:id"
-              element={<ExperimentDetail isOverlay={isOverlayTransition} />}
-            />
-          </Routes>
-        </motion.div>
-      ) : (
-        <motion.div key={location.pathname}>
-          <NotFound />
-        </motion.div>
-      )}
-    </AnimatePresence>
-  )
-}
+      ) : null}
 
-function DesktopGalleryRoute({
-  activeExperimentId,
-  isReturningFromDetail,
-  scrollPosition,
-  onOpenExperiment,
-  onReturnComplete,
-}: {
-  activeExperimentId?: string
-  isReturningFromDetail: boolean
-  scrollPosition: number
-  onOpenExperiment: (experimentId: string) => void
-  onReturnComplete: () => void
-}) {
-  const [isPresent, safeToRemove] = usePresence()
-
-  useLayoutEffect(() => {
-    if (!isReturningFromDetail) return
-
-    const frame = requestAnimationFrame(() =>
-      window.scrollTo(0, scrollPosition)
-    )
-    return () => cancelAnimationFrame(frame)
-  }, [isReturningFromDetail, scrollPosition])
-
-  useEffect(() => {
-    if (isPresent) return
-
-    const timer = window.setTimeout(safeToRemove, 420)
-    return () => window.clearTimeout(timer)
-  }, [isPresent, safeToRemove])
-
-  useEffect(() => {
-    if (!isPresent || !isReturningFromDetail) return
-
-    const timer = window.setTimeout(onReturnComplete, 420)
-    return () => window.clearTimeout(timer)
-  }, [isPresent, isReturningFromDetail, onReturnComplete])
-
-  return (
-    <ExperimentsGallery
-      activeExperimentId={activeExperimentId}
-      isDetailOpen={!isPresent}
-      isEnteringFromDetail={isReturningFromDetail}
-      onOpenExperiment={onOpenExperiment}
-    />
+      <AnimatePresence
+        initial={false}
+        mode="sync"
+        onExitComplete={handleExitComplete}
+      >
+        {isDetailRoute ? (
+          <motion.div
+            key="detail"
+            role={isOverlayTransition ? "dialog" : undefined}
+            aria-modal={isOverlayTransition ? "true" : undefined}
+            aria-label={isOverlayTransition ? "Experiment details" : undefined}
+            className="fixed inset-0 z-50 overflow-hidden"
+            onAnimationComplete={pauseCoveredGalleryPreviews}
+            initial={
+              isOverlayTransition
+                ? { backgroundColor: "rgba(250, 250, 250, 0)" }
+                : false
+            }
+            animate={{
+              backgroundColor: "rgba(250, 250, 250, 1)",
+              transition: {
+                duration: isOverlayTransition ? 0.4 : 0.01,
+                ease: [0.16, 1, 0.3, 1],
+              },
+            }}
+            exit={{
+              backgroundColor: "rgba(250, 250, 250, 0)",
+              transition: {
+                delay: isOverlayTransition ? 0.1 : 0,
+                duration: isOverlayTransition ? 0.22 : 0.01,
+                ease: [0.16, 1, 0.3, 1],
+              },
+            }}
+          >
+            <Routes location={location}>
+              <Route
+                path="/experiments/:id"
+                element={<ExperimentDetail isOverlay={isOverlayTransition} />}
+              />
+            </Routes>
+          </motion.div>
+        ) : !isGalleryRoute ? (
+          <motion.div key={location.pathname}>
+            <NotFound />
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </>
   )
 }
 
