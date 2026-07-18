@@ -1,29 +1,11 @@
-import MotionButtonDemo from "@/experiments/motion-button"
-import motionButtonSource from "@/experiments/motion-button.tsx?raw"
 import type { SupportedCodeLanguage } from "@/lib/highlight-code"
-import codexAtmosphereStyles from "@/styles/codex-atmosphere.css?raw"
-import createModalStyles from "@/styles/create-modal.css?raw"
-import iconRevealStyles from "@/styles/icon-reveal.css?raw"
-import metricMatrixStyles from "@/styles/metric-matrix.css?raw"
-import rainbowDotFieldStyles from "@/styles/rainbow-dot-field.css?raw"
-import vestaboardStyles from "@/styles/vestaboard.css?raw"
-import type { ComponentType } from "react"
-import CodexAtmosphere from "./codex-atmosphere"
-import codexAtmosphereSource from "./codex-atmosphere.tsx?raw"
-import CreateModal from "./create-modal"
-import createModalSource from "./create-modal.tsx?raw"
-import IconReveal from "./icon-reveal"
-import iconRevealSource from "./icon-reveal.tsx?raw"
-import ImessageMenu from "./imessage-menu"
-import imessageMenuSource from "./imessage-menu.tsx?raw"
-import MotionButton from "./iphone"
-import iphoneSource from "./iphone.tsx?raw"
-import MetricMatrix from "./metric-matrix"
-import metricMatrixSource from "./metric-matrix.tsx?raw"
-import RainbowDotField from "./rainbow-dot-field"
-import rainbowDotFieldSource from "./rainbow-dot-field.tsx?raw"
-import Vestaboard from "./vestaboard"
-import vestaboardSource from "./vestaboard.tsx?raw"
+import { lazy, type ComponentType, type LazyExoticComponent } from "react"
+
+type RawSourceModule = { default: string }
+
+type ExperimentSourceDefinition = Omit<ExperimentSourceFile, "code"> & {
+  load: () => Promise<RawSourceModule>
+}
 
 export type ExperimentItem = {
   id: string
@@ -31,9 +13,9 @@ export type ExperimentItem = {
   description: string
   year: string
   tags: string[]
-  files: ExperimentSourceFile[]
+  loadFiles: () => Promise<ExperimentSourceFile[]>
   url?: string
-  Component: ComponentType
+  Component: LazyExoticComponent<ComponentType>
 }
 
 export type ExperimentSourceFile = {
@@ -42,46 +24,50 @@ export type ExperimentSourceFile = {
   code: string
 }
 
-export const experiments: ExperimentItem[] = [
-  {
-    id: "vestaboard",
-    title: "Vestaboard",
-    description: "A split-flap message board with a colorful settling wave.",
-    year: "2026",
-    tags: ["Split Flap", "Motion", "CSS 3D"],
-    files: [
-      {
-        filename: "vestaboard.tsx",
-        language: "tsx",
-        code: vestaboardSource,
-      },
-      {
-        filename: "vestaboard.css",
-        language: "css",
-        code: vestaboardStyles,
-      },
-    ],
-    url: "https://x.com/IanMcclanan/status/2078236377540649392",
-    Component: Vestaboard,
-  },
+function loadSourceFiles(definitions: ExperimentSourceDefinition[]) {
+  let filesPromise: Promise<ExperimentSourceFile[]> | undefined
+
+  return () => {
+    filesPromise ??= Promise.all(
+      definitions.map(async ({ load, ...file }) => ({
+        ...file,
+        code: (await load()).default,
+      }))
+    )
+
+    return filesPromise
+  }
+}
+
+const RainbowDotField = lazy(() => import("./rainbow-dot-field"))
+const MetricMatrix = lazy(() => import("./metric-matrix"))
+const CreateModal = lazy(() => import("./create-modal"))
+const IconReveal = lazy(() => import("./icon-reveal"))
+const MotionButtonDemo = lazy(() => import("./motion-button"))
+const CodexPhone = lazy(() => import("./iphone"))
+const CodexAtmosphere = lazy(() => import("./codex-atmosphere"))
+const ImessageMenu = lazy(() => import("./imessage-menu"))
+
+const experimentTemplates: ExperimentItem[] = [
+  // Vestaboard is intentionally excluded from the gallery for now.
   {
     id: "rainbow-dot-field",
     title: "Rainbow Dot Field",
     description: "A masked spectrum of dots that grows around the cursor.",
     year: "2026",
     tags: ["CSS", "Pointer", "Masking"],
-    files: [
+    loadFiles: loadSourceFiles([
       {
         filename: "rainbow-dot-field.tsx",
         language: "tsx",
-        code: rainbowDotFieldSource,
+        load: () => import("./rainbow-dot-field.tsx?raw"),
       },
       {
         filename: "rainbow-dot-field.css",
         language: "css",
-        code: rainbowDotFieldStyles,
+        load: () => import("@/styles/rainbow-dot-field.css?raw"),
       },
-    ],
+    ]),
     Component: RainbowDotField,
   },
   {
@@ -90,18 +76,18 @@ export const experiments: ExperimentItem[] = [
     description: "A click-driven metric card with progressive dot transitions.",
     year: "2026",
     tags: ["Data", "Motion", "Interaction"],
-    files: [
+    loadFiles: loadSourceFiles([
       {
         filename: "metric-matrix.tsx",
         language: "tsx",
-        code: metricMatrixSource,
+        load: () => import("./metric-matrix.tsx?raw"),
       },
       {
         filename: "metric-matrix.css",
         language: "css",
-        code: metricMatrixStyles,
+        load: () => import("@/styles/metric-matrix.css?raw"),
       },
-    ],
+    ]),
     Component: MetricMatrix,
   },
   {
@@ -110,18 +96,18 @@ export const experiments: ExperimentItem[] = [
     description: "A compact create button that morphs into an action menu.",
     year: "2026",
     tags: ["Motion", "Menu", "Interaction"],
-    files: [
+    loadFiles: loadSourceFiles([
       {
         filename: "create-modal.tsx",
         language: "tsx",
-        code: createModalSource,
+        load: () => import("./create-modal.tsx?raw"),
       },
       {
         filename: "create-modal.css",
         language: "css",
-        code: createModalStyles,
+        load: () => import("@/styles/create-modal.css?raw"),
       },
-    ],
+    ]),
     Component: CreateModal,
   },
   {
@@ -130,18 +116,18 @@ export const experiments: ExperimentItem[] = [
     description: "A color reveal made by stacking and clipping two icons.",
     year: "2026",
     tags: ["CSS", "Clip Path", "Interaction"],
-    files: [
+    loadFiles: loadSourceFiles([
       {
         filename: "icon-reveal.tsx",
         language: "tsx",
-        code: iconRevealSource,
+        load: () => import("./icon-reveal.tsx?raw"),
       },
       {
         filename: "icon-reveal.css",
         language: "css",
-        code: iconRevealStyles,
+        load: () => import("@/styles/icon-reveal.css?raw"),
       },
-    ],
+    ]),
     url: "https://x.com/jh3yy/status/2019918728440283481",
     Component: IconReveal,
   },
@@ -151,13 +137,13 @@ export const experiments: ExperimentItem[] = [
     description: "Simple Framer Motion hover and tap interaction.",
     year: "2026",
     tags: ["Motion", "React", "Interaction"],
-    files: [
+    loadFiles: loadSourceFiles([
       {
         filename: "motion-button.tsx",
         language: "tsx",
-        code: motionButtonSource,
+        load: () => import("./motion-button.tsx?raw"),
       },
-    ],
+    ]),
     Component: MotionButtonDemo,
   },
   {
@@ -166,14 +152,14 @@ export const experiments: ExperimentItem[] = [
     description: "Codex atmosphere presented inside an iPhone frame.",
     year: "2026",
     tags: ["Mobile", "Prototype", "Codex"],
-    files: [
+    loadFiles: loadSourceFiles([
       {
         filename: "iphone.tsx",
         language: "tsx",
-        code: iphoneSource,
+        load: () => import("./iphone.tsx?raw"),
       },
-    ],
-    Component: MotionButton,
+    ]),
+    Component: CodexPhone,
   },
   {
     id: "codex-atmosphere",
@@ -181,18 +167,18 @@ export const experiments: ExperimentItem[] = [
     description: "Warm video texture with a cursor-reactive ASCII field.",
     year: "2026",
     tags: ["Canvas", "Pointer", "Atmosphere"],
-    files: [
+    loadFiles: loadSourceFiles([
       {
         filename: "codex-atmosphere.tsx",
         language: "tsx",
-        code: codexAtmosphereSource,
+        load: () => import("./codex-atmosphere.tsx?raw"),
       },
       {
         filename: "codex-atmosphere.css",
         language: "css",
-        code: codexAtmosphereStyles,
+        load: () => import("@/styles/codex-atmosphere.css?raw"),
       },
-    ],
+    ]),
     Component: CodexAtmosphere,
   },
   {
@@ -201,13 +187,87 @@ export const experiments: ExperimentItem[] = [
     description: "IOS 18 Imessage Menu Inspired Menu",
     year: "2026",
     tags: [],
-    files: [
+    loadFiles: loadSourceFiles([
       {
         filename: "imessage-menu.tsx",
         language: "tsx",
-        code: imessageMenuSource,
+        load: () => import("./imessage-menu.tsx?raw"),
       },
-    ],
+    ]),
     Component: ImessageMenu,
   },
 ]
+
+const LOAD_TEST_EXPERIMENT_COUNT = 1_000
+const LOAD_TEST_HEAVY_RATIO = 0.15
+const LOAD_TEST_SHUFFLE_SEED = 0x5f3759df
+const HEAVY_EXPERIMENT_IDS = new Set(["codex-phone", "codex-atmosphere"])
+
+function createLoadTestExperiments() {
+  const heavyTemplates = experimentTemplates.filter((experiment) =>
+    HEAVY_EXPERIMENT_IDS.has(experiment.id)
+  )
+  const standardTemplates = experimentTemplates.filter(
+    (experiment) => !HEAVY_EXPERIMENT_IDS.has(experiment.id)
+  )
+  const heavyExperimentCount = Math.round(
+    LOAD_TEST_EXPERIMENT_COUNT * LOAD_TEST_HEAVY_RATIO
+  )
+  const standardExperimentCount =
+    LOAD_TEST_EXPERIMENT_COUNT - heavyExperimentCount
+  const heavyCopies = createExperimentCopies(
+    heavyTemplates,
+    heavyExperimentCount - heavyTemplates.length,
+    1
+  )
+  const standardCopies = createExperimentCopies(
+    standardTemplates,
+    standardExperimentCount - standardTemplates.length,
+    heavyCopies.length + 1
+  )
+
+  return shuffleExperiments([
+    ...experimentTemplates,
+    ...heavyCopies,
+    ...standardCopies,
+  ])
+}
+
+function createExperimentCopies(
+  templates: ExperimentItem[],
+  count: number,
+  startingCopyNumber: number
+) {
+  return Array.from({ length: count }, (_, index) => {
+    const template = templates[index % templates.length]
+    const copyNumber = startingCopyNumber + index
+
+    return {
+      ...template,
+      id: `${template.id}-load-test-${copyNumber}`,
+      title: `${template.title} · Test ${copyNumber}`,
+    }
+  })
+}
+
+function shuffleExperiments(items: ExperimentItem[]) {
+  const shuffledItems = [...items]
+  let randomState = LOAD_TEST_SHUFFLE_SEED
+
+  const random = () => {
+    randomState = (Math.imul(randomState, 1_664_525) + 1_013_904_223) >>> 0
+    return randomState / 4_294_967_296
+  }
+
+  for (let index = shuffledItems.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1))
+    ;[shuffledItems[index], shuffledItems[swapIndex]] = [
+      shuffledItems[swapIndex],
+      shuffledItems[index],
+    ]
+  }
+
+  return shuffledItems
+}
+
+export const experiments = createLoadTestExperiments()

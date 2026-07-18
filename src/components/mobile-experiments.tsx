@@ -1,7 +1,8 @@
+import ExperimentLoading from "@/components/experiment-loading"
 import { experiments } from "@/experiments"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 
 type Direction = 1 | -1
@@ -103,7 +104,9 @@ export default function MobileExperiments() {
                 "min(100%, calc(100dvh - 7.5rem - env(safe-area-inset-bottom)))",
             }}
           >
-            <Component />
+            <Suspense fallback={<ExperimentLoading />}>
+              <Component />
+            </Suspense>
           </motion.article>
         </AnimatePresence>
       </section>

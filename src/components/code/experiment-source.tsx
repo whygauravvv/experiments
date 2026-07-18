@@ -1,12 +1,76 @@
 import CodeViewer from "@/components/code/code-viewer"
+import { Spinner } from "@/components/ui/spinner"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { ExperimentSourceFile } from "@/experiments"
+import { useEffect, useState } from "react"
 
 type ExperimentSourceProps = {
-  files: ExperimentSourceFile[]
+  loadFiles: () => Promise<ExperimentSourceFile[]>
 }
 
-export default function ExperimentSource({ files }: ExperimentSourceProps) {
+type SourceState =
+  | {
+      loadFiles: ExperimentSourceProps["loadFiles"]
+      status: "loading"
+    }
+  | {
+      loadFiles: ExperimentSourceProps["loadFiles"]
+      status: "loaded"
+      files: ExperimentSourceFile[]
+    }
+  | {
+      loadFiles: ExperimentSourceProps["loadFiles"]
+      status: "error"
+    }
+
+export default function ExperimentSource({ loadFiles }: ExperimentSourceProps) {
+  const [sourceState, setSourceState] = useState<SourceState>({
+    loadFiles,
+    status: "loading",
+  })
+  const currentState =
+    sourceState.loadFiles === loadFiles
+      ? sourceState
+      : ({ loadFiles, status: "loading" } satisfies SourceState)
+
+  useEffect(() => {
+    let cancelled = false
+
+    void loadFiles()
+      .then((loadedFiles) => {
+        if (!cancelled) {
+          setSourceState({ loadFiles, status: "loaded", files: loadedFiles })
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setSourceState({ loadFiles, status: "error" })
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [loadFiles])
+
+  if (currentState.status === "error") {
+    return (
+      <div
+        role="alert"
+        className="grid min-h-40 place-items-center rounded-xl border border-border/70 bg-card px-6 text-center text-xs text-muted-foreground"
+      >
+        Source code could not be loaded.
+      </div>
+    )
+  }
+
+  if (currentState.status === "loading") {
+    return (
+      <div className="grid min-h-40 place-items-center rounded-xl border border-border/70 bg-card">
+        <Spinner className="text-muted-foreground/60" />
+      </div>
+    )
+  }
+
+  const { files } = currentState
   const firstFile = files[0]
 
   if (!firstFile) return null

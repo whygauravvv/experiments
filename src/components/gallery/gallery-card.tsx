@@ -1,38 +1,18 @@
 import type { ExperimentItem } from "@/experiments"
+import ExperimentLoading from "@/components/experiment-loading"
+import { useNearViewport } from "@/hooks/use-gallery-preview"
 import { MoveUpRight } from "lucide-react"
-import { motion } from "motion/react"
+import { memo, Suspense } from "react"
 import { Link } from "react-router-dom"
 
-type GalleryCardProps = ExperimentItem & {
-  isActive?: boolean
-  isDetailOpen?: boolean
-  isEnteringFromDetail?: boolean
-  onOpenExperiment?: (experimentId: string) => void
-}
+type GalleryCardProps = ExperimentItem
 
-export default function GalleryCard({
-  id,
-  title,
-  description,
-  Component,
-  isActive = false,
-  isDetailOpen = false,
-  isEnteringFromDetail = false,
-  onOpenExperiment,
-}: GalleryCardProps) {
-  const backgroundState = isActive
-    ? { opacity: 0, scale: 0.985, filter: "blur(0px)", y: 0 }
-    : { opacity: 0.28, scale: 0.99, filter: "blur(6px)", y: 6 }
+function GalleryCard({ id, title, description, Component }: GalleryCardProps) {
+  const { isNearViewport, viewportRef } = useNearViewport<HTMLElement>()
 
   return (
-    <motion.article
-      initial={isEnteringFromDetail ? backgroundState : false}
-      animate={
-        isDetailOpen
-          ? backgroundState
-          : { opacity: 1, scale: 1, filter: "blur(0px)", y: 0 }
-      }
-      transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
+    <article
+      ref={viewportRef}
       className="group relative aspect-square overflow-hidden rounded-xl border border-border/60 bg-card"
     >
       <section className="pointer-events-none absolute bottom-0 z-50 h-14 max-h-16 w-full">
@@ -52,8 +32,7 @@ export default function GalleryCard({
           <Link
             id="redirect-button"
             to={`/experiments/${id}`}
-            state={{ transitionFromGallery: true, activeExperimentId: id }}
-            onClick={() => onOpenExperiment?.(id)}
+            state={{ transitionFromGallery: true }}
             aria-label={`View ${title}`}
             className="pointer-events-auto translate-y-0 scale-100 rounded-full bg-muted/60 p-2 opacity-100 delay-50 duration-150 hover:rotate-45 hover:bg-primary/10 hover:text-primary focus-visible:translate-y-0 focus-visible:opacity-100 focus-visible:blur-none focus-visible:outline-none md:translate-y-14 md:scale-95 md:bg-muted/40 md:opacity-0 md:blur-sm md:group-hover:translate-y-0 md:group-hover:scale-100 md:group-hover:opacity-100 md:group-hover:blur-none"
           >
@@ -61,9 +40,15 @@ export default function GalleryCard({
           </Link>
         </div>
       </section>
-      <section className="h-full w-full">
-        <Component />
+      <section className="h-full w-full" aria-live="off">
+        {isNearViewport ? (
+          <Suspense fallback={<ExperimentLoading />}>
+            <Component />
+          </Suspense>
+        ) : null}
       </section>
-    </motion.article>
+    </article>
   )
 }
+
+export default memo(GalleryCard)

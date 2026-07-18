@@ -1,8 +1,9 @@
 import ExperimentSource from "@/components/code/experiment-source"
+import ExperimentLoading from "@/components/experiment-loading"
 import { experiments } from "@/experiments"
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
-import { useCallback, useEffect } from "react"
+import { Suspense, useCallback, useEffect } from "react"
 import {
   Link,
   Navigate,
@@ -75,7 +76,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
   const previousExperiment =
     experiments[(experimentIndex - 1 + experiments.length) % experiments.length]
   const nextExperiment = experiments[(experimentIndex + 1) % experiments.length]
-  const { Component, description, files, title } = experiment
+  const { Component, description, loadFiles, title } = experiment
 
   const navigateToExperiment = (experimentId: string) => {
     requestAnimationFrame(() => {
@@ -193,7 +194,9 @@ export default function ExperimentDetail({ isOverlay = false }) {
               exit="exit"
               className="h-full w-full overflow-hidden rounded-lg border border-border/60 bg-card"
             >
-              <Component />
+              <Suspense fallback={<ExperimentLoading />}>
+                <Component />
+              </Suspense>
             </motion.section>
           </AnimatePresence>
         </motion.div>
@@ -244,7 +247,7 @@ export default function ExperimentDetail({ isOverlay = false }) {
 
                 <section className="mt-10 flex flex-col md:min-h-0 md:flex-1">
                   <h2 className="mb-2 shrink-0 text-sm font-medium">Source</h2>
-                  <ExperimentSource files={files} />
+                  <ExperimentSource loadFiles={loadFiles} />
                 </section>
               </aside>
             </motion.div>
