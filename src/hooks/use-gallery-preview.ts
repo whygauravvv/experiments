@@ -8,14 +8,8 @@ type PreviewRecord = {
 }
 
 export class GalleryPreviewManager {
-  private enabled: boolean
-  private readonly intersectingRecords = new Set<PreviewRecord>()
   private observer?: IntersectionObserver
   private readonly records = new Map<Element, PreviewRecord>()
-
-  constructor(enabled: boolean) {
-    this.enabled = enabled
-  }
 
   private getObserver() {
     this.observer ??= new IntersectionObserver(
@@ -24,13 +18,7 @@ export class GalleryPreviewManager {
           const record = this.records.get(entry.target)
           if (!record) return
 
-          if (entry.isIntersecting) {
-            this.intersectingRecords.add(record)
-          } else {
-            this.intersectingRecords.delete(record)
-          }
-
-          this.setRecordActive(record, this.enabled && entry.isIntersecting)
+          this.setRecordActive(record, entry.isIntersecting)
         })
       },
       {
@@ -59,8 +47,7 @@ export class GalleryPreviewManager {
     this.records.set(element, record)
 
     if (typeof IntersectionObserver === "undefined") {
-      this.intersectingRecords.add(record)
-      this.setRecordActive(record, this.enabled)
+      this.setRecordActive(record, true)
     } else {
       this.getObserver().observe(element)
     }
@@ -68,7 +55,6 @@ export class GalleryPreviewManager {
     return () => {
       this.observer?.unobserve(element)
       this.records.delete(element)
-      this.intersectingRecords.delete(record)
       this.setRecordActive(record, false)
 
       if (this.records.size === 0) {
@@ -78,20 +64,10 @@ export class GalleryPreviewManager {
     }
   }
 
-  setEnabled(enabled: boolean) {
-    if (enabled === this.enabled) return
-
-    this.enabled = enabled
-    this.intersectingRecords.forEach((record) => {
-      this.setRecordActive(record, enabled)
-    })
-  }
-
   destroy() {
     this.observer?.disconnect()
     this.observer = undefined
     this.records.clear()
-    this.intersectingRecords.clear()
   }
 }
 

@@ -3,55 +3,50 @@ import ExperimentErrorBoundary from "@/components/experiment-error-boundary"
 import ExperimentLoading, {
   ExperimentReady,
 } from "@/components/experiment-loading"
-import { useEscapeKey } from "@/hooks/use-escape-key"
 import { getExperimentNavigation } from "@/lib/experiment-navigation"
 import { MOTION_EASE } from "@/lib/motion"
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
-import { Suspense, useCallback } from "react"
-import {
-  Link,
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom"
+import { Suspense } from "react"
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
 
 const experimentTransitionVariants = {
-  enter: { opacity: 0, x: -28, filter: "blur(5px)" },
+  enter: { opacity: 0, x: -28 },
   center: {
     opacity: 1,
     x: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.2, ease: MOTION_EASE },
   },
   exit: {
     opacity: 0,
     x: -28,
-    filter: "blur(5px)",
     transition: { duration: 0.13, ease: MOTION_EASE },
   },
 } satisfies Variants
 
 const experimentDetailsTransitionVariants = {
-  enter: { opacity: 0, x: 28, filter: "blur(5px)" },
+  enter: { opacity: 0, x: 28 },
   center: {
     opacity: 1,
     x: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.2, ease: MOTION_EASE },
   },
   exit: {
     opacity: 0,
     x: 28,
-    filter: "blur(5px)",
+
     transition: { duration: 0.13, ease: MOTION_EASE },
   },
 } satisfies Variants
 
-export default function ExperimentDetail({ isOverlay = false }) {
+type ExperimentDetailProps = {
+  hideHeader?: boolean
+}
+
+export default function ExperimentDetail({
+  hideHeader = false,
+}: ExperimentDetailProps) {
   const { id } = useParams()
-  const location = useLocation()
   const navigate = useNavigate()
   const {
     routeIndex,
@@ -59,12 +54,6 @@ export default function ExperimentDetail({ isOverlay = false }) {
     previousExperiment,
     nextExperiment,
   } = getExperimentNavigation(id)
-
-  const closeDetail = useCallback(() => {
-    navigate("/")
-  }, [navigate])
-
-  useEscapeKey(isOverlay, closeDetail)
 
   if (routeIndex === -1) return <Navigate to="/" replace />
 
@@ -74,48 +63,36 @@ export default function ExperimentDetail({ isOverlay = false }) {
     requestAnimationFrame(() => {
       navigate(`/experiments/${experimentId}`, {
         replace: true,
-        state: location.state,
       })
     })
   }
 
   return (
-    <main className="flex min-h-dvh flex-col gap-6 bg-transparent px-4 pb-6 text-foreground sm:px-6 md:h-dvh md:max-h-dvh md:overflow-hidden">
-      <motion.header
-        initial={
-          isOverlay ? { opacity: 0, y: -32, filter: "blur(6px)" } : false
-        }
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        exit={
-          isOverlay
-            ? {
-                opacity: 0,
-                y: -32,
-                filter: "blur(6px)",
-                transition: {
-                  duration: 0.26,
-                  ease: MOTION_EASE,
-                },
-              }
-            : undefined
-        }
-        transition={{
-          delay: isOverlay ? 0.05 : 0,
-          duration: isOverlay ? 0.36 : 0.01,
-          ease: MOTION_EASE,
-        }}
-        className="-mx-4 flex items-center justify-between border-b bg-background px-4 py-4 sm:-mx-6 sm:px-6"
-      >
-        {isOverlay ? (
-          <button
-            type="button"
-            onClick={closeDetail}
-            className="group inline-flex cursor-pointer items-center gap-2 rounded-full px-3 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
-            Back
-          </button>
-        ) : (
+    <main
+      className={`flex min-h-dvh flex-col gap-6 bg-transparent px-4 text-foreground sm:px-6 md:h-dvh md:max-h-dvh md:overflow-hidden ${
+        hideHeader ? "pt-4 pb-[calc(6rem+env(safe-area-inset-bottom))]" : "pb-6"
+      }`}
+    >
+      {hideHeader ? null : (
+        <motion.header
+          initial={{ opacity: 0, y: -32, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={{
+            opacity: 0,
+            y: -32,
+            filter: "blur(6px)",
+            transition: {
+              duration: 0.26,
+              ease: MOTION_EASE,
+            },
+          }}
+          transition={{
+            delay: 0.05,
+            duration: 0.36,
+            ease: MOTION_EASE,
+          }}
+          className="-mx-4 flex items-center justify-between border-b bg-background px-4 py-4 sm:-mx-6 sm:px-6"
+        >
           <Link
             to="/"
             className="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -123,52 +100,46 @@ export default function ExperimentDetail({ isOverlay = false }) {
             <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
             All experiments
           </Link>
-        )}
-        <nav
-          aria-label="Experiment navigation"
-          className="flex items-center gap-2"
-        >
-          <button
-            type="button"
-            onClick={() => navigateToExperiment(previousExperiment.id)}
-            aria-label={`Previous experiment: ${previousExperiment.title}`}
-            className="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+          <nav
+            aria-label="Experiment navigation"
+            className="flex items-center gap-2"
           >
-            <ChevronLeft className="size-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => navigateToExperiment(nextExperiment.id)}
-            aria-label={`Next experiment: ${nextExperiment.title}`}
-            className="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
-          >
-            <ChevronRight className="size-4" />
-          </button>
-        </nav>
-      </motion.header>
+            <button
+              type="button"
+              onClick={() => navigateToExperiment(previousExperiment.id)}
+              aria-label={`Previous experiment: ${previousExperiment.title}`}
+              className="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => navigateToExperiment(nextExperiment.id)}
+              aria-label={`Next experiment: ${nextExperiment.title}`}
+              className="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+          </nav>
+        </motion.header>
+      )}
 
       <div className="grid grid-cols-1 gap-6 md:min-h-0 md:flex-1 md:grid-cols-2 md:gap-4">
         <motion.div
-          initial={
-            isOverlay ? { opacity: 0, x: -48, filter: "blur(8px)" } : false
-          }
+          initial={{ opacity: 0, x: -48, filter: "blur(8px)" }}
           animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-          exit={
-            isOverlay
-              ? {
-                  opacity: 0,
-                  x: -48,
-                  filter: "blur(8px)",
-                  transition: {
-                    duration: 0.28,
-                    ease: MOTION_EASE,
-                  },
-                }
-              : undefined
-          }
+          exit={{
+            opacity: 0,
+            x: -48,
+            filter: "blur(8px)",
+            transition: {
+              duration: 0.28,
+              ease: MOTION_EASE,
+            },
+          }}
           transition={{
-            delay: isOverlay ? 0.09 : 0,
-            duration: isOverlay ? 0.44 : 0.01,
+            delay: 0.09,
+            duration: 0.44,
             ease: MOTION_EASE,
           }}
           className="z-50 aspect-square w-full md:h-full md:max-h-full md:w-auto md:max-w-full md:justify-self-center"
@@ -194,26 +165,20 @@ export default function ExperimentDetail({ isOverlay = false }) {
         </motion.div>
 
         <motion.div
-          initial={
-            isOverlay ? { opacity: 0, x: 48, filter: "blur(8px)" } : false
-          }
+          initial={{ opacity: 0, x: 48, filter: "blur(8px)" }}
           animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-          exit={
-            isOverlay
-              ? {
-                  opacity: 0,
-                  x: 48,
-                  filter: "blur(8px)",
-                  transition: {
-                    duration: 0.28,
-                    ease: MOTION_EASE,
-                  },
-                }
-              : undefined
-          }
+          exit={{
+            opacity: 0,
+            x: 48,
+            filter: "blur(8px)",
+            transition: {
+              duration: 0.28,
+              ease: MOTION_EASE,
+            },
+          }}
           transition={{
-            delay: isOverlay ? 0.13 : 0,
-            duration: isOverlay ? 0.44 : 0.01,
+            delay: 0.13,
+            duration: 0.44,
             ease: MOTION_EASE,
           }}
           className="min-w-0 md:min-h-0"

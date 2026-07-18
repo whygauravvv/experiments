@@ -2,12 +2,12 @@ import "../styles/vestaboard.css"
 
 import { useCallback, useEffect, useRef, useState } from "react"
 
-const COLUMN_COUNT = 22
+const COLUMN_COUNT = 14
 const ROW_COUNT = 6
 const CELL_COUNT = COLUMN_COUNT * ROW_COUNT
-const FLIP_INTERVAL = 74
+const FLIP_INTERVAL = 70
 const SETTLE_START = 670
-const MAX_DEVICE_PIXEL_RATIO = 2
+const MAX_DEVICE_PIXEL_RATIO = 1
 
 const CHARACTERS = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 const COLORS = [
