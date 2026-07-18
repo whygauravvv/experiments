@@ -7,15 +7,20 @@ import { motion } from "motion/react"
 type ExperimentsGalleryProps = {
   activeExperimentId?: string
   isDetailOpen?: boolean
+  isEnteringFromDetail?: boolean
+  onOpenExperiment?: (experimentId: string) => void
 }
 
 export default function ExperimentsGallery({
   activeExperimentId,
   isDetailOpen = false,
+  isEnteringFromDetail = false,
+  onOpenExperiment,
 }: ExperimentsGalleryProps) {
   return (
     <main className="min-h-screen w-full bg-background text-foreground lg:grid lg:grid-cols-[clamp(17rem,24vw,23rem)_minmax(0,1fr)]">
       <motion.aside
+        initial={isEnteringFromDetail ? { x: -48, opacity: 0 } : false}
         animate={{
           x: isDetailOpen ? -48 : 0,
           opacity: isDetailOpen ? 0 : 1,
@@ -32,6 +37,8 @@ export default function ExperimentsGallery({
           items={experiments}
           activeExperimentId={activeExperimentId}
           isDetailOpen={isDetailOpen}
+          isEnteringFromDetail={isEnteringFromDetail}
+          onOpenExperiment={onOpenExperiment}
         />
       </section>
     </main>

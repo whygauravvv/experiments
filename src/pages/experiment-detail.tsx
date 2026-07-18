@@ -51,8 +51,10 @@ export default function ExperimentDetail({ isOverlay = false }) {
   const shouldAnimateOverlay = isOverlay
 
   const closeDetail = useCallback(() => {
-    navigate("/")
-  }, [navigate])
+    navigate("/", {
+      state: isOverlay ? { transitionFromDetail: true } : undefined,
+    })
+  }, [isOverlay, navigate])
 
   useEffect(() => {
     if (!isOverlay) return
