@@ -1,5 +1,7 @@
 import ExperimentSource from "@/components/code/experiment-source"
-import ExperimentLoading from "@/components/experiment-loading"
+import ExperimentLoading, {
+  ExperimentReady,
+} from "@/components/experiment-loading"
 import { experiments } from "@/experiments"
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
@@ -195,7 +197,9 @@ export default function ExperimentDetail({ isOverlay = false }) {
               className="h-full w-full overflow-hidden rounded-lg border border-border/60 bg-card"
             >
               <Suspense fallback={<ExperimentLoading />}>
-                <Component />
+                <ExperimentReady>
+                  <Component />
+                </ExperimentReady>
               </Suspense>
             </motion.section>
           </AnimatePresence>

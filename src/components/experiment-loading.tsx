@@ -1,9 +1,14 @@
-import { Spinner } from "@/components/ui/spinner"
+import { Skeleton } from "@/components/ui/skeleton"
+import type { PropsWithChildren } from "react"
 
 export default function ExperimentLoading() {
+  return <Skeleton className="h-full w-full rounded-none" />
+}
+
+export function ExperimentReady({ children }: PropsWithChildren) {
   return (
-    <div className="grid h-full w-full place-items-center bg-muted/20">
-      <Spinner className="size-5 text-muted-foreground/60" />
+    <div className="h-full w-full animate-in duration-150 fade-in-0 motion-reduce:animate-none">
+      {children}
     </div>
   )
 }

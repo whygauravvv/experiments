@@ -1,4 +1,6 @@
-import ExperimentLoading from "@/components/experiment-loading"
+import ExperimentLoading, {
+  ExperimentReady,
+} from "@/components/experiment-loading"
 import { experiments } from "@/experiments"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
@@ -105,7 +107,9 @@ export default function MobileExperiments() {
             }}
           >
             <Suspense fallback={<ExperimentLoading />}>
-              <Component />
+              <ExperimentReady>
+                <Component />
+              </ExperimentReady>
             </Suspense>
           </motion.article>
         </AnimatePresence>

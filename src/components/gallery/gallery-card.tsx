@@ -1,5 +1,7 @@
 import type { ExperimentItem } from "@/experiments"
-import ExperimentLoading from "@/components/experiment-loading"
+import ExperimentLoading, {
+  ExperimentReady,
+} from "@/components/experiment-loading"
 import { useNearViewport } from "@/hooks/use-gallery-preview"
 import { MoveUpRight } from "lucide-react"
 import { memo, Suspense } from "react"
@@ -43,7 +45,9 @@ function GalleryCard({ id, title, description, Component }: GalleryCardProps) {
       <section className="h-full w-full" aria-live="off">
         {isNearViewport ? (
           <Suspense fallback={<ExperimentLoading />}>
-            <Component />
+            <ExperimentReady>
+              <Component />
+            </ExperimentReady>
           </Suspense>
         ) : null}
       </section>
