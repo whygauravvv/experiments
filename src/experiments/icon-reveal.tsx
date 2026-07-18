@@ -1,6 +1,6 @@
 import "../styles/icon-reveal.css"
 
-import GridGlowBackground from "@/components/grid-glow-background"
+import GridGlowBackground from "@/components/backgrounds/grid-glow-background"
 
 const ICONS = [
   {

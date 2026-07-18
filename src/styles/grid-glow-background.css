@@ -2,19 +2,26 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background-color: #f3f2ee;
+  background-color: var(--background-surface);
   background-image:
-    linear-gradient(rgba(36, 35, 33, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(36, 35, 33, 0.045) 1px, transparent 1px);
-  background-size: clamp(36px, 8vw, 64px) clamp(36px, 8vw, 64px);
-  color: #252422;
+    linear-gradient(
+      var(--background-pattern-color) var(--background-pattern-mark-size),
+      transparent var(--background-pattern-mark-size)
+    ),
+    linear-gradient(
+      90deg,
+      var(--background-pattern-color) var(--background-pattern-mark-size),
+      transparent var(--background-pattern-mark-size)
+    );
+  background-size: var(--background-pattern-size) var(--background-pattern-size);
+  color: var(--background-foreground);
 }
 
 .grid-glow-background--dots {
   background-image: radial-gradient(
     circle,
-    rgba(36, 35, 33, 0.12) 1px,
-    transparent 1.25px
+    var(--background-pattern-color) var(--background-pattern-mark-size),
+    transparent var(--background-pattern-fade-size)
   );
 }
 
@@ -23,12 +30,24 @@
   top: 50%;
   left: 50%;
   z-index: -1;
-  width: 72%;
-  aspect-ratio: 1;
+  width: var(--background-glow-size);
   transform: translate(-50%, -50%);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  background: var(--background-glow-color);
   content: "";
-  filter: blur(72px);
+  mask-image: radial-gradient(
+    circle,
+    #000 0%,
+    #000 var(--background-glow-inner-stop),
+    transparent var(--background-glow-outer-stop)
+  );
+  mask-repeat: no-repeat;
+  -webkit-mask-image: radial-gradient(
+    circle,
+    #000 0%,
+    #000 var(--background-glow-inner-stop),
+    transparent var(--background-glow-outer-stop)
+  );
+  -webkit-mask-repeat: no-repeat;
   pointer-events: none;
 }

@@ -150,7 +150,8 @@ export const experiments: ExperimentItem[] = [
       {
         filename: "grid-glow-background.tsx",
         language: "tsx",
-        load: () => import("@/components/grid-glow-background.tsx?raw"),
+        load: () =>
+          import("@/components/backgrounds/grid-glow-background.tsx?raw"),
       },
       {
         filename: "grid-glow-background.css",

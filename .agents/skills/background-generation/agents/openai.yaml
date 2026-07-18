@@ -1,0 +1,4 @@
+interface:
+  display_name: "Background Generation"
+  short_description: "Create reusable experiment backgrounds"
+  default_prompt: "Use $background-generation to create and register a reusable CardShell background variant."

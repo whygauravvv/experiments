@@ -1,19 +1,20 @@
-import DotGlowBackground from "@/components/dot-glow-background"
-import GridGlowBackground from "@/components/grid-glow-background"
+import DotGlowBackground from "@/components/backgrounds/dot-glow-background"
+import GridGlowBackground from "@/components/backgrounds/grid-glow-background"
 import type { ComponentType, HTMLAttributes, ReactNode } from "react"
 
-interface CardShellProps {
-  children: ReactNode
-  backgroundVariant?: CardShellBackgroundVariant
-}
-
-type CardShellBackgroundVariant = "grid-glow" | "dot-glow"
 type BackgroundComponent = ComponentType<HTMLAttributes<HTMLDivElement>>
 
 const backgroundVariants = {
   "grid-glow": GridGlowBackground,
   "dot-glow": DotGlowBackground,
-} satisfies Record<CardShellBackgroundVariant, BackgroundComponent>
+} satisfies Record<string, BackgroundComponent>
+
+export type CardShellBackgroundVariant = keyof typeof backgroundVariants
+
+interface CardShellProps {
+  children: ReactNode
+  backgroundVariant?: CardShellBackgroundVariant
+}
 
 export default function CardShell({
   children,
