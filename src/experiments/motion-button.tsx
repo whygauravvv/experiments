@@ -8,7 +8,7 @@ export default function MotionButtonDemo() {
   const [isActive, setIsActive] = useState(false)
 
   return (
-    <CardShell>
+    <CardShell backgroundVariant="dot-glow">
       <motion.div
         whileHover={{ y: -4, scale: 1.03 }}
         whileTap={{ scale: 0.96, y: 0 }}

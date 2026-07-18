@@ -1,28 +1,8 @@
 .icon-reveal {
-  position: relative;
   display: grid;
   height: 100%;
   width: 100%;
   place-items: center;
-  overflow: hidden;
-  isolation: isolate;
-  background-color: #f3f2ee;
-  background-image:
-    linear-gradient(rgba(36, 35, 33, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(36, 35, 33, 0.045) 1px, transparent 1px);
-  background-size: clamp(36px, 8vw, 64px) clamp(36px, 8vw, 64px);
-  color: #252422;
-}
-
-.icon-reveal::before {
-  position: absolute;
-  z-index: -1;
-  width: 72%;
-  aspect-ratio: 1;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  filter: blur(72px);
-  content: "";
 }
 
 .icon-reveal__content {

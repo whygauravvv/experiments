@@ -1,5 +1,7 @@
 import "../styles/icon-reveal.css"
 
+import GridGlowBackground from "@/components/grid-glow-background"
+
 const ICONS = [
   {
     name: "Innie",
@@ -17,7 +19,11 @@ const ICONS = [
 
 export default function IconReveal() {
   return (
-    <section className="icon-reveal" aria-label="Color reveal icon experiment">
+    <GridGlowBackground
+      className="icon-reveal"
+      role="region"
+      aria-label="Color reveal icon experiment"
+    >
       <div className="icon-reveal__content">
         <div className="icon-reveal__icons">
           {ICONS.map((icon) => (
@@ -35,6 +41,6 @@ export default function IconReveal() {
 
         <p className="icon-reveal__hint">Hover or focus an icon</p>
       </div>
-    </section>
+    </GridGlowBackground>
   )
 }

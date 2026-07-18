@@ -47,9 +47,29 @@ const MotionButtonDemo = lazy(() => import("./motion-button"))
 const CodexPhone = lazy(() => import("./iphone"))
 const CodexAtmosphere = lazy(() => import("./codex-atmosphere"))
 const ImessageMenu = lazy(() => import("./imessage-menu"))
+const Vestaboard = lazy(() => import("./vestaboard"))
 
 export const experiments: ExperimentItem[] = [
-  // Vestaboard is intentionally excluded from the gallery for now.
+  {
+    id: "vestaboard",
+    title: "Vestaboard",
+    description: "A tactile split-flap display that cycles through messages.",
+    year: "2026",
+    tags: ["Motion", "Split Flap", "Interaction"],
+    loadFiles: loadSourceFiles([
+      {
+        filename: "vestaboard.tsx",
+        language: "tsx",
+        load: () => import("./vestaboard.tsx?raw"),
+      },
+      {
+        filename: "vestaboard.css",
+        language: "css",
+        load: () => import("@/styles/vestaboard.css?raw"),
+      },
+    ]),
+    Component: Vestaboard,
+  },
   {
     id: "rainbow-dot-field",
     title: "Rainbow Dot Field",
@@ -126,6 +146,16 @@ export const experiments: ExperimentItem[] = [
         filename: "icon-reveal.css",
         language: "css",
         load: () => import("@/styles/icon-reveal.css?raw"),
+      },
+      {
+        filename: "grid-glow-background.tsx",
+        language: "tsx",
+        load: () => import("@/components/grid-glow-background.tsx?raw"),
+      },
+      {
+        filename: "grid-glow-background.css",
+        language: "css",
+        load: () => import("@/styles/grid-glow-background.css?raw"),
       },
     ]),
     url: "https://x.com/jh3yy/status/2019918728440283481",
