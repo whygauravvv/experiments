@@ -1,6 +1,7 @@
 import "../styles/icon-reveal.css"
 
 import GridGlowBackground from "@/components/backgrounds/grid-glow-background"
+import { useState } from "react"
 
 const ICONS = [
   {
@@ -18,6 +19,8 @@ const ICONS = [
 ] as const
 
 export default function IconReveal() {
+  const [failedIcons, setFailedIcons] = useState(() => new Set<string>())
+
   return (
     <GridGlowBackground
       className="icon-reveal"
@@ -33,8 +36,30 @@ export default function IconReveal() {
               className="icon-reveal__icon"
               aria-label={`Reveal ${icon.name} icon in color`}
             >
-              <img src={icon.src} alt="" draggable={false} />
-              <img src={icon.src} alt="" draggable={false} aria-hidden="true" />
+              {failedIcons.has(icon.name) ? (
+                <span className="icon-reveal__fallback" aria-hidden="true">
+                  {icon.name.slice(0, 1)}
+                </span>
+              ) : (
+                <>
+                  <img
+                    src={icon.src}
+                    alt=""
+                    draggable={false}
+                    onError={() => {
+                      setFailedIcons((current) =>
+                        new Set(current).add(icon.name)
+                      )
+                    }}
+                  />
+                  <img
+                    src={icon.src}
+                    alt=""
+                    draggable={false}
+                    aria-hidden="true"
+                  />
+                </>
+              )}
             </button>
           ))}
         </div>

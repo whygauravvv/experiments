@@ -28,6 +28,7 @@ export default function ExperimentSource({ loadFiles }: ExperimentSourceProps) {
     loadFiles,
     status: "loading",
   })
+  const [loadAttempt, setLoadAttempt] = useState(0)
   const currentState =
     sourceState.loadFiles === loadFiles
       ? sourceState
@@ -49,7 +50,7 @@ export default function ExperimentSource({ loadFiles }: ExperimentSourceProps) {
     return () => {
       cancelled = true
     }
-  }, [loadFiles])
+  }, [loadAttempt, loadFiles])
 
   if (currentState.status === "error") {
     return (
@@ -57,7 +58,19 @@ export default function ExperimentSource({ loadFiles }: ExperimentSourceProps) {
         role="alert"
         className="grid min-h-40 place-items-center rounded-xl border border-border/70 bg-card px-6 text-center text-xs text-muted-foreground"
       >
-        Source code could not be loaded.
+        <div className="grid justify-items-center gap-3">
+          <p>Source code could not be loaded.</p>
+          <button
+            type="button"
+            className="rounded-full border border-border bg-background px-3 py-1.5 text-foreground transition-colors hover:bg-muted"
+            onClick={() => {
+              setSourceState({ loadFiles, status: "loading" })
+              setLoadAttempt((attempt) => attempt + 1)
+            }}
+          >
+            Retry
+          </button>
+        </div>
       </div>
     )
   }

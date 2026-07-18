@@ -3,9 +3,7 @@ import { createContext, useContext, useEffect, useRef, useState } from "react"
 type PreviewSubscriber = (isNearViewport: boolean) => void
 
 type PreviewRecord = {
-  element: Element
   isActive: boolean
-  isIntersecting: boolean
   subscriber: PreviewSubscriber
 }
 
@@ -25,8 +23,6 @@ export class GalleryPreviewManager {
         entries.forEach((entry) => {
           const record = this.records.get(entry.target)
           if (!record) return
-
-          record.isIntersecting = entry.isIntersecting
 
           if (entry.isIntersecting) {
             this.intersectingRecords.add(record)
@@ -56,16 +52,13 @@ export class GalleryPreviewManager {
 
   observe(element: Element, subscriber: PreviewSubscriber) {
     const record: PreviewRecord = {
-      element,
       isActive: false,
-      isIntersecting: false,
       subscriber,
     }
 
     this.records.set(element, record)
 
     if (typeof IntersectionObserver === "undefined") {
-      record.isIntersecting = true
       this.intersectingRecords.add(record)
       this.setRecordActive(record, this.enabled)
     } else {

@@ -3,7 +3,8 @@ import { lazy, type ComponentType, type LazyExoticComponent } from "react"
 
 type RawSourceModule = { default: string }
 
-type ExperimentSourceDefinition = Omit<ExperimentSourceFile, "code"> & {
+type ExperimentSourceDefinition = {
+  filename: string
   load: () => Promise<RawSourceModule>
 }
 
@@ -11,10 +12,7 @@ export type ExperimentItem = {
   id: string
   title: string
   description: string
-  year: string
-  tags: string[]
   loadFiles: () => Promise<ExperimentSourceFile[]>
-  url?: string
   Component: LazyExoticComponent<ComponentType>
 }
 
@@ -25,18 +23,47 @@ export type ExperimentSourceFile = {
 }
 
 function loadSourceFiles(definitions: ExperimentSourceDefinition[]) {
+  if (
+    new Set(definitions.map(({ filename }) => filename)).size !==
+    definitions.length
+  ) {
+    throw new Error("Experiment source filenames must be unique")
+  }
+
   let filesPromise: Promise<ExperimentSourceFile[]> | undefined
 
   return () => {
-    filesPromise ??= Promise.all(
-      definitions.map(async ({ load, ...file }) => ({
-        ...file,
-        code: (await load()).default,
-      }))
-    )
+    if (!filesPromise) {
+      const pendingFiles = Promise.all(
+        definitions.map(async ({ load, ...file }) => {
+          const language: SupportedCodeLanguage = file.filename.endsWith(".css")
+            ? "css"
+            : "tsx"
+
+          return {
+            ...file,
+            language,
+            code: (await load()).default,
+          } satisfies ExperimentSourceFile
+        })
+      )
+
+      filesPromise = pendingFiles
+      void pendingFiles.catch(() => {
+        if (filesPromise === pendingFiles) filesPromise = undefined
+      })
+    }
 
     return filesPromise
   }
+}
+
+function defineExperiments(items: ExperimentItem[]) {
+  if (new Set(items.map(({ id }) => id)).size !== items.length) {
+    throw new Error("Experiment ids must be unique")
+  }
+
+  return items
 }
 
 const RainbowDotField = lazy(() => import("./rainbow-dot-field"))
@@ -46,25 +73,21 @@ const IconReveal = lazy(() => import("./icon-reveal"))
 const MotionButtonDemo = lazy(() => import("./motion-button"))
 const CodexPhone = lazy(() => import("./iphone"))
 const CodexAtmosphere = lazy(() => import("./codex-atmosphere"))
-const ImessageMenu = lazy(() => import("./imessage-menu"))
+const IMessageMenu = lazy(() => import("./imessage-menu"))
 const Vestaboard = lazy(() => import("./vestaboard"))
 
-export const experiments: ExperimentItem[] = [
+export const experiments = defineExperiments([
   {
     id: "vestaboard",
     title: "Vestaboard",
     description: "A tactile split-flap display that cycles through messages.",
-    year: "2026",
-    tags: ["Motion", "Split Flap", "Interaction"],
     loadFiles: loadSourceFiles([
       {
         filename: "vestaboard.tsx",
-        language: "tsx",
         load: () => import("./vestaboard.tsx?raw"),
       },
       {
         filename: "vestaboard.css",
-        language: "css",
         load: () => import("@/styles/vestaboard.css?raw"),
       },
     ]),
@@ -74,17 +97,13 @@ export const experiments: ExperimentItem[] = [
     id: "rainbow-dot-field",
     title: "Rainbow Dot Field",
     description: "A masked spectrum of dots that grows around the cursor.",
-    year: "2026",
-    tags: ["CSS", "Pointer", "Masking"],
     loadFiles: loadSourceFiles([
       {
         filename: "rainbow-dot-field.tsx",
-        language: "tsx",
         load: () => import("./rainbow-dot-field.tsx?raw"),
       },
       {
         filename: "rainbow-dot-field.css",
-        language: "css",
         load: () => import("@/styles/rainbow-dot-field.css?raw"),
       },
     ]),
@@ -94,17 +113,13 @@ export const experiments: ExperimentItem[] = [
     id: "metric-matrix",
     title: "Metric Matrix",
     description: "A click-driven metric card with progressive dot transitions.",
-    year: "2026",
-    tags: ["Data", "Motion", "Interaction"],
     loadFiles: loadSourceFiles([
       {
         filename: "metric-matrix.tsx",
-        language: "tsx",
         load: () => import("./metric-matrix.tsx?raw"),
       },
       {
         filename: "metric-matrix.css",
-        language: "css",
         load: () => import("@/styles/metric-matrix.css?raw"),
       },
     ]),
@@ -114,17 +129,13 @@ export const experiments: ExperimentItem[] = [
     id: "create-modal",
     title: "Create Modal",
     description: "A compact create button that morphs into an action menu.",
-    year: "2026",
-    tags: ["Motion", "Menu", "Interaction"],
     loadFiles: loadSourceFiles([
       {
         filename: "create-modal.tsx",
-        language: "tsx",
         load: () => import("./create-modal.tsx?raw"),
       },
       {
         filename: "create-modal.css",
-        language: "css",
         load: () => import("@/styles/create-modal.css?raw"),
       },
     ]),
@@ -134,45 +145,60 @@ export const experiments: ExperimentItem[] = [
     id: "icon-reveal",
     title: "Icon Reveal",
     description: "A color reveal made by stacking and clipping two icons.",
-    year: "2026",
-    tags: ["CSS", "Clip Path", "Interaction"],
     loadFiles: loadSourceFiles([
       {
         filename: "icon-reveal.tsx",
-        language: "tsx",
         load: () => import("./icon-reveal.tsx?raw"),
       },
       {
         filename: "icon-reveal.css",
-        language: "css",
         load: () => import("@/styles/icon-reveal.css?raw"),
       },
       {
         filename: "grid-glow-background.tsx",
-        language: "tsx",
         load: () =>
           import("@/components/backgrounds/grid-glow-background.tsx?raw"),
       },
       {
+        filename: "glow-background.tsx",
+        load: () => import("@/components/backgrounds/glow-background.tsx?raw"),
+      },
+      {
         filename: "grid-glow-background.css",
-        language: "css",
         load: () => import("@/styles/grid-glow-background.css?raw"),
       },
     ]),
-    url: "https://x.com/jh3yy/status/2019918728440283481",
     Component: IconReveal,
   },
   {
     id: "motion-button-demo",
     title: "Motion Button",
     description: "Simple Framer Motion hover and tap interaction.",
-    year: "2026",
-    tags: ["Motion", "React", "Interaction"],
     loadFiles: loadSourceFiles([
       {
         filename: "motion-button.tsx",
-        language: "tsx",
         load: () => import("./motion-button.tsx?raw"),
+      },
+      {
+        filename: "card-shell.tsx",
+        load: () => import("@/components/card-shell.tsx?raw"),
+      },
+      {
+        filename: "dot-glow-background.tsx",
+        load: () =>
+          import("@/components/backgrounds/dot-glow-background.tsx?raw"),
+      },
+      {
+        filename: "glow-background.tsx",
+        load: () => import("@/components/backgrounds/glow-background.tsx?raw"),
+      },
+      {
+        filename: "grid-glow-background.css",
+        load: () => import("@/styles/grid-glow-background.css?raw"),
+      },
+      {
+        filename: "button.tsx",
+        load: () => import("@/components/ui/button.tsx?raw"),
       },
     ]),
     Component: MotionButtonDemo,
@@ -181,13 +207,26 @@ export const experiments: ExperimentItem[] = [
     id: "codex-phone",
     title: "Codex Phone",
     description: "Codex atmosphere presented inside an iPhone frame.",
-    year: "2026",
-    tags: ["Mobile", "Prototype", "Codex"],
     loadFiles: loadSourceFiles([
       {
         filename: "iphone.tsx",
-        language: "tsx",
         load: () => import("./iphone.tsx?raw"),
+      },
+      {
+        filename: "iphone-mockup.tsx",
+        load: () => import("@/components/iphone-mockup.tsx?raw"),
+      },
+      {
+        filename: "card-shell.tsx",
+        load: () => import("@/components/card-shell.tsx?raw"),
+      },
+      {
+        filename: "codex-atmosphere.tsx",
+        load: () => import("./codex-atmosphere.tsx?raw"),
+      },
+      {
+        filename: "codex-atmosphere.css",
+        load: () => import("@/styles/codex-atmosphere.css?raw"),
       },
     ]),
     Component: CodexPhone,
@@ -196,17 +235,13 @@ export const experiments: ExperimentItem[] = [
     id: "codex-atmosphere",
     title: "Codex Atmosphere",
     description: "Warm video texture with a cursor-reactive ASCII field.",
-    year: "2026",
-    tags: ["Canvas", "Pointer", "Atmosphere"],
     loadFiles: loadSourceFiles([
       {
         filename: "codex-atmosphere.tsx",
-        language: "tsx",
         load: () => import("./codex-atmosphere.tsx?raw"),
       },
       {
         filename: "codex-atmosphere.css",
-        language: "css",
         load: () => import("@/styles/codex-atmosphere.css?raw"),
       },
     ]),
@@ -215,16 +250,25 @@ export const experiments: ExperimentItem[] = [
   {
     id: "imessage-menu",
     title: "iMessage Menu",
-    description: "IOS 18 Imessage Menu Inspired Menu",
-    year: "2026",
-    tags: [],
+    description: "An iOS 18-inspired iMessage app menu.",
     loadFiles: loadSourceFiles([
       {
         filename: "imessage-menu.tsx",
-        language: "tsx",
         load: () => import("./imessage-menu.tsx?raw"),
       },
+      {
+        filename: "iphone-mockup.tsx",
+        load: () => import("@/components/iphone-mockup.tsx?raw"),
+      },
+      {
+        filename: "card-shell.tsx",
+        load: () => import("@/components/card-shell.tsx?raw"),
+      },
+      {
+        filename: "skeleton.tsx",
+        load: () => import("@/components/ui/skeleton.tsx?raw"),
+      },
     ]),
-    Component: ImessageMenu,
+    Component: IMessageMenu,
   },
-]
+])

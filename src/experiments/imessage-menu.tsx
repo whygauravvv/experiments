@@ -1,6 +1,8 @@
 import CardShell from "@/components/card-shell"
-import IphoneMockup from "@/components/iphone-mockup"
+import IPhoneMockup from "@/components/iphone-mockup"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useEscapeKey } from "@/hooks/use-escape-key"
+import { MOTION_EASE } from "@/lib/motion"
 import {
   Camera,
   CircleCheck,
@@ -12,7 +14,7 @@ import {
   type LucideIcon,
 } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 type MenuItem = {
   label: string
@@ -60,23 +62,14 @@ const MENU_ITEMS: MenuItem[] = [
   },
 ]
 
-export default function ImessageMenu() {
+export default function IMessageMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  useEffect(() => {
-    if (!isMenuOpen) return
-
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsMenuOpen(false)
-    }
-
-    window.addEventListener("keydown", closeOnEscape)
-    return () => window.removeEventListener("keydown", closeOnEscape)
-  }, [isMenuOpen])
+  useEscapeKey(isMenuOpen, () => setIsMenuOpen(false))
 
   return (
     <CardShell>
-      <IphoneMockup contentClassName="bg-[#f4f5f7] [container-type:inline-size]">
+      <IPhoneMockup contentClassName="bg-[#f4f5f7] [container-type:inline-size]">
         <MessageCanvas />
 
         <div className="absolute bottom-[3.5%] left-[5%] z-30">
@@ -91,7 +84,7 @@ export default function ImessageMenu() {
             <MessageMenuOverlay onDismiss={() => setIsMenuOpen(false)} />
           ) : null}
         </AnimatePresence>
-      </IphoneMockup>
+      </IPhoneMockup>
     </CardShell>
   )
 }
@@ -180,7 +173,7 @@ function MessageMenuItem({ item, index }: { item: MenuItem; index: number }) {
       transition={{
         delay: 0.035 + (MENU_ITEMS.length - 1 - index) * 0.045,
         duration: 0.2,
-        ease: [0.16, 1, 0.3, 1],
+        ease: MOTION_EASE,
       }}
       whileTap={{ scale: 0.98 }}
     >

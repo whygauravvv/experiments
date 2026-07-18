@@ -1,8 +1,9 @@
 import DotGridBackground from "@/components/gallery/dot-grid-background"
 import GalleryHeader from "@/components/gallery/gallery-header"
 import { GalleryPreviewProvider } from "@/components/gallery/gallery-preview-provider"
-import GalleryGrid from "@/components/gallery/galley-grid"
+import GalleryGrid from "@/components/gallery/gallery-grid"
 import { experiments } from "@/experiments"
+import { MOTION_EASE } from "@/lib/motion"
 import { motion } from "motion/react"
 
 type ExperimentsGalleryProps = {
@@ -27,7 +28,7 @@ export default function ExperimentsGallery({
             x: isDetailOpen ? -48 : 0,
             opacity: isDetailOpen ? 0 : 1,
           }}
-          transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.36, ease: MOTION_EASE }}
           className="relative isolate overflow-hidden border-b border-border/40 lg:sticky lg:top-0 lg:h-screen lg:border-r lg:border-b-0"
         >
           <DotGridBackground />

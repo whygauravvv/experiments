@@ -1,7 +1,7 @@
-import "@/styles/grid-glow-background.css"
-
-import { cn } from "@/lib/utils"
-import type { CSSProperties, HTMLAttributes } from "react"
+import GlowBackground, {
+  type GlowBackgroundStyle,
+} from "@/components/backgrounds/glow-background"
+import type { HTMLAttributes } from "react"
 
 const GRID_GLOW_BACKGROUND_TOKENS = {
   surfaceColor: "#f3f2ee",
@@ -16,24 +16,13 @@ const GRID_GLOW_BACKGROUND_TOKENS = {
 } as const
 
 type GridGlowBackgroundProps = HTMLAttributes<HTMLDivElement>
-type GridGlowBackgroundStyle = CSSProperties & {
-  "--background-surface": string
-  "--background-foreground": string
-  "--background-pattern-color": string
-  "--background-pattern-size": string
-  "--background-pattern-mark-size": string
-  "--background-glow-color": string
-  "--background-glow-size": string
-  "--background-glow-inner-stop": string
-  "--background-glow-outer-stop": string
-}
 
 export default function GridGlowBackground({
   className,
   style,
   ...props
 }: GridGlowBackgroundProps) {
-  const backgroundStyle: GridGlowBackgroundStyle = {
+  const backgroundStyle: GlowBackgroundStyle = {
     "--background-surface": GRID_GLOW_BACKGROUND_TOKENS.surfaceColor,
     "--background-foreground": GRID_GLOW_BACKGROUND_TOKENS.foregroundColor,
     "--background-pattern-color": GRID_GLOW_BACKGROUND_TOKENS.patternColor,
@@ -47,8 +36,9 @@ export default function GridGlowBackground({
   }
 
   return (
-    <div
-      className={cn("grid-glow-background", className)}
+    <GlowBackground
+      pattern="grid"
+      className={className}
       style={backgroundStyle}
       {...props}
     />

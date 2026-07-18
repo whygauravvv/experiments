@@ -12,6 +12,8 @@ type CodeViewerProps = {
   language: SupportedCodeLanguage
 }
 
+type CopyStatus = "idle" | "copied" | "error"
+
 export default function CodeViewer({
   code,
   filename = "experiment.tsx",
@@ -22,7 +24,7 @@ export default function CodeViewer({
     key: string
     lines: HighlightedCodeLine[]
   }>()
-  const [copied, setCopied] = useState(false)
+  const [copyStatus, setCopyStatus] = useState<CopyStatus>("idle")
   const copyResetTimer = useRef<number>(undefined)
   const lines = useMemo(() => code.split("\n"), [code])
 
@@ -54,11 +56,27 @@ export default function CodeViewer({
   }, [])
 
   const copyCode = async () => {
-    await navigator.clipboard.writeText(code)
-    setCopied(true)
     window.clearTimeout(copyResetTimer.current)
-    copyResetTimer.current = window.setTimeout(() => setCopied(false), 1600)
+
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopyStatus("copied")
+    } catch {
+      setCopyStatus("error")
+    }
+
+    copyResetTimer.current = window.setTimeout(
+      () => setCopyStatus("idle"),
+      1600
+    )
   }
+
+  const copyLabel =
+    copyStatus === "copied"
+      ? "Code copied"
+      : copyStatus === "error"
+        ? "Copy failed"
+        : "Copy code"
 
   return (
     <div className="code-viewer flex max-h-screen min-h-0 flex-col overflow-hidden rounded-xl border border-border/70 bg-card md:max-h-full">
@@ -81,14 +99,20 @@ export default function CodeViewer({
             type="button"
             onClick={copyCode}
             className="inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 text-[10px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:outline-none"
-            aria-label={copied ? "Code copied" : "Copy code"}
+            aria-label={copyLabel}
           >
-            {copied ? (
+            {copyStatus === "copied" ? (
               <Check className="size-3" />
             ) : (
               <Copy className="size-3" />
             )}
-            <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
+            <span aria-live="polite">
+              {copyStatus === "copied"
+                ? "Copied"
+                : copyStatus === "error"
+                  ? "Unable to copy"
+                  : "Copy"}
+            </span>
           </button>
         </div>
       </div>

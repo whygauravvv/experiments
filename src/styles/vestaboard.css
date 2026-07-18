@@ -111,9 +111,3 @@
   aspect-ratio: 3.12 / 1;
   width: 100%;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .vestaboard {
-    transform: none;
-  }
-}

@@ -1,7 +1,9 @@
 import ExperimentLoading, {
   ExperimentReady,
 } from "@/components/experiment-loading"
-import { experiments } from "@/experiments"
+import ExperimentErrorBoundary from "@/components/experiment-error-boundary"
+import { getExperimentNavigation } from "@/lib/experiment-navigation"
+import { MOTION_EASE } from "@/lib/motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
 import { Suspense, useEffect, useState } from "react"
@@ -19,13 +21,13 @@ const experimentVariants = {
     opacity: 1,
     x: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.3, ease: MOTION_EASE },
   },
   exit: (direction: Direction) => ({
     opacity: 0,
     x: direction * -24,
     filter: "blur(6px)",
-    transition: { duration: 0.13, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.13, ease: MOTION_EASE },
   }),
 } satisfies Variants
 
@@ -40,14 +42,14 @@ const titleVariants = {
     opacity: 1,
     x: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.13, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.13, ease: MOTION_EASE },
   },
   exit: (direction: Direction) => ({
     opacity: 0,
     scale: 0.9,
     x: direction * -24,
     filter: "blur(4px)",
-    transition: { duration: 0.13, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.13, ease: MOTION_EASE },
   }),
 } satisfies Variants
 
@@ -55,14 +57,8 @@ export default function MobileExperiments() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [direction, setDirection] = useState<Direction>(1)
-  const routeIndex = id
-    ? experiments.findIndex((experiment) => experiment.id === id)
-    : 0
-  const activeIndex = routeIndex === -1 ? 0 : routeIndex
-  const activeExperiment = experiments[activeIndex]
-  const previousExperiment =
-    experiments[(activeIndex - 1 + experiments.length) % experiments.length]
-  const nextExperiment = experiments[(activeIndex + 1) % experiments.length]
+  const { routeIndex, activeExperiment, previousExperiment, nextExperiment } =
+    getExperimentNavigation(id)
   const { Component } = activeExperiment
 
   useEffect(() => {
@@ -106,11 +102,13 @@ export default function MobileExperiments() {
                 "min(100%, calc(100dvh - 7.5rem - env(safe-area-inset-bottom)))",
             }}
           >
-            <Suspense fallback={<ExperimentLoading />}>
-              <ExperimentReady>
-                <Component />
-              </ExperimentReady>
-            </Suspense>
+            <ExperimentErrorBoundary key={activeExperiment.id}>
+              <Suspense fallback={<ExperimentLoading />}>
+                <ExperimentReady>
+                  <Component />
+                </ExperimentReady>
+              </Suspense>
+            </ExperimentErrorBoundary>
           </motion.article>
         </AnimatePresence>
       </section>

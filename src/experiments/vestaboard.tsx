@@ -299,7 +299,6 @@ function resizeCanvas(canvas: HTMLCanvasElement, runtime: BoardRuntime) {
 export default function Vestaboard() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const runtimeRef = useRef<BoardRuntime | null>(null)
-  const reducedMotionRef = useRef(false)
   const [messageIndex, setMessageIndex] = useState(INITIAL_MESSAGE_INDEX)
   const [isFlipping, setIsFlipping] = useState(false)
 
@@ -319,19 +318,6 @@ export default function Vestaboard() {
     resizeCanvas(canvas, runtime)
 
     return () => resizeObserver.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
-    reducedMotionRef.current = mediaQuery.matches
-
-    const updateMotionPreference = (event: MediaQueryListEvent) => {
-      reducedMotionRef.current = event.matches
-    }
-
-    mediaQuery.addEventListener("change", updateMotionPreference)
-    return () =>
-      mediaQuery.removeEventListener("change", updateMotionPreference)
   }, [])
 
   useEffect(
@@ -355,14 +341,6 @@ export default function Vestaboard() {
     const nextMessageIndex = (messageIndex + 1) % MESSAGES.length
     runtime.cycle += 1
     messageToValues(MESSAGES[nextMessageIndex], runtime.target)
-
-    if (reducedMotionRef.current) {
-      runtime.current.set(runtime.target)
-      runtime.previous.set(runtime.target)
-      drawBoard(canvas, runtime)
-      setMessageIndex(nextMessageIndex)
-      return
-    }
 
     let animationDuration = 0
     for (let index = 0; index < CELL_COUNT; index += 1) {

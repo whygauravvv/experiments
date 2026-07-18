@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import type { ReactNode } from "react"
 
 import iphone17BlueMockup from "@/assets/mockups/ip-blue.png"
@@ -6,14 +5,14 @@ import iphone17OrangeMockup from "@/assets/mockups/ip-orange.png"
 import iphone17SilverMockup from "@/assets/mockups/ip-silver.png"
 import { cn } from "@/lib/utils"
 
-type IphoneMockupVariant = "silver" | "blue" | "orange"
+type IPhoneMockupVariant = "silver" | "blue" | "orange"
 
-type IphoneMockupProps = {
+type IPhoneMockupProps = {
   children: ReactNode
   className?: string
   screenClassName?: string
   contentClassName?: string
-  variant?: IphoneMockupVariant
+  variant?: IPhoneMockupVariant
   overlayColor?: string
   statusBarColor?: string
   islandColor?: string
@@ -33,7 +32,7 @@ const SCREEN_INSET = {
   borderRadius: "1rem",
 } as const
 
-const MOCKUP_ASSETS: Record<IphoneMockupVariant, string> = {
+const MOCKUP_ASSETS: Record<IPhoneMockupVariant, string> = {
   silver: iphone17SilverMockup,
   blue: iphone17BlueMockup,
   orange: iphone17OrangeMockup,
@@ -46,7 +45,7 @@ const WIFI_PATH =
 const BATTERY_PATH =
   "M385.084 52.9865V56.9957C385.484 56.8855 386.415 55.9934 386.415 54.9911C386.415 53.9888 385.484 53.0967 385.084 52.9865ZM384.083 56.1638C384.083 56.3743 384.083 56.5848 384.083 56.7953C384.083 56.9757 384.083 57.1461 384.083 57.3265C384.073 57.7174 384.053 58.0983 383.983 58.4892C383.913 58.8801 383.803 59.2409 383.623 59.5917C383.443 59.9425 383.213 60.2532 382.943 60.5239C382.673 60.7945 382.353 61.025 382.012 61.2054C381.662 61.3859 381.302 61.4961 380.912 61.5663C380.532 61.6364 380.142 61.6565 379.751 61.6665C379.571 61.6665 379.401 61.6665 379.221 61.6665C379.011 61.6665 378.801 61.6665 378.591 61.6665H364.574C364.364 61.6665 364.154 61.6665 363.944 61.6665C363.764 61.6665 363.594 61.6665 363.414 61.6665C363.023 61.6565 362.643 61.6364 362.253 61.5663C361.863 61.4961 361.503 61.3859 361.153 61.2054C360.812 61.025 360.492 60.7945 360.222 60.5239C359.952 60.2532 359.722 59.9325 359.542 59.5917C359.362 59.2409 359.252 58.8801 359.182 58.4892C359.112 58.1083 359.092 57.7174 359.082 57.3265C359.082 57.1461 359.082 56.9757 359.082 56.7953C359.082 56.5848 359.082 56.3743 359.082 56.1638V54.1592C359.082 53.9487 359.082 53.7382 359.082 53.5277C359.082 53.3473 359.082 53.1769 359.082 52.9965C359.092 52.6056 359.112 52.2247 359.182 51.8438C359.252 51.4529 359.362 51.0921 359.542 50.7413C359.722 50.3905 359.952 50.0798 360.222 49.8091C360.492 49.5385 360.812 49.308 361.153 49.1276C361.503 48.9472 361.863 48.8369 362.253 48.7667C362.633 48.6966 363.023 48.6765 363.414 48.6665C363.594 48.6665 363.764 48.6665 363.944 48.6665C364.154 48.6665 364.364 48.6665 364.574 48.6665H378.581C378.791 48.6665 379.001 48.6665 379.211 48.6665C379.391 48.6665 379.561 48.6665 379.741 48.6665C380.132 48.6765 380.512 48.6966 380.902 48.7667C381.292 48.8369 381.652 48.9472 382.002 49.1276C382.353 49.308 382.663 49.5385 382.933 49.8091C383.203 50.0798 383.433 50.4005 383.613 50.7413C383.793 51.0921 383.903 51.4529 383.973 51.8438C384.043 52.2247 384.063 52.6156 384.073 52.9965C384.073 53.1769 384.073 53.3473 384.073 53.5277C384.073 53.7382 384.073 53.9487 384.073 54.1592V56.1638H384.083Z"
 
-export default function IphoneMockup({
+export default function IPhoneMockup({
   children,
   className,
   screenClassName,
@@ -58,7 +57,7 @@ export default function IphoneMockup({
   showStatusBar = true,
   showIsland = true,
   showHomeBar = true,
-}: IphoneMockupProps) {
+}: IPhoneMockupProps) {
   const resolvedStatusBarColor = statusBarColor ?? overlayColor
   const resolvedHomeBarColor = homeBarColor ?? overlayColor
 
@@ -90,7 +89,7 @@ export default function IphoneMockup({
           </div>
         </div>
 
-        <IphoneOverlay
+        <IPhoneOverlay
           statusBarColor={resolvedStatusBarColor}
           homeBarColor={resolvedHomeBarColor}
           showStatusBar={showStatusBar}
@@ -110,7 +109,7 @@ export default function IphoneMockup({
   )
 }
 
-function IphoneOverlay({
+function IPhoneOverlay({
   statusBarColor,
   homeBarColor,
   showStatusBar,
@@ -167,9 +166,3 @@ function IphoneOverlay({
     </svg>
   )
 }
-
-export const iphoneMockupTuning = {
-  deviceAspectRatio: DEVICE_ASPECT_RATIO,
-  screenInset: SCREEN_INSET,
-  variants: Object.keys(MOCKUP_ASSETS),
-} as const

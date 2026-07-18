@@ -1,4 +1,5 @@
 import type { ExperimentItem } from "@/experiments"
+import ExperimentErrorBoundary from "@/components/experiment-error-boundary"
 import ExperimentLoading, {
   ExperimentReady,
 } from "@/components/experiment-loading"
@@ -44,11 +45,13 @@ function GalleryCard({ id, title, description, Component }: GalleryCardProps) {
       </section>
       <section className="h-full w-full" aria-live="off">
         {isNearViewport ? (
-          <Suspense fallback={<ExperimentLoading />}>
-            <ExperimentReady>
-              <Component />
-            </ExperimentReady>
-          </Suspense>
+          <ExperimentErrorBoundary key={id}>
+            <Suspense fallback={<ExperimentLoading />}>
+              <ExperimentReady>
+                <Component />
+              </ExperimentReady>
+            </Suspense>
+          </ExperimentErrorBoundary>
         ) : null}
       </section>
     </article>

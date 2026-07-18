@@ -1,5 +1,6 @@
 import "../styles/metric-matrix.css"
 
+import { MOTION_EASE } from "@/lib/motion"
 import { AnimatePresence, motion, type Variants } from "motion/react"
 import { useState } from "react"
 
@@ -71,7 +72,7 @@ const CHARACTER_VARIANTS = {
     transition: {
       delay: index * 0.038,
       duration: 0.28,
-      ease: [0.16, 1, 0.3, 1],
+      ease: MOTION_EASE,
     },
   }),
   exit: ({ index, total, direction }: CharacterMotion) => ({
@@ -118,7 +119,7 @@ export default function MetricMatrix() {
         transition={{
           backgroundColor: {
             duration: 0.42,
-            ease: [0.16, 1, 0.3, 1],
+            ease: MOTION_EASE,
           },
           color: { duration: 0.3 },
           scale: { type: "spring", stiffness: 500, damping: 34 },
@@ -143,7 +144,7 @@ export default function MetricMatrix() {
                 transition={{
                   delay: isActive ? index * 0.0025 : 0,
                   duration: 0.26,
-                  ease: [0.16, 1, 0.3, 1],
+                  ease: MOTION_EASE,
                 }}
               />
             )
@@ -191,7 +192,7 @@ export default function MetricMatrix() {
                   exit={{ opacity: 0, y: -5, filter: "blur(3px)" }}
                   transition={{
                     duration: 0.2,
-                    ease: [0.16, 1, 0.3, 1],
+                    ease: MOTION_EASE,
                   }}
                   style={{ color: state.muted }}
                 >

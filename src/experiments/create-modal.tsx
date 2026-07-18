@@ -1,5 +1,7 @@
 import "../styles/create-modal.css"
 
+import { useEscapeKey } from "@/hooks/use-escape-key"
+import { MOTION_EASE } from "@/lib/motion"
 import {
   CalendarDays,
   Copy,
@@ -11,7 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 type CreateAction = {
   label: string
@@ -30,16 +32,7 @@ const CREATE_ACTIONS: CreateAction[] = [
 export default function CreateModal() {
   const [isOpen, setIsOpen] = useState(false)
 
-  useEffect(() => {
-    if (!isOpen) return
-
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsOpen(false)
-    }
-
-    window.addEventListener("keydown", closeOnEscape)
-    return () => window.removeEventListener("keydown", closeOnEscape)
-  }, [isOpen])
+  useEscapeKey(isOpen, () => setIsOpen(false))
 
   return (
     <section className="create-modal-demo" aria-label="Create menu experiment">
@@ -106,7 +99,7 @@ export default function CreateModal() {
               transition={{
                 delay: 0.055,
                 duration: 0.24,
-                ease: [0.16, 1, 0.3, 1],
+                ease: MOTION_EASE,
               }}
             >
               {CREATE_ACTIONS.map((action) => (

@@ -1,15 +1,15 @@
 import CardShell from "@/components/card-shell"
-import IphoneMockup from "@/components/iphone-mockup"
+import IPhoneMockup from "@/components/iphone-mockup"
 import CodexAtmosphere from "./codex-atmosphere"
 
-export default function MotionButton() {
+export default function CodexPhone() {
   return (
     <CardShell>
-      <IphoneMockup variant="orange">
+      <IPhoneMockup variant="orange">
         <div className="flex h-full w-full items-center justify-center">
           <CodexAtmosphere />
         </div>
-      </IphoneMockup>
+      </IPhoneMockup>
     </CardShell>
   )
 }

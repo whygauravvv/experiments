@@ -1,11 +1,14 @@
 import ExperimentSource from "@/components/code/experiment-source"
+import ExperimentErrorBoundary from "@/components/experiment-error-boundary"
 import ExperimentLoading, {
   ExperimentReady,
 } from "@/components/experiment-loading"
-import { experiments } from "@/experiments"
+import { useEscapeKey } from "@/hooks/use-escape-key"
+import { getExperimentNavigation } from "@/lib/experiment-navigation"
+import { MOTION_EASE } from "@/lib/motion"
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
-import { Suspense, useCallback, useEffect } from "react"
+import { Suspense, useCallback } from "react"
 import {
   Link,
   Navigate,
@@ -20,13 +23,13 @@ const experimentTransitionVariants = {
     opacity: 1,
     x: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.2, ease: MOTION_EASE },
   },
   exit: {
     opacity: 0,
     x: -28,
     filter: "blur(5px)",
-    transition: { duration: 0.13, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.13, ease: MOTION_EASE },
   },
 } satisfies Variants
 
@@ -36,13 +39,13 @@ const experimentDetailsTransitionVariants = {
     opacity: 1,
     x: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.2, ease: MOTION_EASE },
   },
   exit: {
     opacity: 0,
     x: 28,
     filter: "blur(5px)",
-    transition: { duration: 0.13, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.13, ease: MOTION_EASE },
   },
 } satisfies Variants
 
@@ -50,34 +53,21 @@ export default function ExperimentDetail({ isOverlay = false }) {
   const { id } = useParams()
   const location = useLocation()
   const navigate = useNavigate()
-  const experiment = experiments.find((item) => item.id === id)
-  const shouldAnimateOverlay = isOverlay
+  const {
+    routeIndex,
+    activeExperiment: experiment,
+    previousExperiment,
+    nextExperiment,
+  } = getExperimentNavigation(id)
 
   const closeDetail = useCallback(() => {
-    navigate("/", {
-      state: isOverlay ? { transitionFromDetail: true } : undefined,
-    })
-  }, [isOverlay, navigate])
+    navigate("/")
+  }, [navigate])
 
-  useEffect(() => {
-    if (!isOverlay) return
+  useEscapeKey(isOverlay, closeDetail)
 
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeDetail()
-    }
+  if (routeIndex === -1) return <Navigate to="/" replace />
 
-    window.addEventListener("keydown", closeOnEscape)
-    return () => {
-      window.removeEventListener("keydown", closeOnEscape)
-    }
-  }, [closeDetail, isOverlay])
-
-  if (!experiment) return <Navigate to="/" replace />
-
-  const experimentIndex = experiments.indexOf(experiment)
-  const previousExperiment =
-    experiments[(experimentIndex - 1 + experiments.length) % experiments.length]
-  const nextExperiment = experiments[(experimentIndex + 1) % experiments.length]
   const { Component, description, loadFiles, title } = experiment
 
   const navigateToExperiment = (experimentId: string) => {
@@ -93,28 +83,26 @@ export default function ExperimentDetail({ isOverlay = false }) {
     <main className="flex min-h-dvh flex-col gap-6 bg-transparent px-4 pb-6 text-foreground sm:px-6 md:h-dvh md:max-h-dvh md:overflow-hidden">
       <motion.header
         initial={
-          shouldAnimateOverlay
-            ? { opacity: 0, y: -32, filter: "blur(6px)" }
-            : false
+          isOverlay ? { opacity: 0, y: -32, filter: "blur(6px)" } : false
         }
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         exit={
-          shouldAnimateOverlay
+          isOverlay
             ? {
                 opacity: 0,
                 y: -32,
                 filter: "blur(6px)",
                 transition: {
                   duration: 0.26,
-                  ease: [0.16, 1, 0.3, 1],
+                  ease: MOTION_EASE,
                 },
               }
             : undefined
         }
         transition={{
-          delay: shouldAnimateOverlay ? 0.05 : 0,
-          duration: shouldAnimateOverlay ? 0.36 : 0.01,
-          ease: [0.16, 1, 0.3, 1],
+          delay: isOverlay ? 0.05 : 0,
+          duration: isOverlay ? 0.36 : 0.01,
+          ease: MOTION_EASE,
         }}
         className="-mx-4 flex items-center justify-between border-b bg-background px-4 py-4 sm:-mx-6 sm:px-6"
       >
@@ -162,28 +150,26 @@ export default function ExperimentDetail({ isOverlay = false }) {
       <div className="grid grid-cols-1 gap-6 md:min-h-0 md:flex-1 md:grid-cols-2 md:gap-4">
         <motion.div
           initial={
-            shouldAnimateOverlay
-              ? { opacity: 0, x: -48, filter: "blur(8px)" }
-              : false
+            isOverlay ? { opacity: 0, x: -48, filter: "blur(8px)" } : false
           }
           animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
           exit={
-            shouldAnimateOverlay
+            isOverlay
               ? {
                   opacity: 0,
                   x: -48,
                   filter: "blur(8px)",
                   transition: {
                     duration: 0.28,
-                    ease: [0.16, 1, 0.3, 1],
+                    ease: MOTION_EASE,
                   },
                 }
               : undefined
           }
           transition={{
-            delay: shouldAnimateOverlay ? 0.09 : 0,
-            duration: shouldAnimateOverlay ? 0.44 : 0.01,
-            ease: [0.16, 1, 0.3, 1],
+            delay: isOverlay ? 0.09 : 0,
+            duration: isOverlay ? 0.44 : 0.01,
+            ease: MOTION_EASE,
           }}
           className="z-50 aspect-square w-full md:h-full md:max-h-full md:w-auto md:max-w-full md:justify-self-center"
         >
@@ -196,39 +182,39 @@ export default function ExperimentDetail({ isOverlay = false }) {
               exit="exit"
               className="h-full w-full overflow-hidden rounded-lg border border-border/60 bg-card"
             >
-              <Suspense fallback={<ExperimentLoading />}>
-                <ExperimentReady>
-                  <Component />
-                </ExperimentReady>
-              </Suspense>
+              <ExperimentErrorBoundary key={experiment.id}>
+                <Suspense fallback={<ExperimentLoading />}>
+                  <ExperimentReady>
+                    <Component />
+                  </ExperimentReady>
+                </Suspense>
+              </ExperimentErrorBoundary>
             </motion.section>
           </AnimatePresence>
         </motion.div>
 
         <motion.div
           initial={
-            shouldAnimateOverlay
-              ? { opacity: 0, x: 48, filter: "blur(8px)" }
-              : false
+            isOverlay ? { opacity: 0, x: 48, filter: "blur(8px)" } : false
           }
           animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
           exit={
-            shouldAnimateOverlay
+            isOverlay
               ? {
                   opacity: 0,
                   x: 48,
                   filter: "blur(8px)",
                   transition: {
                     duration: 0.28,
-                    ease: [0.16, 1, 0.3, 1],
+                    ease: MOTION_EASE,
                   },
                 }
               : undefined
           }
           transition={{
-            delay: shouldAnimateOverlay ? 0.13 : 0,
-            duration: shouldAnimateOverlay ? 0.44 : 0.01,
-            ease: [0.16, 1, 0.3, 1],
+            delay: isOverlay ? 0.13 : 0,
+            duration: isOverlay ? 0.44 : 0.01,
+            ease: MOTION_EASE,
           }}
           className="min-w-0 md:min-h-0"
         >

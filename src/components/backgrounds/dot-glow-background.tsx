@@ -1,7 +1,7 @@
-import "@/styles/grid-glow-background.css"
-
-import { cn } from "@/lib/utils"
-import type { CSSProperties, HTMLAttributes } from "react"
+import GlowBackground, {
+  type GlowBackgroundStyle,
+} from "@/components/backgrounds/glow-background"
+import type { HTMLAttributes } from "react"
 
 const DOT_GLOW_BACKGROUND_TOKENS = {
   surfaceColor: "#f3f2ee",
@@ -17,25 +17,13 @@ const DOT_GLOW_BACKGROUND_TOKENS = {
 } as const
 
 type DotGlowBackgroundProps = HTMLAttributes<HTMLDivElement>
-type DotGlowBackgroundStyle = CSSProperties & {
-  "--background-surface": string
-  "--background-foreground": string
-  "--background-pattern-color": string
-  "--background-pattern-size": string
-  "--background-pattern-mark-size": string
-  "--background-pattern-fade-size": string
-  "--background-glow-color": string
-  "--background-glow-size": string
-  "--background-glow-inner-stop": string
-  "--background-glow-outer-stop": string
-}
 
 export default function DotGlowBackground({
   className,
   style,
   ...props
 }: DotGlowBackgroundProps) {
-  const backgroundStyle: DotGlowBackgroundStyle = {
+  const backgroundStyle: GlowBackgroundStyle = {
     "--background-surface": DOT_GLOW_BACKGROUND_TOKENS.surfaceColor,
     "--background-foreground": DOT_GLOW_BACKGROUND_TOKENS.foregroundColor,
     "--background-pattern-color": DOT_GLOW_BACKGROUND_TOKENS.patternColor,
@@ -50,11 +38,9 @@ export default function DotGlowBackground({
   }
 
   return (
-    <div
-      className={cn(
-        "grid-glow-background grid-glow-background--dots",
-        className
-      )}
+    <GlowBackground
+      pattern="dots"
+      className={className}
       style={backgroundStyle}
       {...props}
     />
