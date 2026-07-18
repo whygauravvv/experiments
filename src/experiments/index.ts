@@ -48,7 +48,7 @@ const CodexPhone = lazy(() => import("./iphone"))
 const CodexAtmosphere = lazy(() => import("./codex-atmosphere"))
 const ImessageMenu = lazy(() => import("./imessage-menu"))
 
-const experimentTemplates: ExperimentItem[] = [
+export const experiments: ExperimentItem[] = [
   // Vestaboard is intentionally excluded from the gallery for now.
   {
     id: "rainbow-dot-field",
@@ -197,77 +197,3 @@ const experimentTemplates: ExperimentItem[] = [
     Component: ImessageMenu,
   },
 ]
-
-const LOAD_TEST_EXPERIMENT_COUNT = 1_000
-const LOAD_TEST_HEAVY_RATIO = 0.15
-const LOAD_TEST_SHUFFLE_SEED = 0x5f3759df
-const HEAVY_EXPERIMENT_IDS = new Set(["codex-phone", "codex-atmosphere"])
-
-function createLoadTestExperiments() {
-  const heavyTemplates = experimentTemplates.filter((experiment) =>
-    HEAVY_EXPERIMENT_IDS.has(experiment.id)
-  )
-  const standardTemplates = experimentTemplates.filter(
-    (experiment) => !HEAVY_EXPERIMENT_IDS.has(experiment.id)
-  )
-  const heavyExperimentCount = Math.round(
-    LOAD_TEST_EXPERIMENT_COUNT * LOAD_TEST_HEAVY_RATIO
-  )
-  const standardExperimentCount =
-    LOAD_TEST_EXPERIMENT_COUNT - heavyExperimentCount
-  const heavyCopies = createExperimentCopies(
-    heavyTemplates,
-    heavyExperimentCount - heavyTemplates.length,
-    1
-  )
-  const standardCopies = createExperimentCopies(
-    standardTemplates,
-    standardExperimentCount - standardTemplates.length,
-    heavyCopies.length + 1
-  )
-
-  return shuffleExperiments([
-    ...experimentTemplates,
-    ...heavyCopies,
-    ...standardCopies,
-  ])
-}
-
-function createExperimentCopies(
-  templates: ExperimentItem[],
-  count: number,
-  startingCopyNumber: number
-) {
-  return Array.from({ length: count }, (_, index) => {
-    const template = templates[index % templates.length]
-    const copyNumber = startingCopyNumber + index
-
-    return {
-      ...template,
-      id: `${template.id}-load-test-${copyNumber}`,
-      title: `${template.title} · Test ${copyNumber}`,
-    }
-  })
-}
-
-function shuffleExperiments(items: ExperimentItem[]) {
-  const shuffledItems = [...items]
-  let randomState = LOAD_TEST_SHUFFLE_SEED
-
-  const random = () => {
-    randomState = (Math.imul(randomState, 1_664_525) + 1_013_904_223) >>> 0
-    return randomState / 4_294_967_296
-  }
-
-  for (let index = shuffledItems.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(random() * (index + 1))
-    ;[shuffledItems[index], shuffledItems[swapIndex]] = [
-      shuffledItems[swapIndex],
-      shuffledItems[index],
-    ]
-  }
-
-  return shuffledItems
-}
-
-export const experiments = createLoadTestExperiments()

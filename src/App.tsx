@@ -36,7 +36,7 @@ function DesktopApp() {
   const [galleryPreviewsEnabled, setGalleryPreviewsEnabled] =
     useState(isGalleryRoute)
 
-  const pauseGalleryPreviews = useCallback(() => {
+  const pauseCoveredGalleryPreviews = useCallback(() => {
     setGalleryPreviewsEnabled(false)
   }, [])
 
@@ -62,7 +62,7 @@ function DesktopApp() {
       {isGalleryRoute || isOverlayTransition ? (
         <ExperimentsGallery
           isDetailOpen={isOverlayTransition}
-          previewsEnabled={galleryPreviewsEnabled && !isDetailRoute}
+          previewsEnabled={isGalleryRoute || galleryPreviewsEnabled}
         />
       ) : null}
 
@@ -78,7 +78,7 @@ function DesktopApp() {
             aria-modal={isOverlayTransition ? "true" : undefined}
             aria-label={isOverlayTransition ? "Experiment details" : undefined}
             className="fixed inset-0 z-50 overflow-hidden"
-            onAnimationStart={pauseGalleryPreviews}
+            onAnimationComplete={pauseCoveredGalleryPreviews}
             initial={
               isOverlayTransition
                 ? { backgroundColor: "rgba(250, 250, 250, 0)" }
