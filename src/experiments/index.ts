@@ -6,6 +6,7 @@ import createModalStyles from "@/styles/create-modal.css?raw"
 import iconRevealStyles from "@/styles/icon-reveal.css?raw"
 import metricMatrixStyles from "@/styles/metric-matrix.css?raw"
 import rainbowDotFieldStyles from "@/styles/rainbow-dot-field.css?raw"
+import vestaboardStyles from "@/styles/vestaboard.css?raw"
 import type { ComponentType } from "react"
 import CodexAtmosphere from "./codex-atmosphere"
 import codexAtmosphereSource from "./codex-atmosphere.tsx?raw"
@@ -21,6 +22,8 @@ import MetricMatrix from "./metric-matrix"
 import metricMatrixSource from "./metric-matrix.tsx?raw"
 import RainbowDotField from "./rainbow-dot-field"
 import rainbowDotFieldSource from "./rainbow-dot-field.tsx?raw"
+import Vestaboard from "./vestaboard"
+import vestaboardSource from "./vestaboard.tsx?raw"
 
 export type ExperimentItem = {
   id: string
@@ -40,6 +43,27 @@ export type ExperimentSourceFile = {
 }
 
 export const experiments: ExperimentItem[] = [
+  {
+    id: "vestaboard",
+    title: "Vestaboard",
+    description: "A split-flap message board with a colorful settling wave.",
+    year: "2026",
+    tags: ["Split Flap", "Motion", "CSS 3D"],
+    files: [
+      {
+        filename: "vestaboard.tsx",
+        language: "tsx",
+        code: vestaboardSource,
+      },
+      {
+        filename: "vestaboard.css",
+        language: "css",
+        code: vestaboardStyles,
+      },
+    ],
+    url: "https://x.com/IanMcclanan/status/2078236377540649392",
+    Component: Vestaboard,
+  },
   {
     id: "rainbow-dot-field",
     title: "Rainbow Dot Field",
