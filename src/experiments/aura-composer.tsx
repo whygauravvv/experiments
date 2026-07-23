@@ -6,8 +6,8 @@ import { ArrowUp } from "lucide-react"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { useState } from "react"
 
-const PILL_TEXT_Y = -20
-const FIELD_TEXT_Y = 14
+const PILL_TEXT_Y = -60
+const FIELD_TEXT_Y = 20
 
 export default function AuraComposer() {
   const [isHovered, setIsHovered] = useState(false)
@@ -45,8 +45,8 @@ export default function AuraComposer() {
       data-open={isOpen}
       aria-label="Aura floating composer experiment"
     >
-      <article className="aura-composer__article">
-        <p>
+      <article className="aura-composer__article cursor-default">
+        <p className="selection:bg-orange-500 selection:text-white">
           Ideas rarely arrive fully formed. They begin as fragments: a phrase
           overheard on a walk, a color remembered from somewhere else, a small
           question that keeps returning long after the conversation has ended.
@@ -122,25 +122,25 @@ export default function AuraComposer() {
               }}
             >
               <motion.textarea
-                className="aura-composer__prompt"
+                className="aura-composer__prompt cursor-default"
                 value={prompt}
                 rows={3}
                 placeholder="Describe something beautiful"
                 aria-label="Aura prompt"
                 initial={{
-                  y: FIELD_TEXT_Y,
+                  x: FIELD_TEXT_Y,
                   opacity: 0,
                   scale: 0.9,
                   filter: "blur(8px)",
                 }}
                 animate={{
-                  y: 0,
+                  x: 0,
                   opacity: 1,
                   scale: 1,
                   filter: "blur(0px)",
                 }}
                 exit={{
-                  y: FIELD_TEXT_Y,
+                  x: FIELD_TEXT_Y,
                   opacity: 0,
                   scale: 0.9,
                   filter: "blur(7px)",
@@ -177,19 +177,19 @@ export default function AuraComposer() {
               onClick={openAndFocusComposer}
               onFocus={openAndFocusComposer}
               initial={{
-                y: PILL_TEXT_Y,
+                x: PILL_TEXT_Y,
                 opacity: 0,
                 scale: 0.98,
                 filter: "blur(6px)",
               }}
               animate={{
-                y: 0,
+                x: 0,
                 opacity: 1,
                 scale: 1,
                 filter: "blur(0px)",
               }}
               exit={{
-                y: PILL_TEXT_Y,
+                x: PILL_TEXT_Y,
                 opacity: 0,
                 scale: 0.98,
                 filter: "blur(6px)",

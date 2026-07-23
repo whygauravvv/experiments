@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #f4efe5;
+  background: #ffffff;
   color: #111;
 }
 
@@ -96,7 +96,7 @@
   width: 100%;
   height: 100%;
   place-items: center;
-  color: rgb(82 91 156 / 82%);
+  color: rgb(82 91 156 / 100%);
   font-size: clamp(1.5rem, 5vw, 2rem);
   font-weight: 700;
 }

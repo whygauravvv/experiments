@@ -72,7 +72,6 @@ const MetricMatrix = lazy(() => import("./metric-matrix"))
 const CreateModal = lazy(() => import("./create-modal"))
 const IconReveal = lazy(() => import("./icon-reveal"))
 const MotionButtonDemo = lazy(() => import("./motion-button"))
-const CodexPhone = lazy(() => import("./iphone"))
 const CodexAtmosphere = lazy(() => import("./codex-atmosphere"))
 const IMessageMenu = lazy(() => import("./imessage-menu"))
 const Vestaboard = lazy(() => import("./vestaboard"))
@@ -220,34 +219,7 @@ export const experiments = defineExperiments([
     ]),
     Component: MotionButtonDemo,
   },
-  {
-    id: "codex-phone",
-    title: "Codex Phone",
-    description: "Codex atmosphere presented inside an iPhone frame.",
-    loadFiles: loadSourceFiles([
-      {
-        filename: "iphone.tsx",
-        load: () => import("./iphone.tsx?raw"),
-      },
-      {
-        filename: "iphone-mockup.tsx",
-        load: () => import("@/components/iphone-mockup.tsx?raw"),
-      },
-      {
-        filename: "card-shell.tsx",
-        load: () => import("@/components/card-shell.tsx?raw"),
-      },
-      {
-        filename: "codex-atmosphere.tsx",
-        load: () => import("./codex-atmosphere.tsx?raw"),
-      },
-      {
-        filename: "codex-atmosphere.css",
-        load: () => import("@/styles/codex-atmosphere.css?raw"),
-      },
-    ]),
-    Component: CodexPhone,
-  },
+  
   {
     id: "codex-atmosphere",
     title: "Codex Atmosphere",

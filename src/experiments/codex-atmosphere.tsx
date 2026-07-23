@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 
 import "@/styles/codex-atmosphere.css"
 
-const BACKGROUND_VIDEO = "https://cdn.openai.com/ctf-cdn/floral_a.mp4"
+// const BACKGROUND_VIDEO = "https://cdn.openai.com/ctf-cdn/floral_a.mp4"
 const CODEX_MARK_VIDEO =
   "https://cdn.openai.com/cap/76B4ISvLjfcSygxIvoMqyl/7d037d99808d419313b42980eb181ecg.mp4"
 
@@ -165,8 +165,8 @@ export default function CodexAtmosphere() {
   }, [])
 
   return (
-    <div ref={containerRef} className="codex-atmosphere">
-      <video
+    <div ref={containerRef} className="codex-atmosphere group">
+      {/* <video
         ref={backgroundVideoRef}
         className="codex-atmosphere__background"
         src={BACKGROUND_VIDEO}
@@ -179,7 +179,7 @@ export default function CodexAtmosphere() {
         onError={(event) => {
           event.currentTarget.hidden = true
         }}
-      />
+      /> */}
       <div className="codex-atmosphere__wash" aria-hidden="true" />
       <canvas
         ref={canvasRef}
