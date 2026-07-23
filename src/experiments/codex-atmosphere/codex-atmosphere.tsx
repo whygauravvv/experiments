@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 
-import "@/styles/codex-atmosphere.css"
+import "./codex-atmosphere.css"
 
 // const BACKGROUND_VIDEO = "https://cdn.openai.com/ctf-cdn/floral_a.mp4"
 const CODEX_MARK_VIDEO =

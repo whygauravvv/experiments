@@ -1,4 +1,4 @@
-import "../styles/metric-matrix.css"
+import "./metric-matrix.css"
 
 import { MOTION_EASE } from "@/lib/motion"
 import { AnimatePresence, motion, type Variants } from "motion/react"

@@ -1,4 +1,4 @@
-import "../styles/aura-composer.css"
+import "./aura-composer.css"
 
 import { useEscapeKey } from "@/hooks/use-escape-key"
 import { MOTION_EASE } from "@/lib/motion"

@@ -1,4 +1,4 @@
-import "../styles/rainbow-dot-field.css"
+import "./rainbow-dot-field.css"
 
 import { useEffect, useRef } from "react"
 

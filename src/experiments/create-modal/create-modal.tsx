@@ -1,4 +1,4 @@
-import "../styles/create-modal.css"
+import "./create-modal.css"
 
 import { useEscapeKey } from "@/hooks/use-escape-key"
 import { MOTION_EASE } from "@/lib/motion"

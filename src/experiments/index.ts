@@ -1,5 +1,14 @@
+import { BaseUi } from "@/components/ui/svgs/baseUi"
+import { Lucide } from "@/components/ui/svgs/lucide"
+import { Motion } from "@/components/ui/svgs/motion"
+import { ReactLight } from "@/components/ui/svgs/reactLight"
 import type { SupportedCodeLanguage } from "@/lib/highlight-code"
-import { lazy, type ComponentType, type LazyExoticComponent } from "react"
+import {
+  lazy,
+  type ComponentType,
+  type LazyExoticComponent,
+  type SVGProps,
+} from "react"
 
 type RawSourceModule = { default: string }
 
@@ -12,8 +21,20 @@ export type ExperimentItem = {
   id: string
   title: string
   description: string
+  libraries: ExperimentLibrary[]
+  credit?: ExperimentCredit
   loadFiles: () => Promise<ExperimentSourceFile[]>
   Component: LazyExoticComponent<ComponentType>
+}
+
+export type ExperimentLibrary = {
+  name: string
+  icon: ComponentType<SVGProps<SVGSVGElement>>
+}
+
+export type ExperimentCredit = {
+  name: string
+  url: string
 }
 
 export type ExperimentSourceFile = {
@@ -66,29 +87,41 @@ function defineExperiments(items: ExperimentItem[]) {
   return items
 }
 
-const RainbowDotField = lazy(() => import("./rainbow-dot-field"))
-const AuraComposer = lazy(() => import("./aura-composer"))
-const MetricMatrix = lazy(() => import("./metric-matrix"))
-const CreateModal = lazy(() => import("./create-modal"))
-const IconReveal = lazy(() => import("./icon-reveal"))
-const MotionButtonDemo = lazy(() => import("./motion-button"))
-const CodexAtmosphere = lazy(() => import("./codex-atmosphere"))
-const IMessageMenu = lazy(() => import("./imessage-menu"))
-const Vestaboard = lazy(() => import("./vestaboard"))
+const LIBRARIES = {
+  react: { name: "React", icon: ReactLight },
+  motion: { name: "Motion", icon: Motion },
+  lucide: { name: "Lucide", icon: Lucide },
+  baseUi: { name: "Base UI", icon: BaseUi },
+} satisfies Record<string, ExperimentLibrary>
+
+const RainbowDotField = lazy(
+  () => import("./rainbow-dot-field/rainbow-dot-field")
+)
+const AuraComposer = lazy(() => import("./aura-composer/aura-composer"))
+const MetricMatrix = lazy(() => import("./metric-matrix/metric-matrix"))
+const CreateModal = lazy(() => import("./create-modal/create-modal"))
+const IconReveal = lazy(() => import("./icon-reveal/icon-reveal"))
+const MotionButtonDemo = lazy(() => import("./motion-button/motion-button"))
+const CodexAtmosphere = lazy(
+  () => import("./codex-atmosphere/codex-atmosphere")
+)
+const IMessageMenu = lazy(() => import("./imessage-menu/imessage-menu"))
+const Vestaboard = lazy(() => import("./vestaboard/vestaboard"))
 
 export const experiments = defineExperiments([
   {
     id: "aura-composer",
     title: "Aura Composer",
     description: "A floating CTA that blooms into a radiant prompt composer.",
+    libraries: [LIBRARIES.react, LIBRARIES.motion, LIBRARIES.lucide],
     loadFiles: loadSourceFiles([
       {
         filename: "aura-composer.tsx",
-        load: () => import("./aura-composer.tsx?raw"),
+        load: () => import("./aura-composer/aura-composer.tsx?raw"),
       },
       {
         filename: "aura-composer.css",
-        load: () => import("@/styles/aura-composer.css?raw"),
+        load: () => import("./aura-composer/aura-composer.css?raw"),
       },
     ]),
     Component: AuraComposer,
@@ -97,14 +130,19 @@ export const experiments = defineExperiments([
     id: "vestaboard",
     title: "Vestaboard",
     description: "A tactile split-flap display that cycles through messages.",
+    libraries: [LIBRARIES.react],
+    credit: {
+      name: "Vestaboard",
+      url: "https://www.vestaboard.com/",
+    },
     loadFiles: loadSourceFiles([
       {
         filename: "vestaboard.tsx",
-        load: () => import("./vestaboard.tsx?raw"),
+        load: () => import("./vestaboard/vestaboard.tsx?raw"),
       },
       {
         filename: "vestaboard.css",
-        load: () => import("@/styles/vestaboard.css?raw"),
+        load: () => import("./vestaboard/vestaboard.css?raw"),
       },
     ]),
     Component: Vestaboard,
@@ -113,14 +151,15 @@ export const experiments = defineExperiments([
     id: "rainbow-dot-field",
     title: "Rainbow Dot Field",
     description: "A masked spectrum of dots that grows around the cursor.",
+    libraries: [LIBRARIES.react],
     loadFiles: loadSourceFiles([
       {
         filename: "rainbow-dot-field.tsx",
-        load: () => import("./rainbow-dot-field.tsx?raw"),
+        load: () => import("./rainbow-dot-field/rainbow-dot-field.tsx?raw"),
       },
       {
         filename: "rainbow-dot-field.css",
-        load: () => import("@/styles/rainbow-dot-field.css?raw"),
+        load: () => import("./rainbow-dot-field/rainbow-dot-field.css?raw"),
       },
     ]),
     Component: RainbowDotField,
@@ -129,14 +168,15 @@ export const experiments = defineExperiments([
     id: "metric-matrix",
     title: "Metric Matrix",
     description: "A click-driven metric card with progressive dot transitions.",
+    libraries: [LIBRARIES.react, LIBRARIES.motion],
     loadFiles: loadSourceFiles([
       {
         filename: "metric-matrix.tsx",
-        load: () => import("./metric-matrix.tsx?raw"),
+        load: () => import("./metric-matrix/metric-matrix.tsx?raw"),
       },
       {
         filename: "metric-matrix.css",
-        load: () => import("@/styles/metric-matrix.css?raw"),
+        load: () => import("./metric-matrix/metric-matrix.css?raw"),
       },
     ]),
     Component: MetricMatrix,
@@ -145,14 +185,15 @@ export const experiments = defineExperiments([
     id: "create-modal",
     title: "Create Modal",
     description: "A compact create button that morphs into an action menu.",
+    libraries: [LIBRARIES.react, LIBRARIES.motion, LIBRARIES.lucide],
     loadFiles: loadSourceFiles([
       {
         filename: "create-modal.tsx",
-        load: () => import("./create-modal.tsx?raw"),
+        load: () => import("./create-modal/create-modal.tsx?raw"),
       },
       {
         filename: "create-modal.css",
-        load: () => import("@/styles/create-modal.css?raw"),
+        load: () => import("./create-modal/create-modal.css?raw"),
       },
     ]),
     Component: CreateModal,
@@ -161,27 +202,15 @@ export const experiments = defineExperiments([
     id: "icon-reveal",
     title: "Icon Reveal",
     description: "A color reveal made by stacking and clipping two icons.",
+    libraries: [LIBRARIES.react],
     loadFiles: loadSourceFiles([
       {
         filename: "icon-reveal.tsx",
-        load: () => import("./icon-reveal.tsx?raw"),
+        load: () => import("./icon-reveal/icon-reveal.tsx?raw"),
       },
       {
         filename: "icon-reveal.css",
-        load: () => import("@/styles/icon-reveal.css?raw"),
-      },
-      {
-        filename: "grid-glow-background.tsx",
-        load: () =>
-          import("@/components/backgrounds/grid-glow-background.tsx?raw"),
-      },
-      {
-        filename: "glow-background.tsx",
-        load: () => import("@/components/backgrounds/glow-background.tsx?raw"),
-      },
-      {
-        filename: "grid-glow-background.css",
-        load: () => import("@/styles/grid-glow-background.css?raw"),
+        load: () => import("./icon-reveal/icon-reveal.css?raw"),
       },
     ]),
     Component: IconReveal,
@@ -190,48 +219,33 @@ export const experiments = defineExperiments([
     id: "motion-button-demo",
     title: "Motion Button",
     description: "Simple Framer Motion hover and tap interaction.",
+    libraries: [LIBRARIES.react, LIBRARIES.motion, LIBRARIES.baseUi],
     loadFiles: loadSourceFiles([
       {
         filename: "motion-button.tsx",
-        load: () => import("./motion-button.tsx?raw"),
-      },
-      {
-        filename: "card-shell.tsx",
-        load: () => import("@/components/card-shell.tsx?raw"),
-      },
-      {
-        filename: "dot-glow-background.tsx",
-        load: () =>
-          import("@/components/backgrounds/dot-glow-background.tsx?raw"),
-      },
-      {
-        filename: "glow-background.tsx",
-        load: () => import("@/components/backgrounds/glow-background.tsx?raw"),
-      },
-      {
-        filename: "grid-glow-background.css",
-        load: () => import("@/styles/grid-glow-background.css?raw"),
-      },
-      {
-        filename: "button.tsx",
-        load: () => import("@/components/ui/button.tsx?raw"),
+        load: () => import("./motion-button/motion-button.tsx?raw"),
       },
     ]),
     Component: MotionButtonDemo,
   },
-  
+
   {
     id: "codex-atmosphere",
     title: "Codex Atmosphere",
     description: "Warm video texture with a cursor-reactive ASCII field.",
+    libraries: [LIBRARIES.react],
+    credit: {
+      name: "OpenAI Codex",
+      url: "https://openai.com/codex/",
+    },
     loadFiles: loadSourceFiles([
       {
         filename: "codex-atmosphere.tsx",
-        load: () => import("./codex-atmosphere.tsx?raw"),
+        load: () => import("./codex-atmosphere/codex-atmosphere.tsx?raw"),
       },
       {
         filename: "codex-atmosphere.css",
-        load: () => import("@/styles/codex-atmosphere.css?raw"),
+        load: () => import("./codex-atmosphere/codex-atmosphere.css?raw"),
       },
     ]),
     Component: CodexAtmosphere,
@@ -240,22 +254,15 @@ export const experiments = defineExperiments([
     id: "imessage-menu",
     title: "iMessage Menu",
     description: "An iOS 18-inspired iMessage app menu.",
+    libraries: [LIBRARIES.react, LIBRARIES.motion, LIBRARIES.lucide],
+    credit: {
+      name: "Apple Messages",
+      url: "https://www.apple.com/ios/messages/",
+    },
     loadFiles: loadSourceFiles([
       {
         filename: "imessage-menu.tsx",
-        load: () => import("./imessage-menu.tsx?raw"),
-      },
-      {
-        filename: "iphone-mockup.tsx",
-        load: () => import("@/components/iphone-mockup.tsx?raw"),
-      },
-      {
-        filename: "card-shell.tsx",
-        load: () => import("@/components/card-shell.tsx?raw"),
-      },
-      {
-        filename: "skeleton.tsx",
-        load: () => import("@/components/ui/skeleton.tsx?raw"),
+        load: () => import("./imessage-menu/imessage-menu.tsx?raw"),
       },
     ]),
     Component: IMessageMenu,

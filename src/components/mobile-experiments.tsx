@@ -126,7 +126,7 @@ export default function MobileExperiments() {
     <main className="fixed inset-0 isolate overflow-hidden overscroll-none text-foreground">
       {detailMatch ? (
         <section className="absolute inset-0 overflow-y-auto overscroll-contain bg-background">
-          <ExperimentDetail hideHeader />
+          <ExperimentDetail hideHeader experimentId={detailMatch.params.id} />
         </section>
       ) : (
         <section className="absolute inset-x-0 top-0 bottom-[calc(5.75rem+env(safe-area-inset-bottom))] grid place-items-center overflow-hidden p-3">

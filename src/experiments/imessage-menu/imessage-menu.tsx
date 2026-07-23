@@ -62,6 +62,7 @@ const MENU_ITEMS: MenuItem[] = [
   },
 ]
 
+/** An iOS-inspired expandable app menu interaction. */
 export default function IMessageMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 

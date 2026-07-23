@@ -51,7 +51,7 @@ Useful commands:
 
 ## Architecture
 
-- `src/experiments/` contains the individual experiments and the registry that powers gallery, detail, and mobile navigation.
+- `src/experiments/` contains one folder per experiment plus the registry that powers gallery, detail, mobile navigation, library badges, credits, and displayed source.
 - `src/components/gallery/` contains the desktop gallery shell and preview lifecycle.
 - `src/components/backgrounds/` contains reusable visual surfaces used by experiments and `CardShell`.
 - `src/pages/experiment-detail.tsx` renders an experiment alongside its exposed source files.
@@ -61,9 +61,9 @@ Experiment components are lazy-loaded. Gallery previews mount only near the view
 
 ## Adding an experiment
 
-1. Add the component under `src/experiments/` and keep experiment-specific CSS under `src/styles/`.
-2. Register its id, title, description, lazy component, and source files in `src/experiments/index.ts`.
-3. Include every shared component or stylesheet needed to understand the example in its `loadFiles` manifest.
+1. Add a folder under `src/experiments/` containing the experiment TSX file and, when needed, a colocated CSS file.
+2. Register its id, title, description, libraries, optional credit, lazy component, and source files in `src/experiments/index.ts`.
+3. Keep the displayed source focused on the experiment's primary TSX and optional CSS files; shared gallery infrastructure does not need to be exposed.
 4. Verify the experiment in the gallery, detail view, and mobile navigator.
 5. Run `npm run build` before committing.
 

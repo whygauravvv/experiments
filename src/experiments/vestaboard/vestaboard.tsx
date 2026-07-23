@@ -1,4 +1,4 @@
-import "../styles/vestaboard.css"
+import "./vestaboard.css"
 
 import { useCallback, useEffect, useRef, useState } from "react"
 

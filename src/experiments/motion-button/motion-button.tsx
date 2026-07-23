@@ -4,6 +4,7 @@ import { useState } from "react"
 import CardShell from "@/components/card-shell"
 import { Button } from "@/components/ui/button"
 
+/** A compact hover, press, and state-change motion study. */
 export default function MotionButtonDemo() {
   const [isActive, setIsActive] = useState(false)
 

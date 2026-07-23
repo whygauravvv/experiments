@@ -48,6 +48,7 @@
   filter: blur(18px);
 }
 
+/* Vestaboard */
 .vestaboard {
   position: relative;
   width: min(88%, 760px);

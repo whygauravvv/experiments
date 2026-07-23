@@ -5,7 +5,12 @@ import ExperimentLoading, {
 } from "@/components/experiment-loading"
 import { getExperimentNavigation } from "@/lib/experiment-navigation"
 import { MOTION_EASE } from "@/lib/motion"
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react"
+import {
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+} from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
 import { Suspense } from "react"
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
@@ -41,23 +46,26 @@ const experimentDetailsTransitionVariants = {
 
 type ExperimentDetailProps = {
   hideHeader?: boolean
+  experimentId?: string
 }
 
 export default function ExperimentDetail({
   hideHeader = false,
+  experimentId,
 }: ExperimentDetailProps) {
-  const { id } = useParams()
+  const { id: routeExperimentId } = useParams()
   const navigate = useNavigate()
   const {
     routeIndex,
     activeExperiment: experiment,
     previousExperiment,
     nextExperiment,
-  } = getExperimentNavigation(id)
+  } = getExperimentNavigation(experimentId ?? routeExperimentId)
 
   if (routeIndex === -1) return <Navigate to="/" replace />
 
-  const { Component, description, loadFiles, title } = experiment
+  const { Component, credit, description, libraries, loadFiles, title } =
+    experiment
 
   const navigateToExperiment = (experimentId: string) => {
     requestAnimationFrame(() => {
@@ -198,6 +206,29 @@ export default function ExperimentDetail({
                     {title}
                   </h1>
                   <p className="text-xs text-muted-foreground">{description}</p>
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    {libraries.map(({ icon: LibraryIcon, name }) => (
+                      <span
+                        key={name}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-muted/45 px-2.5 py-1 text-[10px] font-medium text-muted-foreground"
+                      >
+                        <LibraryIcon className="size-3" aria-hidden="true" />
+                        {name}
+                      </span>
+                    ))}
+
+                    {credit ? (
+                      <a
+                        href={credit.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[10px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:outline-none"
+                      >
+                        Credit: {credit.name}
+                        <ExternalLink className="size-3" aria-hidden="true" />
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
 
                 <section className="mt-10 flex flex-col md:min-h-0 md:flex-1">
