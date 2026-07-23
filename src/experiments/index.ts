@@ -107,8 +107,31 @@ const CodexAtmosphere = lazy(
 )
 const IMessageMenu = lazy(() => import("./imessage-menu/imessage-menu"))
 const Vestaboard = lazy(() => import("./vestaboard/vestaboard"))
+const MorphingTimer = lazy(() => import("./morphing-timer/morphing-timer"))
 
 export const experiments = defineExperiments([
+  {
+    id: "morphing-timer",
+    title: "Morphing Timer",
+    description:
+      "A compact timer that expands into a seconds picker, then reshapes into a live pause-and-resume countdown.",
+    libraries: [LIBRARIES.react, LIBRARIES.motion],
+    credit: {
+      name: "@diip3sh via @designpicks_",
+      url: "https://www.threads.com/@designpicks_/post/DbHAdUzFREL/media",
+    },
+    loadFiles: loadSourceFiles([
+      {
+        filename: "morphing-timer.tsx",
+        load: () => import("./morphing-timer/morphing-timer.tsx?raw"),
+      },
+      {
+        filename: "morphing-timer.css",
+        load: () => import("./morphing-timer/morphing-timer.css?raw"),
+      },
+    ]),
+    Component: MorphingTimer,
+  },
   {
     id: "aura-composer",
     title: "Aura Composer",
