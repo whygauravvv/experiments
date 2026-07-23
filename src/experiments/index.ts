@@ -67,6 +67,7 @@ function defineExperiments(items: ExperimentItem[]) {
 }
 
 const RainbowDotField = lazy(() => import("./rainbow-dot-field"))
+const AuraComposer = lazy(() => import("./aura-composer"))
 const MetricMatrix = lazy(() => import("./metric-matrix"))
 const CreateModal = lazy(() => import("./create-modal"))
 const IconReveal = lazy(() => import("./icon-reveal"))
@@ -77,6 +78,22 @@ const IMessageMenu = lazy(() => import("./imessage-menu"))
 const Vestaboard = lazy(() => import("./vestaboard"))
 
 export const experiments = defineExperiments([
+  {
+    id: "aura-composer",
+    title: "Aura Composer",
+    description: "A floating CTA that blooms into a radiant prompt composer.",
+    loadFiles: loadSourceFiles([
+      {
+        filename: "aura-composer.tsx",
+        load: () => import("./aura-composer.tsx?raw"),
+      },
+      {
+        filename: "aura-composer.css",
+        load: () => import("@/styles/aura-composer.css?raw"),
+      },
+    ]),
+    Component: AuraComposer,
+  },
   {
     id: "vestaboard",
     title: "Vestaboard",

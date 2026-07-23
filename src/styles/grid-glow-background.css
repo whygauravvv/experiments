@@ -1,53 +1,120 @@
-.grid-glow-background {
+.glow-background {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   background-color: var(--background-surface);
-  background-image:
-    linear-gradient(
-      var(--background-pattern-color) var(--background-pattern-mark-size),
-      transparent var(--background-pattern-mark-size)
-    ),
-    linear-gradient(
-      90deg,
-      var(--background-pattern-color) var(--background-pattern-mark-size),
-      transparent var(--background-pattern-mark-size)
-    );
-  background-size: var(--background-pattern-size) var(--background-pattern-size);
   color: var(--background-foreground);
 }
 
-.grid-glow-background--dots {
+.glow-background::before,
+.glow-background::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+.glow-background::before {
+  inset: 0;
+  z-index: -2;
+  background-position: var(--background-pattern-offset-x)
+    var(--background-pattern-offset-y);
+  background-size: var(--background-pattern-horizontal-spacing)
+    var(--background-pattern-vertical-spacing);
+  opacity: var(--background-pattern-opacity);
+}
+
+.glow-background--grid::before {
+  background-image:
+    linear-gradient(
+      to bottom,
+      var(--background-pattern-color)
+        var(--background-grid-horizontal-line-width),
+      transparent var(--background-grid-horizontal-line-width)
+    ),
+    linear-gradient(
+      to right,
+      var(--background-pattern-color) var(--background-grid-vertical-line-width),
+      transparent var(--background-grid-vertical-line-width)
+    );
+}
+
+.glow-background--dots::before {
   background-image: radial-gradient(
     circle,
-    var(--background-pattern-color) var(--background-pattern-mark-size),
-    transparent var(--background-pattern-fade-size)
+    var(--background-pattern-color) var(--background-dot-size),
+    transparent var(--background-dot-edge-size)
   );
 }
 
-.grid-glow-background::before {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: -1;
-  width: var(--background-glow-size);
-  transform: translate(-50%, -50%);
-  border-radius: 999px;
-  background: var(--background-glow-color);
-  content: "";
+.glow-background--mask-edges::before,
+.glow-background--mask-center::before {
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.glow-background--mask-edges::before {
   mask-image: radial-gradient(
-    circle,
+    ellipse var(--background-pattern-mask-width)
+      var(--background-pattern-mask-height) at var(--background-pattern-mask-x)
+      var(--background-pattern-mask-y),
+    rgb(0 0 0 / var(--background-pattern-mask-opacity)) 0%,
+    rgb(0 0 0 / var(--background-pattern-mask-opacity))
+      var(--background-pattern-mask-inner-stop),
+    transparent var(--background-pattern-mask-outer-stop)
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse var(--background-pattern-mask-width)
+      var(--background-pattern-mask-height) at var(--background-pattern-mask-x)
+      var(--background-pattern-mask-y),
+    rgb(0 0 0 / var(--background-pattern-mask-opacity)) 0%,
+    rgb(0 0 0 / var(--background-pattern-mask-opacity))
+      var(--background-pattern-mask-inner-stop),
+    transparent var(--background-pattern-mask-outer-stop)
+  );
+}
+
+.glow-background--mask-center::before {
+  mask-image: radial-gradient(
+    ellipse var(--background-pattern-mask-width)
+      var(--background-pattern-mask-height) at var(--background-pattern-mask-x)
+      var(--background-pattern-mask-y),
+    transparent 0%,
+    transparent var(--background-pattern-mask-inner-stop),
+    rgb(0 0 0 / var(--background-pattern-mask-opacity))
+      var(--background-pattern-mask-outer-stop)
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse var(--background-pattern-mask-width)
+      var(--background-pattern-mask-height) at var(--background-pattern-mask-x)
+      var(--background-pattern-mask-y),
+    transparent 0%,
+    transparent var(--background-pattern-mask-inner-stop),
+    rgb(0 0 0 / var(--background-pattern-mask-opacity))
+      var(--background-pattern-mask-outer-stop)
+  );
+}
+
+.glow-background::after {
+  top: var(--background-glow-y);
+  left: var(--background-glow-x);
+  z-index: -1;
+  width: var(--background-glow-width);
+  height: var(--background-glow-height);
+  transform: translate(-50%, -50%);
+  background-color: var(--background-glow-color);
+  opacity: var(--background-glow-opacity);
+  mask-image: radial-gradient(
+    ellipse,
     #000 0%,
     #000 var(--background-glow-inner-stop),
     transparent var(--background-glow-outer-stop)
   );
   mask-repeat: no-repeat;
   -webkit-mask-image: radial-gradient(
-    circle,
+    ellipse,
     #000 0%,
     #000 var(--background-glow-inner-stop),
     transparent var(--background-glow-outer-stop)
   );
   -webkit-mask-repeat: no-repeat;
-  pointer-events: none;
 }

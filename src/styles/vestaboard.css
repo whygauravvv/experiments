@@ -9,11 +9,9 @@
   background:
     radial-gradient(
       circle at 51% 40%,
-      rgba(255, 255, 255, 0.94),
+      rgba(255, 255, 255, 1),
       transparent 42%
     ),
-    linear-gradient(135deg, #e2e5e8 0%, #f3f4f5 48%, #d9dde1 100%);
-  perspective: 1000px;
 }
 
 .vestaboard-experiment::before {

@@ -39,7 +39,7 @@
   width: 100%;
   overflow: hidden;
   isolation: isolate;
-  background: #faf9f6;
+  background: #ffffff;
 }
 
 .rainbow-dot-field::after {
