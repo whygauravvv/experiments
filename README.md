@@ -61,11 +61,73 @@ Experiment components are lazy-loaded. Gallery previews mount only near the view
 
 ## Adding an experiment
 
-1. Add a folder under `src/experiments/` containing the experiment TSX file and, when needed, a colocated CSS file.
-2. Register its id, title, description, libraries, optional credit, lazy component, and source files in `src/experiments/index.ts`.
-3. Keep the displayed source focused on the experiment's primary TSX and optional CSS files; shared gallery infrastructure does not need to be exposed.
-4. Verify the experiment in the gallery, detail view, and mobile navigator.
-5. Run `npm run build` before committing.
+Each experiment is intentionally isolated and small. Create a folder named after the experiment and keep its implementation inside it:
+
+```text
+src/experiments/
+└── example-interaction/
+    ├── example-interaction.tsx
+    └── example-interaction.css  # only when custom CSS is needed
+```
+
+Import the CSS from the experiment's TSX file. Shared gallery files, backgrounds, and infrastructure should not be included in the displayed source—the primary TSX and optional CSS file are enough for someone to understand and reuse the interaction.
+
+Next, add the lazy import and registry entry in `src/experiments/index.ts`:
+
+```tsx
+const ExampleInteraction = lazy(
+  () => import("./example-interaction/example-interaction")
+)
+
+{
+  id: "example-interaction",
+  title: "Example Interaction",
+  description:
+    "A concise explanation of what the interaction does and how it behaves.",
+  libraries: [LIBRARIES.react, LIBRARIES.motion],
+  credit: {
+    name: "Original creator or source",
+    url: "https://example.com/",
+  },
+  loadFiles: loadSourceFiles([
+    {
+      filename: "example-interaction.tsx",
+      load: () =>
+        import("./example-interaction/example-interaction.tsx?raw"),
+    },
+    {
+      filename: "example-interaction.css",
+      load: () =>
+        import("./example-interaction/example-interaction.css?raw"),
+    },
+  ]),
+  Component: ExampleInteraction,
+}
+```
+
+Registry metadata:
+
+- `id` is the unique URL slug for the experiment.
+- `title` and `description` explain the interaction in the gallery and detail view.
+- `libraries` is an array of `{ name, icon }` objects rendered as badges.
+- `credit` is optional and links to the original inspiration or source.
+- `loadFiles` controls which source files visitors can view and copy.
+- `Component` is the lazy-loaded experiment preview.
+
+Library definitions live in the shared `LIBRARIES` object in `src/experiments/index.ts`. Reuse an existing definition whenever possible. When adding a new library, add or import its SVG icon under `src/components/ui/svgs/`, then register its name and icon once:
+
+```tsx
+const LIBRARIES = {
+  example: { name: "Example", icon: ExampleIcon },
+} satisfies Record<string, ExperimentLibrary>
+```
+
+Before committing:
+
+1. Verify the experiment in the gallery and detail view.
+2. Check the mobile navigator and responsive layout.
+3. Confirm the inspiration link, library badges, and copyable source files.
+4. Run `npm run lint` and `npm run build`.
 
 Registry ids and source filenames are validated for uniqueness. Source-file language is inferred from the filename extension.
 

@@ -218,8 +218,18 @@ export const experiments = defineExperiments([
   {
     id: "motion-button-demo",
     title: "Motion Button",
-    description: "Simple Framer Motion hover and tap interaction.",
-    libraries: [LIBRARIES.react, LIBRARIES.motion, LIBRARIES.baseUi],
+    description:
+      "A responsive button study exploring hover lift, tactile press feedback, animated label changes, and spring-based state transitions.",
+    libraries: [
+      LIBRARIES.react,
+      LIBRARIES.motion,
+      LIBRARIES.baseUi,
+      LIBRARIES.lucide,
+    ],
+    credit: {
+      name: "Example Interaction Design Studio",
+      url: "https://example.com/",
+    },
     loadFiles: loadSourceFiles([
       {
         filename: "motion-button.tsx",

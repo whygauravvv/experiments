@@ -54,7 +54,7 @@ Never silently replace a requested asset source. Verify that remote assets can b
 
 ## 4. Implement the experiment
 
-Follow the host project's stack and conventions. Prefer the smallest clear implementation, commonly one component file plus one scoped stylesheet when custom CSS materially improves the result.
+Follow the host project's stack and conventions. Put each experiment in its own `src/experiments/<experiment-name>/` folder. Use `<experiment-name>.tsx` for the component and an optional colocated `<experiment-name>.css` file when custom CSS materially improves the result. Import that stylesheet directly from the experiment component.
 
 - Keep the experiment self-contained and safe to render in both gallery cards and detail views.
 - Scope CSS under a unique experiment root to prevent leakage.
@@ -67,17 +67,25 @@ Follow the host project's stack and conventions. Prefer the smallest clear imple
 
 ## 5. Register it properly
 
-Add the experiment to the project's existing registry, gallery, or router. Include the metadata the host expects, such as:
+Add the lazy component import and experiment entry to `src/experiments/index.ts`. Follow the existing registry order and conventions. Every entry must include:
 
-- stable ID;
-- concise title and description;
-- current year;
-- meaningful tags;
-- component reference;
-- every displayed source file;
-- original reference URL when available.
+- `id`: a stable, unique URL slug;
+- `title`: a concise display name;
+- `description`: a useful explanation of what the interaction does and how it behaves;
+- `libraries`: references to shared `{ name, icon }` definitions from `LIBRARIES`;
+- `loadFiles`: the experiment's copyable TSX file and optional CSS file, loaded with `?raw`;
+- `Component`: the lazy-loaded experiment component.
 
-Match existing ordering and import conventions. Ensure the source viewer displays the actual files used by the experiment.
+Add `credit: { name, url }` when the experiment has a known inspiration or source. Use the original creator, product, article, or reference rather than a generic attribution.
+
+Reuse existing `LIBRARIES` entries whenever possible. When a library is missing:
+
+1. Add or reuse its SVG icon under `src/components/ui/svgs/`.
+2. Import the icon in the registry.
+3. Add one shared `{ name, icon }` entry to `LIBRARIES`.
+4. Reference that entry from the experiment's `libraries` array.
+
+Expose only the files needed to understand and reuse the isolated interaction: its primary TSX file and optional colocated CSS file. Do not expose shared backgrounds, gallery infrastructure, utilities, or unrelated dependencies. Ensure every exposed filename is unique within the experiment and matches the real file.
 
 ## 6. Verify the result
 
@@ -88,8 +96,10 @@ Validate in proportion to the project:
 3. Run the production build.
 4. Open the experiment in the local app and inspect both gallery and detail presentations.
 5. Exercise the primary interaction and keyboard state.
-6. Check remote asset loading, clipping, overflow, responsive sizing, and reduced-motion behavior.
+6. Check the mobile navigator and responsive layout.
+7. Confirm the description, library badges, optional inspiration/source credit, and copyable source files render correctly.
+8. Check remote asset loading, clipping, overflow, responsive sizing, and reduced-motion behavior.
 
 Fix issues found during visual verification. Distinguish pre-existing repository failures from failures introduced by the experiment.
 
-In the final response, lead with the completed outcome, link the relevant files, state the asset source, and summarize verification. Mention unrelated pre-existing failures briefly without implying they were fixed.
+In the final response, lead with the completed outcome, link the experiment folder and registry, state the inspiration or asset source when applicable, and summarize verification. Mention unrelated pre-existing failures briefly without implying they were fixed.

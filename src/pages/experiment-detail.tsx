@@ -7,9 +7,9 @@ import { getExperimentNavigation } from "@/lib/experiment-navigation"
 import { MOTION_EASE } from "@/lib/motion"
 import {
   ArrowLeft,
+  ArrowUpRight,
   ChevronLeft,
   ChevronRight,
-  ExternalLink,
 } from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
 import { Suspense } from "react"
@@ -200,34 +200,52 @@ export default function ExperimentDetail({
               exit="exit"
               className="h-full min-w-0 md:min-h-0"
             >
-              <aside className="flex h-full min-w-0 flex-col md:min-h-0 md:overflow-hidden">
-                <div className="shrink-0">
-                  <h1 className="text-[clamp(2.25rem,3.75vw,3rem)] font-semibold tracking-[-0.045em]">
-                    {title}
-                  </h1>
-                  <p className="text-xs text-muted-foreground">{description}</p>
-                  <div className="mt-3 flex flex-wrap items-center gap-2">
-                    {libraries.map(({ icon: LibraryIcon, name }) => (
-                      <span
-                        key={name}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-muted/45 px-2.5 py-1 text-[10px] font-medium text-muted-foreground"
-                      >
-                        <LibraryIcon className="size-3" aria-hidden="true" />
-                        {name}
-                      </span>
-                    ))}
-
+              <aside className="flex h-full min-w-0 flex-col font-rounded md:min-h-0 md:overflow-hidden">
+                <div className="shrink-0 space-y-6">
+                  <div>
+                    <h1 className="text-[clamp(2.25rem,3.75vw,3rem)] font-semibold tracking-[-0.045em]">
+                      {title}
+                    </h1>
+                    <p className="text-xs text-muted-foreground">
+                      {description}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
                     {credit ? (
-                      <a
-                        href={credit.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[10px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:outline-none"
-                      >
-                        Credit: {credit.name}
-                        <ExternalLink className="size-3" aria-hidden="true" />
-                      </a>
+                      <div>
+                        <p className="pl-1 text-[10px] font-medium tracking-wide text-muted-foreground/50">
+                          Inspiration/Source
+                        </p>
+                        <a
+                          href={credit.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 rounded-xs px-1 py-1 font-rounded text-sm text-blue-400 duration-150 hover:bg-muted hover:text-foreground"
+                        >
+                          {credit.name}
+                          <ArrowUpRight className="size-4" aria-hidden="true" />
+                        </a>
+                      </div>
                     ) : null}
+                    <section className="space-y-2">
+                      <p className="pl-1 text-[10px] font-medium tracking-wide text-muted-foreground/50">
+                        Libraries Used
+                      </p>
+                      <div className="flex flex-wrap items-center gap-2 pl-1">
+                        {libraries.map(({ icon: LibraryIcon, name }) => (
+                          <span
+                            key={name}
+                            className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-linear-to-t from-white to-muted px-2.5 py-1 font-rounded text-xs font-medium shadow-xs"
+                          >
+                            <LibraryIcon
+                              className="size-3"
+                              aria-hidden="true"
+                            />
+                            {name}
+                          </span>
+                        ))}
+                      </div>
+                    </section>
                   </div>
                 </div>
 
