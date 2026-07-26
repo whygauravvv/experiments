@@ -103,6 +103,8 @@ export default function ExperimentDetail({
         >
           <Link
             to="/"
+            data-cuelume-hover="tick"
+            data-cuelume-toggle="droplet"
             className="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
@@ -116,6 +118,8 @@ export default function ExperimentDetail({
               type="button"
               onClick={() => navigateToExperiment(previousExperiment.id)}
               aria-label={`Previous experiment: ${previousExperiment.title}`}
+              data-cuelume-hover="tick"
+              data-cuelume-toggle="page"
               className="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
             >
               <ChevronLeft className="size-4" />
@@ -124,6 +128,8 @@ export default function ExperimentDetail({
               type="button"
               onClick={() => navigateToExperiment(nextExperiment.id)}
               aria-label={`Next experiment: ${nextExperiment.title}`}
+              data-cuelume-hover="tick"
+              data-cuelume-toggle="page"
               className="inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
             >
               <ChevronRight className="size-4" />

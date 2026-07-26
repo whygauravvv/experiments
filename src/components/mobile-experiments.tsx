@@ -170,6 +170,7 @@ export default function MobileExperiments() {
               type="button"
               aria-label="Back to experiments"
               onClick={closeExperimentDetail}
+              data-cuelume-toggle="droplet"
               variants={floatingControlVariants}
               initial="enter"
               animate="center"
@@ -194,6 +195,7 @@ export default function MobileExperiments() {
                 type="button"
                 aria-label={`Previous experiment: ${previousExperiment.title}`}
                 onClick={() => showExperiment(previousExperiment.id, -1)}
+                data-cuelume-toggle="page"
                 whileTap={{ scale: 0.92 }}
                 className="grid size-12 cursor-pointer place-items-center rounded-[1rem] bg-white/8 text-white/75 transition-colors outline-none hover:bg-white/12 hover:text-white focus-visible:ring-2 focus-visible:ring-white/60"
               >
@@ -204,6 +206,7 @@ export default function MobileExperiments() {
                 type="button"
                 aria-label={`View ${activeExperiment.title} details`}
                 onClick={openExperimentDetail}
+                data-cuelume-toggle="bloom"
                 whileTap={{ scale: 0.97 }}
                 className="relative h-12 min-w-0 cursor-pointer overflow-hidden px-2 text-center outline-none focus-visible:ring-2 focus-visible:ring-white/60"
               >
@@ -227,6 +230,7 @@ export default function MobileExperiments() {
                 type="button"
                 aria-label={`Next experiment: ${nextExperiment.title}`}
                 onClick={() => showExperiment(nextExperiment.id, 1)}
+                data-cuelume-toggle="page"
                 whileTap={{ scale: 0.92 }}
                 className="grid size-12 cursor-pointer place-items-center rounded-[1rem] bg-white/8 text-white/75 transition-colors outline-none hover:bg-white/12 hover:text-white focus-visible:ring-2 focus-visible:ring-white/60"
               >

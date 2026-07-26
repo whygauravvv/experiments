@@ -2,6 +2,7 @@ import CodeViewer from "@/components/code/code-viewer"
 import { Spinner } from "@/components/ui/spinner"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { ExperimentSourceFile } from "@/experiments"
+import { playSound } from "@/lib/sound"
 import { useEffect, useState } from "react"
 
 type ExperimentSourceProps = {
@@ -41,10 +42,14 @@ export default function ExperimentSource({ loadFiles }: ExperimentSourceProps) {
       .then((loadedFiles) => {
         if (!cancelled) {
           setSourceState({ loadFiles, status: "loaded", files: loadedFiles })
+          if (loadAttempt > 0) playSound("ready")
         }
       })
       .catch(() => {
-        if (!cancelled) setSourceState({ loadFiles, status: "error" })
+        if (!cancelled) {
+          setSourceState({ loadFiles, status: "error" })
+          if (loadAttempt > 0) playSound("error")
+        }
       })
 
     return () => {
@@ -64,6 +69,7 @@ export default function ExperimentSource({ loadFiles }: ExperimentSourceProps) {
             type="button"
             className="rounded-full border border-border bg-background px-3 py-1.5 text-foreground transition-colors hover:bg-muted"
             onClick={() => {
+              playSound("loading")
               setSourceState({ loadFiles, status: "loading" })
               setLoadAttempt((attempt) => attempt + 1)
             }}
@@ -108,6 +114,7 @@ export default function ExperimentSource({ loadFiles }: ExperimentSourceProps) {
           <TabsTrigger
             key={file.filename}
             value={file.filename}
+            data-cuelume-toggle="toggle"
             className="data-active:bg-muted"
           >
             <span className="font-mono text-xs">{file.filename}</span>

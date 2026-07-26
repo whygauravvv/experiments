@@ -36,6 +36,8 @@ function GalleryCard({ id, title, description, Component }: GalleryCardProps) {
             id="redirect-button"
             to={`/experiments/${id}`}
             aria-label={`View ${title}`}
+            data-cuelume-hover="tick"
+            data-cuelume-toggle="bloom"
             className="pointer-events-auto translate-y-0 scale-100 rounded-full bg-muted/60 p-2 opacity-100 delay-50 duration-150 hover:rotate-45 hover:bg-primary/10 hover:text-primary focus-visible:translate-y-0 focus-visible:opacity-100 focus-visible:blur-none focus-visible:outline-none md:translate-y-14 md:scale-95 md:bg-muted/40 md:opacity-0 md:blur-sm md:group-hover:translate-y-0 md:group-hover:scale-100 md:group-hover:opacity-100 md:group-hover:blur-none"
           >
             <MoveUpRight size={18} className="text-muted-foreground/60" />

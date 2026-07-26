@@ -18,6 +18,8 @@ export default function NotFound() {
 
         <Link
           to="/"
+          data-cuelume-hover="tick"
+          data-cuelume-toggle="droplet"
           className="group mt-8 inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
         >
           <ArrowLeft className="size-4 origin-right transition-transform" />

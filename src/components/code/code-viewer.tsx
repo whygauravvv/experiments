@@ -3,6 +3,7 @@ import type {
   HighlightedCodeLine,
   SupportedCodeLanguage,
 } from "@/lib/highlight-code"
+import { playSound } from "@/lib/sound"
 import { Check, Copy } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
@@ -61,8 +62,10 @@ export default function CodeViewer({
     try {
       await navigator.clipboard.writeText(code)
       setCopyStatus("copied")
+      playSound("success")
     } catch {
       setCopyStatus("error")
+      playSound("error")
     }
 
     copyResetTimer.current = window.setTimeout(
