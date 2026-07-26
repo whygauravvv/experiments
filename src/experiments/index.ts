@@ -111,6 +111,7 @@ const MotionButtonDemo = lazy(() => import("./motion-button/motion-button"))
 const CodexAtmosphere = lazy(
   () => import("./codex-atmosphere/codex-atmosphere")
 )
+const MobileToc = lazy(() => import("./mobile-toc/mobile-toc"))
 const IMessageMenu = lazy(() => import("./imessage-menu/imessage-menu"))
 const Vestaboard = lazy(() => import("./vestaboard/vestaboard"))
 const MorphingTimer = lazy(() => import("./morphing-timer/morphing-timer"))
@@ -347,6 +348,24 @@ export const experiments = defineExperiments([
       },
     ]),
     Component: CodexAtmosphere,
+  },
+  {
+    id: "mobile-toc",
+    title: "Mobile Table of Contents",
+    description:
+      "A side-mounted reading handle slides an article aside to reveal a compact mobile table of contents.",
+    libraries: [LIBRARIES.react, LIBRARIES.motion, LIBRARIES.lucide],
+    loadFiles: loadSourceFiles([
+      {
+        filename: "mobile-toc.tsx",
+        load: () => import("./mobile-toc/mobile-toc.tsx?raw"),
+      },
+      {
+        filename: "mobile-toc.css",
+        load: () => import("./mobile-toc/mobile-toc.css?raw"),
+      },
+    ]),
+    Component: MobileToc,
   },
   {
     id: "imessage-menu",
