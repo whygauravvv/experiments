@@ -1,0 +1,169 @@
+.undo-delete {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  place-items: center;
+  overflow: hidden;
+  background: #ffffff;
+  font-family: "OpenRunde", sans-serif;
+}
+
+.undo-delete__button {
+  position: relative;
+  display: grid;
+  width: 172px;
+  height: 64px;
+  cursor: pointer;
+  appearance: none;
+  place-items: center;
+  overflow: visible;
+  border: 0;
+  border-radius: 999px;
+  padding: 0;
+  color: #e90d34;
+  font: inherit;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 20%) inset,
+    0 12px 24px rgb(110 30 50 / 8%);
+  isolation: isolate;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.undo-delete__button[data-phase="idle"] {
+  color: #ffffff;
+}
+
+.undo-delete__button[data-phase="deleted"] {
+  cursor: pointer;
+}
+
+.undo-delete__button:focus {
+  outline: none;
+}
+
+.undo-delete__button:focus-visible {
+  filter: brightness(0.92);
+}
+
+.undo-delete__label-viewport {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.undo-delete__label {
+  display: block;
+  line-height: 1;
+}
+
+.undo-delete__orbit {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.undo-delete__orbit.is-trash {
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  background: #ffffff;
+  color: #ef0d36;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 65%) inset,
+    0 2px 5px rgb(117 20 43 / 12%);
+}
+
+.undo-delete__orbit.is-trash svg {
+  width: 22px;
+  height: 22px;
+}
+
+.undo-delete__orbit.is-countdown {
+  top: -13px;
+  right: -8px;
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  background: #ef0d36;
+  color: #ffffff;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.025em;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 22%) inset,
+    0 7px 13px rgb(126 17 43 / 18%);
+}
+
+.undo-delete__digits {
+  display: grid;
+  grid-template-columns: repeat(2, 0.56em);
+  height: 1em;
+  line-height: 1;
+}
+
+.undo-delete__digit-slot {
+  position: relative;
+  display: grid;
+  height: 1em;
+  place-items: center;
+}
+
+.undo-delete__digit {
+  position: absolute;
+  display: grid;
+  inset: 0;
+  place-items: center;
+}
+
+.undo-delete__orbit.is-deleted {
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  background: #ffffff;
+  color: #657184;
+  box-shadow: 0 2px 5px rgb(50 62 80 / 10%);
+}
+
+.undo-delete__orbit.is-deleted svg {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.3;
+  transition:
+    opacity 160ms ease,
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.undo-delete__reset {
+  opacity: 0;
+  transform: rotate(-45deg) scale(0.7);
+}
+
+.undo-delete__button[data-phase="deleted"]:is(:hover, :focus-visible)
+  .undo-delete__check {
+  opacity: 0;
+  transform: rotate(25deg) scale(0.7);
+}
+
+.undo-delete__button[data-phase="deleted"]:is(:hover, :focus-visible)
+  .undo-delete__reset {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .undo-delete__orbit.is-deleted svg {
+    transition: none;
+  }
+}

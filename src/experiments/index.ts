@@ -97,6 +97,9 @@ const LIBRARIES = {
 const CurvedCityWheel = lazy(
   () => import("./curved-city-wheel/curved-city-wheel")
 )
+const UndoDeleteButton = lazy(
+  () => import("./undo-delete-button/undo-delete-button")
+)
 const RainbowDotField = lazy(
   () => import("./rainbow-dot-field/rainbow-dot-field")
 )
@@ -114,6 +117,28 @@ const MorphingTimer = lazy(() => import("./morphing-timer/morphing-timer"))
 const GooeyStatusBar = lazy(() => import("./gooey-status-bar/gooey-status-bar"))
 
 export const experiments = defineExperiments([
+  {
+    id: "undo-delete-button",
+    title: "Undo Delete Button",
+    description:
+      "A destructive action that opens a ten-second cancellation window before committing.",
+    libraries: [LIBRARIES.react, LIBRARIES.motion, LIBRARIES.lucide],
+    credit: {
+      name: "Motion",
+      url: "https://motion.dev/",
+    },
+    loadFiles: loadSourceFiles([
+      {
+        filename: "undo-delete-button.tsx",
+        load: () => import("./undo-delete-button/undo-delete-button.tsx?raw"),
+      },
+      {
+        filename: "undo-delete-button.css",
+        load: () => import("./undo-delete-button/undo-delete-button.css?raw"),
+      },
+    ]),
+    Component: UndoDeleteButton,
+  },
   {
     id: "curved-city-wheel",
     title: "Curved City Wheel",
