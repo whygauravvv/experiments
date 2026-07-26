@@ -94,6 +94,9 @@ const LIBRARIES = {
   baseUi: { name: "Base UI", icon: BaseUi },
 } satisfies Record<string, ExperimentLibrary>
 
+const CurvedCityWheel = lazy(
+  () => import("./curved-city-wheel/curved-city-wheel")
+)
 const RainbowDotField = lazy(
   () => import("./rainbow-dot-field/rainbow-dot-field")
 )
@@ -111,6 +114,24 @@ const MorphingTimer = lazy(() => import("./morphing-timer/morphing-timer"))
 const GooeyStatusBar = lazy(() => import("./gooey-status-bar/gooey-status-bar"))
 
 export const experiments = defineExperiments([
+  {
+    id: "curved-city-wheel",
+    title: "Curved City Wheel",
+    description:
+      "An infinite city selector that bends, glides, and snaps around the active destination.",
+    libraries: [LIBRARIES.react, LIBRARIES.motion],
+    loadFiles: loadSourceFiles([
+      {
+        filename: "curved-city-wheel.tsx",
+        load: () => import("./curved-city-wheel/curved-city-wheel.tsx?raw"),
+      },
+      {
+        filename: "curved-city-wheel.css",
+        load: () => import("./curved-city-wheel/curved-city-wheel.css?raw"),
+      },
+    ]),
+    Component: CurvedCityWheel,
+  },
   {
     id: "gooey-status-bar",
     title: "Gooey Status Bar",
