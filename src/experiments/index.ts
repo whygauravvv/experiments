@@ -1,4 +1,3 @@
-import { BaseUi } from "@/components/ui/svgs/baseUi"
 import { Lucide } from "@/components/ui/svgs/lucide"
 import { Motion } from "@/components/ui/svgs/motion"
 import { ReactLight } from "@/components/ui/svgs/reactLight"
@@ -91,7 +90,6 @@ const LIBRARIES = {
   react: { name: "React", icon: ReactLight },
   motion: { name: "Motion", icon: Motion },
   lucide: { name: "Lucide", icon: Lucide },
-  baseUi: { name: "Base UI", icon: BaseUi },
 } satisfies Record<string, ExperimentLibrary>
 
 const CurvedCityWheel = lazy(
@@ -107,7 +105,7 @@ const AuraComposer = lazy(() => import("./aura-composer/aura-composer"))
 const MetricMatrix = lazy(() => import("./metric-matrix/metric-matrix"))
 const CreateModal = lazy(() => import("./create-modal/create-modal"))
 const IconReveal = lazy(() => import("./icon-reveal/icon-reveal"))
-const MotionButtonDemo = lazy(() => import("./motion-button/motion-button"))
+const AppIconLoop = lazy(() => import("./app-icon-loop/app-icon-loop"))
 const CodexAtmosphere = lazy(
   () => import("./codex-atmosphere/codex-atmosphere")
 )
@@ -305,27 +303,26 @@ export const experiments = defineExperiments([
     Component: IconReveal,
   },
   {
-    id: "motion-button-demo",
-    title: "Motion Button",
+    id: "app-icon-loop",
+    title: "App Icon Loop",
     description:
-      "A responsive button study exploring hover lift, tactile press feedback, animated label changes, and spring-based state transitions.",
-    libraries: [
-      LIBRARIES.react,
-      LIBRARIES.motion,
-      LIBRARIES.baseUi,
-      LIBRARIES.lucide,
-    ],
+      "A continuous ribbon of SVGL app icons that follows a crossed path, fades at the edges, and eases its pace on hover.",
+    libraries: [LIBRARIES.react, LIBRARIES.motion],
     credit: {
-      name: "Example Interaction Design Studio",
-      url: "https://example.com/",
+      name: "@nonzeroexitcode",
+      url: "https://x.com/nonzeroexitcode/status/2081382292430241839",
     },
     loadFiles: loadSourceFiles([
       {
-        filename: "motion-button.tsx",
-        load: () => import("./motion-button/motion-button.tsx?raw"),
+        filename: "app-icon-loop.tsx",
+        load: () => import("./app-icon-loop/app-icon-loop.tsx?raw"),
+      },
+      {
+        filename: "app-icon-loop.css",
+        load: () => import("./app-icon-loop/app-icon-loop.css?raw"),
       },
     ]),
-    Component: MotionButtonDemo,
+    Component: AppIconLoop,
   },
 
   {

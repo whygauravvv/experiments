@@ -1,0 +1,62 @@
+.app-icon-loop {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #f8f8f7;
+}
+
+.app-icon-loop__stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  outline: none;
+}
+
+.app-icon-loop__stage:focus-visible {
+  box-shadow: inset 0 0 0 2px rgb(16 16 16 / 12%);
+}
+
+.app-icon-loop__scene {
+  --app-icon-loop-scale: 0.5;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1000px;
+  height: 600px;
+  transform: translate(-50%, -50%) scale(var(--app-icon-loop-scale));
+  transform-origin: center;
+}
+
+.app-icon-loop__tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  width: 62px;
+  height: 62px;
+  place-items: center;
+  border: 1px solid rgb(0 0 0 / 7%);
+  border-radius: 9px;
+  background: #fff;
+  offset-anchor: center;
+  offset-path: path(
+    "M 55 378 C 210 379 350 373 470 340 C 535 322 593 249 598 165 C 603 90 560 60 505 70 C 420 82 365 150 370 218 C 375 277 414 325 470 340 C 600 375 765 386 945 378"
+  );
+  offset-rotate: auto;
+  will-change: offset-distance, opacity;
+}
+
+.app-icon-loop__logo {
+  display: block;
+  width: 68%;
+  height: 68%;
+  object-fit: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-icon-loop__tile {
+    will-change: auto;
+  }
+}
