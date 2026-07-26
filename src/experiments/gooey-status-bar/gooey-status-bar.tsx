@@ -28,8 +28,8 @@ type ActiveStatus = {
 const STATUS_ITEMS: StatusItem[] = [
   { id: "weather", label: "Weather", bubbleWidth: 50 },
   { id: "wifi", label: "Wi-Fi", bubbleWidth: 44 },
-  { id: "battery", label: "Battery", bubbleWidth: 36 },
-  { id: "time", label: "Time", bubbleWidth: 32 },
+  { id: "battery", label: "Battery", bubbleWidth: 42 },
+  { id: "time", label: "Time", bubbleWidth: 46 },
 ]
 
 const TOUCH_REVEAL_MS = 1600
