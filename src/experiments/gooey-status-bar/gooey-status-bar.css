@@ -1,0 +1,201 @@
+.gooey-status-bar {
+  container-type: inline-size;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: #fff;
+  color: #f5f5f3;
+  font-family: "Inter Variable", sans-serif;
+}
+
+.gooey-status-bar__bar {
+  --gooey-bar-height: clamp(3rem, 10.25cqw, 4rem);
+
+  position: absolute;
+  z-index: 2;
+  inset: 0 0 auto;
+  height: var(--gooey-bar-height);
+  background: #000;
+}
+
+.gooey-status-bar__controls {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: max-content;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-inline: auto;
+}
+
+.gooey-status-bar__control {
+  --status-accent: #f5f5f3;
+
+  display: flex;
+  min-width: clamp(2rem, 7cqw, 2.75rem);
+  height: clamp(2rem, 7cqw, 2.75rem);
+  cursor: default;
+  appearance: none;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.22rem, 0.9cqw, 0.4rem);
+  padding: 0 clamp(0.55rem, 1.55cqw, 0.75rem);
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgb(245 245 243 / 62%);
+  transition: color 150ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gooey-status-bar__control[data-status="weather"],
+.gooey-status-bar__bubble[data-status="weather"] {
+  --status-accent: #73c9e7;
+}
+
+.gooey-status-bar__control[data-status="wifi"],
+.gooey-status-bar__bubble[data-status="wifi"] {
+  --status-accent: #61d9e6;
+}
+
+.gooey-status-bar__control[data-status="battery"],
+.gooey-status-bar__bubble[data-status="battery"] {
+  --status-accent: #66e696;
+}
+
+.gooey-status-bar__control[data-status="time"],
+.gooey-status-bar__bubble[data-status="time"] {
+  --status-accent: #f09a5b;
+}
+
+.gooey-status-bar__control > svg {
+  width: clamp(0.95rem, 3.6cqw, 1.35rem);
+  height: auto;
+  flex: none;
+}
+
+.gooey-status-bar__clock path {
+  fill: none;
+  stroke: #000;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.gooey-status-bar__temperature {
+  color: inherit;
+  font-size: clamp(0.64rem, 2.4cqw, 0.92rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+
+.gooey-status-bar__control[data-active="true"] {
+  color: #fff;
+}
+
+.gooey-status-bar__control:focus-visible {
+  color: #fff;
+  outline: 1px solid rgb(255 255 255 / 62%);
+  outline-offset: -2px;
+}
+
+.gooey-status-bar__bubble {
+  position: absolute;
+  z-index: 1;
+  top: calc(100% - 1px);
+  left: 50%;
+  width: 50%;
+  height: clamp(1.65rem, 5.1cqw, 2.2rem);
+  transform-origin: top center;
+  translate: -50% 0;
+  pointer-events: none;
+  will-change: left, width, transform;
+}
+
+.gooey-status-bar__bubble-shape {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.gooey-status-bar__bubble-shape path {
+  fill: #000;
+}
+
+.gooey-status-bar__detail {
+  position: absolute;
+  inset: 8% 9% 12%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.gooey-status-bar__detail-content {
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.28rem, 1cqw, 0.48rem);
+  font-size: clamp(0.72rem, 2.4cqw, 0.92rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.gooey-status-bar__detail-lead {
+  color: var(--status-accent);
+}
+
+.gooey-status-bar__detail-weather-icon {
+  width: 1.25em;
+  height: auto;
+  flex: none;
+  color: rgb(245 245 243 / 72%);
+}
+
+.gooey-status-bar__detail-separator {
+  width: 1px;
+  height: 0.9em;
+  flex: none;
+  background: rgb(245 245 243 / 24%);
+}
+
+.gooey-status-bar__detail-tail {
+  overflow: hidden;
+  color: rgb(245 245 243 / 58%);
+  text-overflow: ellipsis;
+}
+
+.gooey-status-bar__bubble[data-status="weather"]
+  .gooey-status-bar__detail-lead {
+  color: rgb(245 245 243 / 58%);
+}
+
+.gooey-status-bar__bubble[data-status="weather"]
+  .gooey-status-bar__detail-separator {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--status-accent);
+}
+
+.gooey-status-bar__bubble[data-status="weather"]
+  .gooey-status-bar__detail-tail {
+  color: var(--status-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gooey-status-bar__control {
+    transition-duration: 0.01ms;
+  }
+}

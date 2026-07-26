@@ -108,8 +108,27 @@ const CodexAtmosphere = lazy(
 const IMessageMenu = lazy(() => import("./imessage-menu/imessage-menu"))
 const Vestaboard = lazy(() => import("./vestaboard/vestaboard"))
 const MorphingTimer = lazy(() => import("./morphing-timer/morphing-timer"))
+const GooeyStatusBar = lazy(() => import("./gooey-status-bar/gooey-status-bar"))
 
 export const experiments = defineExperiments([
+  {
+    id: "gooey-status-bar",
+    title: "Gooey Status Bar",
+    description:
+      "A system bar that flows into contextual hover details for weather, Wi-Fi, battery, and time.",
+    libraries: [LIBRARIES.react, LIBRARIES.motion, LIBRARIES.lucide],
+    loadFiles: loadSourceFiles([
+      {
+        filename: "gooey-status-bar.tsx",
+        load: () => import("./gooey-status-bar/gooey-status-bar.tsx?raw"),
+      },
+      {
+        filename: "gooey-status-bar.css",
+        load: () => import("./gooey-status-bar/gooey-status-bar.css?raw"),
+      },
+    ]),
+    Component: GooeyStatusBar,
+  },
   {
     id: "morphing-timer",
     title: "Morphing Timer",
