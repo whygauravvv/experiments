@@ -29,7 +29,7 @@ const SCREEN_INSET = {
   right: "5.3%",
   top: "2.45%",
   bottom: "2.5%",
-  borderRadius: "1rem",
+  borderRadius: "15.9% / 7.3%",
 } as const
 
 const MOCKUP_ASSETS: Record<IPhoneMockupVariant, string> = {
