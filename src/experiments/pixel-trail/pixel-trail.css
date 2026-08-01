@@ -1,0 +1,16 @@
+.pixel-trail {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: #090909;
+}
+
+.pixel-trail__canvas {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  display: block;
+  pointer-events: none;
+}

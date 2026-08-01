@@ -114,6 +114,7 @@ const IMessageMenu = lazy(() => import("./imessage-menu/imessage-menu"))
 const Vestaboard = lazy(() => import("./vestaboard/vestaboard"))
 const MorphingTimer = lazy(() => import("./morphing-timer/morphing-timer"))
 const GooeyStatusBar = lazy(() => import("./gooey-status-bar/gooey-status-bar"))
+const PixelTrail = lazy(() => import("./pixel-trail/pixel-trail"))
 
 export const experiments = defineExperiments([
   {
@@ -250,6 +251,27 @@ export const experiments = defineExperiments([
       },
     ]),
     Component: RainbowDotField,
+  },
+  {
+    id: "pixel-trail",
+    title: "Pixel Trail",
+    description: "A trail of pixels that follows the cursor and fades away.",
+    libraries: [LIBRARIES.react],
+    credit: {
+      name: "Interactions Gallery",
+      url: "https://interactions.gallery/interactions/pixel-trail",
+    },
+    loadFiles: loadSourceFiles([
+      {
+        filename: "pixel-trail.tsx",
+        load: () => import("./pixel-trail/pixel-trail.tsx?raw"),
+      },
+      {
+        filename: "pixel-trail.css",
+        load: () => import("./pixel-trail/pixel-trail.css?raw"),
+      },
+    ]),
+    Component: PixelTrail,
   },
   {
     id: "metric-matrix",
